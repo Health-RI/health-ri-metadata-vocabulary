@@ -3,8 +3,18 @@ message: Please cite the version of the Health-RI Metadata Vocabulary that you u
 title: Health-RI Metadata Vocabulary
 type: dataset
 authors:
-- name: Health-RI
-  website: https://www.health-ri.nl/
+- given-names: Ana
+  family-names: Konrad
+  orcid: https://orcid.org/0009-0002-3089-9558
+- given-names: Hannah
+  family-names: Neikes
+  orcid: https://orcid.org/0000-0001-8306-0380
+- given-names: Niek
+  family-names: van Ulzen
+  orcid: https://orcid.org/0000-0003-0771-3516
+- given-names: Pedro Paulo F.
+  family-names: Barcelos
+  orcid: https://orcid.org/0000-0003-2736-7817
 version: 0.1.0
 date-released: '2026-09-30'
 url: https://w3id.org/health-ri/metadata-vocabulary/v0.1.0

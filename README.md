@@ -21,10 +21,10 @@ configuration is accepted. A fork is a staging location, not a canonical namespa
 ## Access
 
 - [Latest Turtle vocabulary](vocabulary/latest/health-ri-metadata-vocabulary.ttl)
-- [Versioned release sources](vocabulary/versioned/)
-- [Latest PyLODE HTML](docs/latest/index.html) and [versioned HTML](docs/versioned/)
-- [SHACL validation](vocabulary/latest/health-ri-metadata-shapes.ttl)
-- [Turtle usage example](vocabulary/latest/example.ttl)
+- [Versioned Turtle and archived HTML](vocabulary/versioned/)
+- [Latest PyLODE HTML](vocabulary/latest/index.html)
+- [SHACL validation](validation/health-ri-metadata-shapes.ttl)
+- [Turtle usage example](examples/health-condition-of-interest.ttl)
 - [Changelog](CHANGELOG.md), [citation metadata](CITATION.cff), and [maintenance](MAINTAINING.md)
 
 ## Health condition of interest
@@ -74,16 +74,21 @@ Use Python 3.12 in a virtual environment:
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m unittest discover -s tests -v
+python -m pip install -r scripts/requirements.txt
+python -m unittest discover -s scripts/tests -v
 python scripts/build.py
 cffconvert --validate
-python -m http.server --directory site 8000
+python -m http.server --directory vocabulary/latest 8000
 ```
 
-The build validates each complete release, selects the highest numeric `X.Y.Z`
-version, copies it to `latest`, generates new release documentation with PyLODE,
-updates citation metadata, and assembles the Pages site. On Windows, activate with
+The build reads `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`,
+selects the highest numeric `X.Y.Z` version, and copies it to
+`vocabulary/latest/health-ri-metadata-vocabulary.ttl`. PyLODE creates the matching
+versioned `.html` snapshot and copies it to `vocabulary/latest/index.html`.
+Pages publishes the latest directory directly: the site URL opens the current
+specification, and archived HTML remains in GitHub rather than on Pages.
+No separate tracked `docs` directory or generated `site` copy is needed.
+On Windows, activate with
 `.venv\Scripts\Activate.ps1` in PowerShell.
 
 To validate metadata data independently, load the SHACL file with the data graph,
@@ -95,13 +100,26 @@ tests use explicit typing and no inference.
 ## Attribution and provenance
 
 Cite the specific whole-vocabulary version using [CITATION.cff](CITATION.cff).
-Health-RI is the organizational creator and publisher. Personal contributor
-identities and identifiers have not been copied from unrelated artifacts.
+The authors are [Ana Konrad](https://orcid.org/0009-0002-3089-9558),
+[Hannah Neikes](https://orcid.org/0000-0001-8306-0380),
+[Niek van Ulzen](https://orcid.org/0000-0003-0771-3516), and
+[Pedro Paulo F. Barcelos](https://orcid.org/0000-0003-2736-7817).
+Health-RI is the publisher. Authors are recorded as both creators and contributors;
+this does not imply an additional set of contributors.
 
 The release infrastructure is informed by the
 [Health-RI Mapping Vocabulary](https://github.com/Health-RI/semantic-interoperability/tree/main/vocabulary)
 and its latest/versioned and PyLODE patterns. The scripts here are a separate,
 smaller implementation. Metadata design uses OWL, Dublin Core, DCAT, VANN, FOAF,
-SKOS, and Schema.org. There are no automatic remote ontology imports.
+SKOS, MOD, and Schema.org. `owl:imports` references the SKOS ontology because the
+property uses `skos:Concept` and SKOS annotations. It does not import the Semantic
+Interoperability Initiative's semiotics ontology. The local validation checks do
+not fetch imports or infer types before checking the example.
 All original repository content is licensed under CC BY 4.0. External terminology
 references and third-party dependencies retain their own licensing conditions.
+
+The SHACL file is a small, separate application-validation artifact: OWL/RDFS range
+axioms cannot enforce IRI-only values, while `sh:nodeKind sh:IRI` rejects blank nodes
+and literals. It is not a second vocabulary or a replacement for the full Health-RI
+Metadata Schema. The example is an executable illustration and validation fixture.
+Neither file needs to be copied or added when releasing a new vocabulary version.

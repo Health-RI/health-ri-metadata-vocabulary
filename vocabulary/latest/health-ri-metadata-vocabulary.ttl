@@ -6,15 +6,29 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix vann: <http://purl.org/vocab/vann/> .
+@prefix mod: <https://w3id.org/mod#> .
 @prefix schema: <https://schema.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://w3id.org/health-ri/metadata-vocabulary> a owl:Ontology ;
     dcterms:title "Health-RI Metadata Vocabulary"@en ;
     rdfs:label "Health-RI Metadata Vocabulary"@en ;
+    dcterms:abstract "A vocabulary defining Health-RI-specific metadata terms for health dataset discovery, initially providing a property for dataset-level health conditions of interest."@en ;
+    dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary"^^xsd:anyURI ;
+    dcat:landingPage <https://w3id.org/health-ri/metadata-vocabulary/spec> ;
+    foaf:logo <https://raw.githubusercontent.com/Health-RI/semantic-interoperability/refs/heads/main/docs/assets/images/health-ri-logo-blue.png> ;
+    mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> ;
+    owl:imports <http://www.w3.org/2004/02/skos/core> ;
     dcterms:description "A vocabulary of Health-RI-specific terms for describing health datasets at metadata and catalogue level. It complements reused metadata standards; it is not a complete metadata schema or a clinical terminology."@en ;
-    dcterms:creator <https://www.health-ri.nl/> ;
-    dcterms:publisher <https://www.health-ri.nl/> ;
+    dcterms:creator <https://orcid.org/0009-0002-3089-9558>,
+        <https://orcid.org/0000-0001-8306-0380>,
+        <https://orcid.org/0000-0003-0771-3516>,
+        <https://orcid.org/0000-0003-2736-7817> ;
+    dcterms:contributor <https://orcid.org/0009-0002-3089-9558>,
+        <https://orcid.org/0000-0001-8306-0380>,
+        <https://orcid.org/0000-0003-0771-3516>,
+        <https://orcid.org/0000-0003-2736-7817> ;
+    dcterms:publisher <https://w3id.org/health-ri> ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:language "en"^^xsd:language ;
     dcterms:issued "2026-09-30"^^xsd:date ;
@@ -28,10 +42,10 @@
     rdfs:seeAlso <https://w3id.org/health-ri/metadata-vocabulary/v0.1.0/spec> ;
     schema:codeRepository <https://github.com/Health-RI/health-ri-metadata-vocabulary> ;
     dcat:keyword "health metadata"@en, "dataset discovery"@en, "Semantic Web vocabulary"@en ;
-    dcterms:bibliographicCitation "Health-RI (2026). Health-RI Metadata Vocabulary, version 0.1.0. https://w3id.org/health-ri/metadata-vocabulary/v0.1.0"@en ;
+    dcterms:bibliographicCitation "Konrad, A.; Neikes, H.; van Ulzen, N.; Barcelos, P. P. F. (2026). Health-RI Metadata Vocabulary, version 0.1.0. https://w3id.org/health-ri/metadata-vocabulary/v0.1.0"@en ;
     rdfs:comment "Initial development release for review. The entire vocabulary is versioned together using Semantic Versioning; term IRIs remain unversioned. This release does not assert approval or adoption by a particular Health-RI Metadata Schema release."@en .
 
-<https://www.health-ri.nl/> a foaf:Organization ;
+<https://w3id.org/health-ri> a foaf:Organization ;
     foaf:name "Health-RI" ;
     foaf:homepage <https://www.health-ri.nl/> .
 
@@ -45,3 +59,15 @@ hri:healthConditionOfInterest a owl:ObjectProperty ;
     rdfs:domain dcat:Dataset ;
     rdfs:range skos:Concept ;
     rdfs:isDefinedBy <https://w3id.org/health-ri/metadata-vocabulary> .
+
+<https://orcid.org/0009-0002-3089-9558> a foaf:Person ;
+    foaf:name "Ana Konrad" .
+
+<https://orcid.org/0000-0001-8306-0380> a foaf:Person ;
+    foaf:name "Hannah Neikes" .
+
+<https://orcid.org/0000-0003-0771-3516> a foaf:Person ;
+    foaf:name "Niek van Ulzen" .
+
+<https://orcid.org/0000-0003-2736-7817> a foaf:Person ;
+    foaf:name "Pedro Paulo F. Barcelos" .

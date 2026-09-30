@@ -7,6 +7,16 @@ Terms do not have independent release versions.
 
 ## [Unreleased]
 
+### Changed
+
+- Restructured the initial 0.1.0 implementation at the maintainers' request:
+  flat versioned TTL/HTML files and latest-only Pages publication.
+- Moved tests and pinned dependencies under `scripts/`; moved validation and
+  the usage example to separate supporting directories.
+- Completed initial vocabulary metadata and attributed the four authors with
+  verified ORCID identifiers. This is a correction of the initial implementation,
+  not a change to the health-condition property's semantics.
+
 ## [0.1.0] - 2026-09-30
 
 ### Added
@@ -20,4 +30,4 @@ Terms do not have independent release versions.
   and automated validation and GitHub Pages publication infrastructure.
 
 [Unreleased]: https://github.com/Health-RI/health-ri-metadata-vocabulary/commits/main
-[0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/tree/main/vocabulary/versioned/0.1.0
+[0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.1.0.ttl

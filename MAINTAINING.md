@@ -2,20 +2,27 @@
 
 ## Sources and release contract
 
-`vocabulary/versioned/X.Y.Z/` is the authoritative source for each complete release.
-It contains `health-ri-metadata-vocabulary.ttl`, `health-ri-metadata-shapes.ttl`, and
-`example.ttl`. All terms in the vocabulary belong to the same release; term IRIs
-are stable and unversioned. Shapes and examples accompany that release.
+Authoritative releases are flat files:
+`vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`.
+The version is part of the filename, not a directory name. All terms belong to the
+same vocabulary version and retain their stable, unversioned term IRIs.
 
-Release source files and published `docs/versioned/X.Y.Z/index.html` snapshots are
-immutable. Never edit or delete a published snapshot, even to correct a typo.
-Create a new complete release. The workflow compares against its base commit and
-fails if existing snapshots have changed. This is a CI safeguard, not a substitute
-for repository branch protection or access control.
+PyLODE generates an adjacent `health-ri-metadata-vocabulary-vX.Y.Z.html` snapshot.
+The highest numbered release is copied to `vocabulary/latest/health-ri-metadata-vocabulary.ttl`
+and its documentation to `vocabulary/latest/index.html`. These latest files and
+`CITATION.cff` are generated; do not edit them by hand.
 
-`vocabulary/latest/`, `docs/latest/`, and `CITATION.cff` are generated/current files.
-The Pages `site/` directory is disposable output. Do not edit generated files by hand.
-There is no second authoritative source tree that can drift from release sources.
+Published versioned Turtle and HTML snapshots are immutable. Add a new version
+rather than editing or deleting an existing snapshot. CI checks existing snapshots
+against its base commit; branch protection remains a separate repository setting.
+The explicitly requested restructuring and metadata correction of the initial
+0.1.0 implementation is a one-time migration from commit `e9bc4ca`; the build script
+limits that exception to the old paths at that exact commit.
+
+The SHACL file in `validation/` and example in `examples/` are supporting artifacts,
+not additional release inputs. They provide the IRI-only data check and a runnable
+usage example. Adding one new versioned vocabulary Turtle file is sufficient for
+the publication pipeline; no versioned copies of these support files are required.
 
 ## Semantic Versioning
 
@@ -38,22 +45,26 @@ stays on branches until ready for a numbered release.
 
 ## Add a release
 
-1. Copy the previous complete release directory to a new `X.Y.Z` directory.
+1. Copy the previous vocabulary TTL to
+   `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`.
 2. Edit the new vocabulary. Update `owl:versionInfo`, `dcat:version`,
    `owl:versionIRI`, `dcterms:modified`, the version-specific documentation link,
    and the bibliographic citation. Preserve the vocabulary's original issued date.
-   Set `owl:priorVersion` to the preceding version IRI. Update shapes/example as needed.
+   Set `owl:priorVersion` to the preceding version IRI. Update the separate
+   shape/example only if the accompanying validation or usage guidance changes.
 3. Add a dated vocabulary-level entry to `CHANGELOG.md` using Keep a Changelog
    categories. Include any breaking semantics or validation effects explicitly.
 4. Run the README validation commands and review both RDF and generated HTML.
 5. Commit the new release and changelog to `main` (or merge a reviewed branch).
 
-Adding the complete release directory is sufficient to trigger generation and
+Adding the new versioned TTL file is sufficient to trigger generation and
 publication; no hard-coded current-version configuration needs changing. The
 highest version is selected numerically, not by modification date or string order.
-All historical snapshots remain available. The workflow commits generated
+All historical snapshots remain stored in GitHub; only the latest documentation
+is deployed to Pages. The workflow commits generated
 latest/HTML/citation files using `GITHUB_TOKEN`, which does not recursively trigger
-another push workflow. The same run uploads the site for Pages deployment.
+another push workflow. The same run uploads `vocabulary/latest/` directly as the Pages artifact. No
+separate `docs/` or `site/` copy is maintained.
 
 ## Automation and Pages
 
@@ -73,13 +84,16 @@ workflow credentials and deployment target come from the current repository.
 No workflow writes to an upstream repository. The workflow requests contents-write
 only for generated-file updates, and pages-write/id-token-write only for deployment.
 
-The official site will be `https://health-ri.github.io/health-ri-metadata-vocabulary/`.
+The official site will be `https://health-ri.github.io/health-ri-metadata-vocabulary/`,
+opening the latest PyLODE specification directly. Archived HTML is stored in
+`vocabulary/versioned/` and may be inspected or downloaded through GitHub, but is
+not deployed as historical Pages URLs.
 The w3id redirects are maintained separately; their adoption is not performed by
 this repository. Until they are installed, use the repository files directly.
 
 ## Dependencies and review
 
-`requirements.txt` pins the full tested Python environment, including transitive
+`scripts/requirements.txt` pins the full tested Python environment, including transitive
 dependencies. Use Python 3.12. Action dependencies are pinned to commit SHAs with
 release labels in comments. Upgrade deliberately, run all checks, and inspect
 newly generated documentation before accepting upgrades. Past HTML snapshots are

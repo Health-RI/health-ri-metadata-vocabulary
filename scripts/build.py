@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import datetime
-import html
 import re
 import shutil
 import subprocess
@@ -23,8 +22,10 @@ VANN = Namespace('http://purl.org/vocab/vann/')
 SCHEMA = Namespace('https://schema.org/')
 REPO = 'https://github.com/Health-RI/health-ri-metadata-vocabulary'
 LICENSE = URIRef('https://creativecommons.org/licenses/by/4.0/')
-NAME = 'health-ri-metadata-vocabulary.ttl'
-FILES = (NAME, 'health-ri-metadata-shapes.ttl', 'example.ttl')
+STEM = 'health-ri-metadata-vocabulary'
+NAME = STEM + '.ttl'
+SHAPES = ROOT / 'validation/health-ri-metadata-shapes.ttl'
+EXAMPLE = ROOT / 'examples/health-condition-of-interest.ttl'
 SEMVER = re.compile(r'(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)')
 
 
@@ -33,20 +34,24 @@ def require(condition, message):
         raise ValueError(message)
 
 
+def version_of(path):
+    match = re.fullmatch(STEM + r'-v(' + SEMVER.pattern + r')\.ttl', path.name)
+    require(match is not None, f'Invalid release filename: {path.name}; use {STEM}-vX.Y.Z.ttl')
+    return match.group(1)
+
+
 def releases():
-    entries = list((ROOT / 'vocabulary/versioned').iterdir())
-    require(bool(entries), 'No versioned releases found')
-    for entry in entries:
-        require(entry.is_dir() and SEMVER.fullmatch(entry.name),
-                f'Invalid release directory: {entry.name}; use X.Y.Z')
-    return sorted(entries, key=lambda p: tuple(map(int, p.name.split('.'))))
+    directory = ROOT / 'vocabulary/versioned'
+    require(not any(p.is_dir() for p in directory.iterdir()),
+            'Versioned releases must be flat files, not version subdirectories')
+    entries = list(directory.glob('*.ttl'))
+    require(bool(entries), 'No versioned vocabulary files found')
+    return sorted(entries, key=lambda p: tuple(map(int, version_of(p).split('.'))))
 
 
-def validate_release(directory, previous=None):
-    version = directory.name
-    for name in FILES:
-        require((directory / name).is_file(), f'{version}: missing {name}')
-    g = Graph().parse(directory / NAME)
+def validate_release(file, previous=None):
+    version = version_of(file)
+    g = Graph().parse(file)
     ontology = URIRef(BASE)
     require(set(g.subjects(RDF.type, OWL.Ontology)) == {ontology},
             f'{version}: expected one ontology with the canonical IRI')
@@ -85,11 +90,14 @@ def validate_release(directory, previous=None):
     require(g.value(term, RDFS.domain) == DCAT.Dataset, 'Expected Dataset domain')
     require(g.value(term, RDFS.range) == SKOS.Concept, 'Expected Concept range')
     require((term, RDF.type, OWL.FunctionalProperty) not in g, 'Property must be repeatable')
-    shapes = Graph().parse(directory / FILES[1])
-    example = Graph().parse(directory / FILES[2])
-    conforms, _, report = validate(example, shacl_graph=shapes, inference='none', meta_shacl=True)
-    require(conforms, f'{version}: example fails SHACL\n{report}')
     return g
+
+
+def validate_example():
+    shapes = Graph().parse(SHAPES)
+    example = Graph().parse(EXAMPLE)
+    conforms, _, report = validate(example, shacl_graph=shapes, inference='none', meta_shacl=True)
+    require(conforms, f'Example fails SHACL\n{report}')
 
 
 def check_immutable(base):
@@ -101,6 +109,12 @@ def check_immutable(base):
          'vocabulary/versioned', 'docs/versioned'], cwd=ROOT, text=True).splitlines()
     for path in paths:
         old = subprocess.check_output(['git', 'show', f'{base}:{path}'], cwd=ROOT)
+        # Explicitly requested migration of the initial implementation on 2026-09-30.
+        # The exception applies only to the known legacy paths at this exact base commit.
+        if base == 'e9bc4cac163d7be67709caaecd98a94d74c34051' and (
+                path.startswith('vocabulary/versioned/0.1.0/') or
+                path == 'docs/versioned/0.1.0/index.html'):
+            continue
         file = ROOT / path
         require(file.is_file() and file.read_bytes() == old,
                 f'Immutable release file changed or removed: {path}; add a new version')
@@ -128,62 +142,44 @@ def build(base=None):
     check_immutable(base)
     versions = releases()
     previous = None
-    for directory in versions:
-        validate_release(directory, previous)
-        previous = directory.name
+    for file in versions:
+        validate_release(file, previous)
+        previous = version_of(file)
+    validate_example()
     current = versions[-1]
+    version = version_of(current)
     latest = ROOT / 'vocabulary/latest'
     latest.mkdir(parents=True, exist_ok=True)
-    for name in FILES:
-        shutil.copyfile(current / name, latest / name)
-    # Generate a snapshot once; never silently regenerate past documentation.
-    for directory in versions:
-        output = ROOT / 'docs/versioned' / directory.name / 'index.html'
+    shutil.copyfile(current, latest / NAME)
+    # A versioned HTML snapshot is generated once alongside its Turtle source.
+    for file in versions:
+        output = file.with_suffix('.html')
         if not output.exists():
-            output.parent.mkdir(parents=True, exist_ok=True)
-            subprocess.run(['pylode', str(directory / NAME), '-p', 'ontpub',
-                            '-c', 'true', '-o', str(output)], check=True)
-        require('health condition of interest' in output.read_text().lower(),
-                f'Incomplete PyLODE output: {output}')
-    latest_doc = ROOT / 'docs/latest/index.html'
-    latest_doc.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(ROOT / 'docs/versioned' / current.name / 'index.html', latest_doc)
-    # Citation metadata follows the selected vocabulary release automatically.
+            temporary = output.with_suffix('.tmp.html')
+            try:
+                subprocess.run(['pylode', str(file), '-p', 'ontpub',
+                                '-c', 'true', '-o', str(temporary)], check=True)
+                require(f'{BASE}/v{version_of(file)}' in temporary.read_text(),
+                        f'PyLODE output lacks the version IRI: {file.name}')
+                temporary.replace(output)
+            finally:
+                temporary.unlink(missing_ok=True)
+        require(f'{BASE}/v{version_of(file)}' in output.read_text(),
+                f'Documentation version mismatch: {output.name}')
+    shutil.copyfile(current.with_suffix('.html'), latest / 'index.html')
+    # The latest directory itself is the Pages artifact; archives stay in GitHub.
+    (latest / '.nojekyll').touch()
     citation = yaml.safe_load((ROOT / 'CITATION.cff').read_text())
-    graph = Graph().parse(current / NAME)
-    citation['version'] = current.name
+    graph = Graph().parse(current)
+    citation['version'] = version
     citation['date-released'] = str(graph.value(URIRef(BASE), DCTERMS.modified))
-    citation['url'] = f'{BASE}/v{current.name}'
+    citation['url'] = f'{BASE}/v{version}'
     (ROOT / 'CITATION.cff').write_text(yaml.safe_dump(citation, sort_keys=False, allow_unicode=True))
-    site = ROOT / 'site'
-    if site.exists():
-        shutil.rmtree(site)
-    shutil.copytree(ROOT / 'docs', site)
-    shutil.copytree(ROOT / 'vocabulary', site / 'vocabulary')
-    for name in ('LICENSE', 'CHANGELOG.md', 'CITATION.cff', 'README.md', 'MAINTAINING.md'):
-        shutil.copyfile(ROOT / name, site / name)
-    items = ''.join(f'<li><a href="versioned/{p.name}/index.html">Version {p.name}</a> '
-                    f'(<a href="vocabulary/versioned/{p.name}/{NAME}">Turtle</a>)</li>'
-                    for p in reversed(versions))
-    (site / 'index.html').write_text(f'''<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>Health-RI Metadata Vocabulary</title></head><body>
-<main><h1>Health-RI Metadata Vocabulary</h1>
-<p>Current vocabulary version: {html.escape(current.name)}. Prefix: <code>hri</code>.</p>
-<p>Namespace: <code>{BASE}#</code>. Development releases (0.x) are subject to change.</p>
-<p><a href="latest/index.html">Current PyLODE specification</a> ·
-<a href="vocabulary/latest/{NAME}">Current Turtle vocabulary</a> ·
-<a href="vocabulary/latest/health-ri-metadata-shapes.ttl">SHACL</a> ·
-<a href="vocabulary/latest/example.ttl">Example</a></p>
-<h2>Complete vocabulary releases</h2><ul>{items}</ul>
-<p><a href="{REPO}">Official repository</a> · <a href="CHANGELOG.md">Changelog</a> ·
-<a href="CITATION.cff">Citation</a> · <a href="LICENSE">CC BY 4.0 license</a></p>
-</main></body></html>''')
-    (site / '.nojekyll').touch()
-    check_links(site)
-    for name in FILES:
-        require((latest / name).read_bytes() == (current / name).read_bytes(), 'Latest mismatch')
-    print(f'Validated {len(versions)} release(s); latest={current.name}; Pages site ready in site/')
+    check_links(latest)
+    require((latest / NAME).read_bytes() == current.read_bytes(), 'Latest Turtle mismatch')
+    require((latest / 'index.html').read_bytes() == current.with_suffix('.html').read_bytes(),
+            'Latest HTML mismatch')
+    print(f'Validated {len(versions)} release(s); latest={version}; Pages ready in vocabulary/latest/')
 
 
 if __name__ == '__main__':
