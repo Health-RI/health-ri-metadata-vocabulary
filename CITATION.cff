@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: Please cite the version of the Health-RI Metadata Vocabulary that you use.
+title: Health-RI Metadata Vocabulary
+type: dataset
+authors:
+- name: Health-RI
+  website: https://www.health-ri.nl/
+version: 0.1.0
+date-released: '2026-09-30'
+url: https://w3id.org/health-ri/metadata-vocabulary/v0.1.0
+repository-code: https://github.com/Health-RI/health-ri-metadata-vocabulary
+license: CC-BY-4.0
+abstract: Health-RI-specific RDF terms for describing health datasets at metadata
+  and catalogue level.
+keywords:
+- health metadata
+- RDF vocabulary
+- dataset discovery

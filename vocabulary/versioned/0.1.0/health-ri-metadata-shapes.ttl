@@ -1,0 +1,20 @@
+@prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# Application validation, separate from vocabulary entailments.
+# Blank-node shapes avoid introducing extra Health-RI vocabulary terms.
+[] a sh:NodeShape ;
+    sh:targetSubjectsOf hri:healthConditionOfInterest ;
+    sh:class dcat:Dataset ;
+    sh:property [
+        sh:path hri:healthConditionOfInterest ;
+        sh:nodeKind sh:IRI ;
+        sh:class skos:Concept ;
+        sh:message "Health condition of interest must be an IRI identified as a skos:Concept."@en
+    ] .
+
+# No minCount or maxCount: optional and repeatable (0..*).
+# Validate without loading the vocabulary's domain/range axioms if missing
+# explicit data typing must be detected rather than supplied by inference.

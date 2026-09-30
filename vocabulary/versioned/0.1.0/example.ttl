@@ -1,0 +1,14 @@
+@prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<https://example.org/dataset/myocardial-infarction> a dcat:Dataset ;
+    dcterms:title "Example dataset concerning myocardial infarction"@en ;
+    hri:healthConditionOfInterest <http://snomed.info/id/22298006> .
+
+# Local metadata typing; no redistribution of the external terminology.
+<http://snomed.info/id/22298006> a skos:Concept .
+
+# This is a minimal vocabulary usage example, not a complete
+# Health-RI Metadata Schema or HealthDCAT-AP compliant dataset record.

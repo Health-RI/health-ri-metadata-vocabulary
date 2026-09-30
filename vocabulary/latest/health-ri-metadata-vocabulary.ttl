@@ -1,0 +1,47 @@
+@prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/health-ri/metadata-vocabulary> a owl:Ontology ;
+    dcterms:title "Health-RI Metadata Vocabulary"@en ;
+    rdfs:label "Health-RI Metadata Vocabulary"@en ;
+    dcterms:description "A vocabulary of Health-RI-specific terms for describing health datasets at metadata and catalogue level. It complements reused metadata standards; it is not a complete metadata schema or a clinical terminology."@en ;
+    dcterms:creator <https://www.health-ri.nl/> ;
+    dcterms:publisher <https://www.health-ri.nl/> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:language "en"^^xsd:language ;
+    dcterms:issued "2026-09-30"^^xsd:date ;
+    dcterms:modified "2026-09-30"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    dcat:version "0.1.0" ;
+    owl:versionIRI <https://w3id.org/health-ri/metadata-vocabulary/v0.1.0> ;
+    vann:preferredNamespacePrefix "hri" ;
+    vann:preferredNamespaceUri "https://w3id.org/health-ri/metadata-vocabulary#"^^xsd:anyURI ;
+    foaf:homepage <https://health-ri.github.io/health-ri-metadata-vocabulary/> ;
+    rdfs:seeAlso <https://w3id.org/health-ri/metadata-vocabulary/v0.1.0/spec> ;
+    schema:codeRepository <https://github.com/Health-RI/health-ri-metadata-vocabulary> ;
+    dcat:keyword "health metadata"@en, "dataset discovery"@en, "Semantic Web vocabulary"@en ;
+    dcterms:bibliographicCitation "Health-RI (2026). Health-RI Metadata Vocabulary, version 0.1.0. https://w3id.org/health-ri/metadata-vocabulary/v0.1.0"@en ;
+    rdfs:comment "Initial development release for review. The entire vocabulary is versioned together using Semantic Versioning; term IRIs remain unversioned. This release does not assert approval or adoption by a particular Health-RI Metadata Schema release."@en .
+
+<https://www.health-ri.nl/> a foaf:Organization ;
+    foaf:name "Health-RI" ;
+    foaf:homepage <https://www.health-ri.nl/> .
+
+hri:healthConditionOfInterest a owl:ObjectProperty ;
+    rdfs:label "health condition of interest"@en ;
+    skos:definition "Relates a dataset to an identified concept representing a disease, disorder, or clinical condition that the dataset as a whole concerns at metadata or catalogue level."@en ;
+    rdfs:comment "The value represents a clinical concept, not a patient or an individual occurrence of a condition. Multiple values may be provided. Values must be IRIs; this syntactic requirement is expressed in the accompanying SHACL shape, not by an RDFS range of IRI."@en ;
+    skos:scopeNote "This relation characterises the dataset as a whole. It does not assert that individual subjects, patients, records, samples, or observations have been diagnosed with the condition, and it is not an enumeration of diagnoses in individual records. Use externally identified disease or condition concepts from appropriate terminologies or classifications. The vocabulary does not prescribe a closed list of terminologies. Values are modelled as skos:Concept in accordance with the Health-RI metadata convention."@en ;
+    skos:historyNote "Introduced for the health condition of interest requirement (R-U-04). It replaces the previously proposed use of SIO_000332 in the modelling decision. This history does not assert equivalence, subsumption, or a formal mapping to SIO."@en ;
+    skos:example "A dataset concerning myocardial infarction may link to http://snomed.info/id/22298006; the linked concept is typed as skos:Concept in the metadata graph. This says nothing about diagnosis status of individual participants."@en ;
+    rdfs:domain dcat:Dataset ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://w3id.org/health-ri/metadata-vocabulary> .
