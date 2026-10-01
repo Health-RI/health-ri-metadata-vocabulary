@@ -177,7 +177,6 @@ def build(base=None):
                 f'Documentation version mismatch: {output.name}')
     shutil.copyfile(current.with_suffix('.html'), latest / 'index.html')
     # The latest directory itself is the Pages artifact; archives stay in GitHub.
-    (latest / '.nojekyll').touch()
     citation = yaml.safe_load((ROOT / 'CITATION.cff').read_text())
     graph = Graph().parse(current)
     citation['version'] = version

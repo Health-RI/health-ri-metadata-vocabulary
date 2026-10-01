@@ -36,7 +36,7 @@ class PublicationTests(unittest.TestCase):
             self.assertEqual((latest / 'index.html').read_bytes(), new.with_suffix('.html').read_bytes())
             self.assertEqual(original.with_suffix('.html').read_bytes(), archived_html)
             self.assertEqual({p.name for p in latest.iterdir()},
-                             {build.NAME, 'index.html', '.nojekyll'})
+                             {build.NAME, 'index.html'})
 
     def test_numeric_version_order(self):
         with tempfile.TemporaryDirectory() as tmp:
