@@ -25,7 +25,7 @@ LICENSE = URIRef('https://creativecommons.org/licenses/by/4.0/')
 STEM = 'health-ri-metadata-vocabulary'
 NAME = STEM + '.ttl'
 SHAPES = ROOT / 'validation/health-ri-metadata-shapes.ttl'
-EXAMPLE = ROOT / 'examples/health-condition-of-interest.ttl'
+EXAMPLES = ROOT / 'examples'
 SEMVER = re.compile(r'(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)')
 
 
@@ -90,14 +90,23 @@ def validate_release(file, previous=None):
     require(g.value(term, RDFS.domain) == DCAT.Dataset, 'Expected Dataset domain')
     require(g.value(term, RDFS.range) == SKOS.Concept, 'Expected Concept range')
     require((term, RDF.type, OWL.FunctionalProperty) not in g, 'Property must be repeatable')
+    if tuple(map(int, version.split('.'))) >= (0, 2, 0):
+        term = HRI.anatomicalLocationCovered
+        require((term, RDF.type, OWL.ObjectProperty) in g, 'Expected anatomical object property')
+        require(g.value(term, RDFS.domain) == DCAT.Dataset, 'Expected anatomical Dataset domain')
+        require(g.value(term, RDFS.range) == SKOS.Concept, 'Expected anatomical Concept range')
+        require((term, RDF.type, OWL.FunctionalProperty) not in g, 'Anatomical property must be repeatable')
     return g
 
 
 def validate_example():
     shapes = Graph().parse(SHAPES)
-    example = Graph().parse(EXAMPLE)
-    conforms, _, report = validate(example, shacl_graph=shapes, inference='none', meta_shacl=True)
-    require(conforms, f'Example fails SHACL\n{report}')
+    examples = sorted(EXAMPLES.glob('*.ttl'))
+    require(bool(examples), 'No usage examples found')
+    for file in examples:
+        example = Graph().parse(file)
+        conforms, _, report = validate(example, shacl_graph=shapes, inference='none', meta_shacl=True)
+        require(conforms, f'{file.name} fails SHACL\n{report}')
 
 
 def check_immutable(base):

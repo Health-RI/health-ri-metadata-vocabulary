@@ -1,6 +1,8 @@
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sct: <http://snomed.info/id/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 # Application validation, separate from vocabulary entailments.
@@ -18,3 +20,24 @@
 # No minCount or maxCount: optional and repeatable (0..*).
 # Validate without loading the vocabulary's domain/range axioms if missing
 # explicit data typing must be detected rather than supplied by inference.
+
+# Supply trustworthy SNOMED CT taxonomy evidence in the validation data graph.
+# Zero-or-more includes the root itself; descendants require a subclass path.
+# These checks do not authenticate terminology assertions or check active status.
+[] a sh:NodeShape ;
+    sh:targetSubjectsOf hri:anatomicalLocationCovered ;
+    sh:class dcat:Dataset ;
+    sh:property [
+        sh:path hri:anatomicalLocationCovered ;
+        sh:nodeKind sh:IRI ;
+        sh:class skos:Concept ;
+        sh:pattern "^http://snomed[.]info/id/[0-9]+$" ;
+        sh:node [
+            sh:property [
+                sh:path [ sh:zeroOrMorePath rdfs:subClassOf ] ;
+                sh:hasValue sct:91723000 ;
+                sh:message "Supply SNOMED CT taxonomy evidence that the value is Anatomical structure (91723000) or a descendant."@en
+            ]
+        ] ;
+        sh:message "Anatomical location covered must be a SNOMED CT concept IRI within << 91723000, typed as skos:Concept."@en
+    ] .

@@ -19,9 +19,9 @@ The explicitly requested restructuring and metadata correction of the initial
 0.1.0 implementation is a one-time migration from commit `e9bc4ca`; the build script
 limits that exception to the old paths at that exact commit.
 
-The SHACL file in `validation/` and example in `examples/` are supporting artifacts,
-not additional release inputs. They provide the IRI-only data check and a runnable
-usage example. Adding one new versioned vocabulary Turtle file is sufficient for
+The SHACL file in `validation/` and examples in `examples/` are supporting artifacts,
+not additional release inputs. They provide IRI-only data checks, the anatomical SNOMED hierarchy binding,
+and runnable usage examples. Adding one new versioned vocabulary Turtle file is sufficient for
 the publication pipeline; no versioned copies of these support files are required.
 
 ## Semantic Versioning
@@ -33,7 +33,7 @@ and accompanying validation constraints. The vocabulary follows
 - At `1.0.0` and above: incompatible changes require a major version; compatible
   additions require a minor version; compatible corrections require a patch.
 - During `0.y.z` development, stability is not promised. Use a new minor version
-  for breaking semantic or validation changes and a patch for compatible corrections.
+  for term additions or breaking semantic or validation changes, and a patch for compatible corrections.
 - Do not silently change the meaning of a published term; explain compatibility
   implications in the changelog and assess whether a different term is necessary.
 - Repository-only tooling changes do not require a vocabulary release unless they
@@ -51,7 +51,7 @@ stays on branches until ready for a numbered release.
    `owl:versionIRI`, `dcterms:modified`, the version-specific documentation link,
    and the bibliographic citation. Preserve the vocabulary's original issued date.
    Set `owl:priorVersion` to the preceding version IRI. Update the separate
-   shape/example only if the accompanying validation or usage guidance changes.
+   shapes/examples only if the accompanying validation or usage guidance changes.
 3. Add a dated vocabulary-level entry to `CHANGELOG.md` using Keep a Changelog
    categories. Include any breaking semantics or validation effects explicitly.
 4. Run the README validation commands and review both RDF and generated HTML.
@@ -100,5 +100,14 @@ newly generated documentation before accepting upgrades. Past HTML snapshots are
 preserved when the generator changes.
 
 Tests cover release metadata, IRI-only values, explicit Concept typing,
-subject typing, optionality, and multiple values. Review the clinical meaning and
+subject typing, optionality, multiple values, and the anatomical hierarchy binding. Review the clinical meaning and
 external identifiers separately; syntax validation cannot establish those facts.
+
+For `hri:anatomicalLocationCovered`, retain the SNOMED CT binding to
+`<< 91723000 |Anatomical structure (body structure)|`. Validation needs trusted
+taxonomy evidence expressed through `rdfs:subClassOf` paths, plus metadata Concept
+typing. Tests exercise the root, transitive descendants, missing evidence, and
+out-of-hierarchy values. Passing SHACL is not proof that the supplied taxonomy is
+authoritative or that a concept is active in the selected SNOMED edition.
+The existing w3id proposal uses version-pattern redirects and already covers
+`v0.2.0`; this release does not require new redirect rules.

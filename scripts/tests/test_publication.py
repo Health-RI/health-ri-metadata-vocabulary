@@ -1,4 +1,5 @@
 """Publication safeguards: numeric ordering, invalid input, immutable snapshots."""
+import re
 import shutil
 import subprocess
 import tempfile
@@ -14,16 +15,21 @@ class PublicationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / 'repository'
             shutil.copytree(build.ROOT, root, ignore=shutil.ignore_patterns('__pycache__', 'site'))
-            original = root / f'vocabulary/versioned/{build.STEM}-v0.1.0.ttl'
+            current = build.releases()[-1]
+            old_version = build.version_of(current)
+            major, minor, _ = map(int, old_version.split('.'))
+            new_version = f'{major}.{minor + 1}.0'
+            original = root / current.relative_to(build.ROOT)
             archived_html = original.with_suffix('.html').read_bytes()
-            new = original.with_name(f'{build.STEM}-v0.2.0.ttl')
-            text = original.read_text().replace('0.1.0', '0.2.0')
+            new = original.with_name(f'{build.STEM}-v{new_version}.ttl')
+            text = original.read_text().replace(old_version, new_version)
+            text = re.sub(r'    owl:priorVersion [^;]+;\n', '', text)
             text = text.replace('    owl:versionInfo',
-                                f'    owl:priorVersion <{build.BASE}/v0.1.0> ;\n    owl:versionInfo')
+                                f'    owl:priorVersion <{build.BASE}/v{old_version}> ;\n    owl:versionInfo')
             new.write_text(text)
             with patch.object(build, 'ROOT', root), \
                     patch.object(build, 'SHAPES', root / 'validation/health-ri-metadata-shapes.ttl'), \
-                    patch.object(build, 'EXAMPLE', root / 'examples/health-condition-of-interest.ttl'):
+                    patch.object(build, 'EXAMPLES', root / 'examples'):
                 build.build()
             latest = root / 'vocabulary/latest'
             self.assertEqual((latest / build.NAME).read_bytes(), new.read_bytes())

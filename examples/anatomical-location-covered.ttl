@@ -1,0 +1,19 @@
+@prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sct: <http://snomed.info/id/> .
+
+# Minimal usage example, not a complete HealthDCAT-AP record.
+<https://example.org/dataset/lung-imaging> a dcat:Dataset ;
+    dcterms:title "Example dataset covering the lung"@en ;
+    hri:anatomicalLocationCovered sct:39607008 .
+
+# Metadata concept typing plus a subsumption assertion for standalone validation.
+# This is not a claim that Anatomical structure is the immediate SNOMED parent.
+# Source: SNOMED International's ECL Quick Reference, Reversed Attributes example:
+# https://docs.snomed.org/snomed-ct-specifications/snomed-ct-expression-constraint-language/appendices/appendix-d-ecl-quick-reference
+# Production validation should use taxonomy evidence from the chosen SNOMED edition.
+sct:39607008 a skos:Concept ;
+    rdfs:subClassOf sct:91723000 .

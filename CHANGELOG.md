@@ -17,6 +17,24 @@ Terms do not have independent release versions.
   verified ORCID identifiers. This is a correction of the initial implementation,
   not a change to the health-condition property's semantics.
 
+## [0.2.0] - 2026-10-01
+
+### Added
+
+- `hri:anatomicalLocationCovered` for R-U-03 dataset-level anatomical coverage.
+  Domain is `dcat:Dataset`; RDF range is `skos:Concept`, with a controlled value
+  range of SNOMED CT Anatomical structure (91723000) or descendants (`<< 91723000`).
+- Separate SHACL checks for concept IRIs and the supplied SNOMED subclass hierarchy,
+  with optional, repeatable use; a standalone lung-coverage example and tests.
+
+### Changed
+
+- Superseded the earlier R-U-03 EUCAIM modelling proposal with the Health-RI term,
+  without asserting a formal mapping to EUCAIM.
+- Updated current documentation, citation metadata, and latest representations.
+  Archived 0.1.0 files and health-condition semantics remain unchanged.
+- Validate every usage example and test promotion from the current release.
+
 ## [0.1.0] - 2026-09-30
 
 ### Added
@@ -31,3 +49,5 @@ Terms do not have independent release versions.
 
 [Unreleased]: https://github.com/Health-RI/health-ri-metadata-vocabulary/commits/main
 [0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.1.0.ttl
+
+[0.2.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.2.0.ttl
