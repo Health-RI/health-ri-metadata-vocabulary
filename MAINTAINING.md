@@ -20,7 +20,7 @@ The explicitly requested restructuring and metadata correction of the initial
 limits that exception to the old paths at that exact commit.
 
 The SHACL file in `validation/` and examples in `examples/` are supporting artifacts,
-not additional release inputs. They provide IRI-only data checks, the anatomical SNOMED hierarchy binding,
+not additional release inputs. They provide IRI-only data checks and health-condition Concept typing,
 and runnable usage examples. Adding one new versioned vocabulary Turtle file is sufficient for
 the publication pipeline; no versioned copies of these support files are required.
 
@@ -100,14 +100,21 @@ newly generated documentation before accepting upgrades. Past HTML snapshots are
 preserved when the generator changes.
 
 Tests cover release metadata, IRI-only values, explicit Concept typing,
-subject typing, optionality, multiple values, and the anatomical hierarchy binding. Review the clinical meaning and
+subject typing, optionality, multiple values, and anatomical subclass entailment. Review the clinical meaning and
 external identifiers separately; syntax validation cannot establish those facts.
 
-For `hri:anatomicalLocationCovered`, retain the SNOMED CT binding to
-`<< 91723000 |Anatomical structure (body structure)|`. Validation needs trusted
-taxonomy evidence expressed through `rdfs:subClassOf` paths, plus metadata Concept
-typing. Tests exercise the root, transitive descendants, missing evidence, and
-out-of-hierarchy values. Passing SHACL is not proof that the supplied taxonomy is
-authoritative or that a concept is active in the selected SNOMED edition.
+For `hri:anatomicalLocationCovered`, version 0.2.1 uses an OWL Full range restriction
+on `rdfs:subClassOf` with `owl:hasValue` set to SNOMED CT `91723000`.
+Do not interpret the resulting subclass entailment as authoritative terminology
+validation. Anatomical SHACL checks only subject typing and IRI-valued objects.
+The inference regression test exercises the relevant RDF/OWL rules; it is not a
+complete OWL Full consistency checker. OWL 2 DL tools cannot be assumed to support
+this metamodeling pattern.
+
+The 0.2.1 number is an explicitly requested exception to the development versioning
+guideline above: the release changes formal range semantics and removes anatomical
+Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0
+files unchanged.
+
 The existing w3id proposal uses version-pattern redirects and already covers
-`v0.2.0`; this release does not require new redirect rules.
+`v0.2.1`; this release does not require new redirect rules.

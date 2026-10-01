@@ -94,7 +94,19 @@ def validate_release(file, previous=None):
         term = HRI.anatomicalLocationCovered
         require((term, RDF.type, OWL.ObjectProperty) in g, 'Expected anatomical object property')
         require(g.value(term, RDFS.domain) == DCAT.Dataset, 'Expected anatomical Dataset domain')
-        require(g.value(term, RDFS.range) == SKOS.Concept, 'Expected anatomical Concept range')
+        ranges = list(g.objects(term, RDFS.range))
+        require(len(ranges) == 1, 'Expected exactly one anatomical range')
+        if version == '0.2.0':
+            require(ranges[0] == SKOS.Concept, 'Expected historical anatomical Concept range')
+        else:
+            restriction = ranges[0]
+            require((restriction, RDF.type, OWL.Restriction) in g, 'Expected anatomical range restriction')
+            require(set(g.objects(restriction, OWL.onProperty)) == {RDFS.subClassOf},
+                    'Expected restriction on rdfs:subClassOf')
+            require(set(g.objects(restriction, OWL.hasValue)) == {URIRef('http://snomed.info/id/91723000')},
+                    'Expected Anatomical structure as restriction value')
+            require((URIRef('http://snomed.info/id/91723000'), RDF.type, OWL.Class) in g,
+                    'Expected anatomical root class declaration')
         require((term, RDF.type, OWL.FunctionalProperty) not in g, 'Anatomical property must be repeatable')
     return g
 

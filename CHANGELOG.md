@@ -17,6 +17,22 @@ Terms do not have independent release versions.
   verified ORCID identifiers. This is a correction of the initial implementation,
   not a change to the health-condition property's semantics.
 
+## [0.2.1] - 2026-10-01
+
+### Changed
+
+- Replaced the anatomical property's `skos:Concept` range with an OWL Full
+  `owl:hasValue` restriction on `rdfs:subClassOf`, targeting SNOMED CT 91723000.
+- Removed anatomical Concept typing, namespace, and hierarchy-membership SHACL
+  checks; retained Dataset-subject and IRI-object checks. The range axiom entails
+  subclass membership and does not validate authoritative SNOMED membership.
+- Updated the anatomical example, documentation, release checks, inference tests,
+  generated latest representations, and citation metadata.
+- **Compatibility:** this changes formal semantics and validation expectations.
+  Version 0.2.1 was explicitly requested despite that semantic change; it is not
+  a claim of patch-level compatibility. The health-condition term and all previous
+  release snapshots remain unchanged.
+
 ## [0.2.0] - 2026-10-01
 
 ### Added
@@ -51,3 +67,5 @@ Terms do not have independent release versions.
 [0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.1.0.ttl
 
 [0.2.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.2.0.ttl
+
+[0.2.1]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.2.1.ttl

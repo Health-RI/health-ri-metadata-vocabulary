@@ -9,7 +9,7 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.2.0` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.2.1` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [GitHub Pages](https://health-ri.github.io/health-ri-metadata-vocabulary/) |
@@ -70,45 +70,57 @@ additional entailments have not been adopted here.
 
 ## Anatomical location covered
 
-Added in `0.2.0`, `hri:anatomicalLocationCovered` relates a dataset to a SNOMED CT
-concept identifying an anatomical structure covered by the dataset as a whole.
-Use is optional and repeatable (`0..*`). It does not associate a particular body
-site with a particular modality, data category, sample, or record within a mixed
-dataset.
+Introduced in `0.2.0` and revised in `0.2.1`, `hri:anatomicalLocationCovered`
+relates a dataset to an anatomical class describing its aggregate anatomical coverage.
+Use is optional and repeatable (`0..*`). It does not pair a body site with a
+particular modality, data category, sample, or record within a mixed dataset.
 
-The controlled value range is **91723000 |Anatomical structure (body structure)|
-and its descendants**, expressed as SNOMED CT ECL `<< 91723000`.
-The root IRI is `http://snomed.info/id/91723000`. It is more specific than the
-broader Body structure hierarchy (`123037004`).
-See the [SNOMED International anatomical-structure model](https://docs.snomed.org/snomed-ct-specifications/snomed-ct-editorial-guide/readme/authoring/domain-specific-modeling/body-structure/body-structure-attributes-summary)
-and [ECL descendant-or-self syntax](https://docs.snomed.org/snomed-ct-specifications/snomed-ct-expression-constraint-language/appendices/appendix-d-ecl-quick-reference).
+Version `0.2.1` uses this **OWL Full / RDF-Based Semantics** range:
 
-The property is an `owl:ObjectProperty` with domain `dcat:Dataset` and formal RDF
-range `skos:Concept`, following the concept-valued metadata convention above.
-The SNOMED restriction is a **terminology binding**, enforced separately by SHACL.
-A direct `rdfs:range <http://snomed.info/id/91723000>` would entail that each value
-is an anatomical instance; it would not require the value to identify a SNOMED
-subclass. No new anatomical class or copied SNOMED hierarchy is added to the vocabulary.
+```turtle
+@prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sct: <http://snomed.info/id/> .
 
-The [standalone Turtle example](examples/anatomical-location-covered.ttl) uses
-`http://snomed.info/id/39607008` (Lung structure), typed as `skos:Concept`.
-Its minimal terminology evidence states subsumption under `91723000`; it does not
-assert that this is the immediate parent.
+hri:anatomicalLocationCovered a owl:ObjectProperty ;
+    rdfs:domain dcat:Dataset ;
+    rdfs:range [
+        a owl:Restriction ;
+        owl:onProperty rdfs:subClassOf ;
+        owl:hasValue sct:91723000
+    ] .
 
-For validation, supply trusted SNOMED CT taxonomy evidence from the chosen edition
-in the data graph alongside the metadata. The shape requires a SNOMED concept IRI,
-Concept typing, and an `rdfs:subClassOf*` path to `91723000` (zero steps accepts the
-root). Use an extracted or classified hierarchy: SHACL does not classify OWL
-expressions or fetch a terminology service. Missing hierarchy evidence causes a
-validation failure even when the code is clinically appropriate. These checks
-cannot authenticate supplied taxonomy assertions or establish current active status;
-verify those against the selected SNOMED edition. The IRI pattern alone does not
-establish membership.
+sct:91723000 a owl:Class .
+```
 
-This term implements the revised R-U-03 decision, superseding the earlier
-`eucaim:hasBodySite` / `eucaim:BP1000024` proposal. No formal equivalence,
-subproperty relationship, or mapping to EUCAIM is asserted.
-The existing `hri:healthConditionOfInterest` definition and axioms are unchanged.
+Every linked value is thereby a subclass of **91723000 |Anatomical structure
+(body structure)|**. Subclass transitivity and reflexivity include indirect subclasses
+and the root itself. The restriction operates on `rdfs:subClassOf`, so this pattern
+is **outside OWL 2 DL**. See the [OWL 2 RDF-Based Semantics](https://www.w3.org/TR/owl2-rdf-based-semantics/)
+and [SNOMED anatomical-structure model](https://docs.snomed.org/snomed-ct-specifications/snomed-ct-editorial-guide/readme/authoring/domain-specific-modeling/body-structure/body-structure-attributes-summary).
+
+Use SNOMED anatomical class IRIs for the intended terminology binding. The
+[example](examples/anatomical-location-covered.ttl) links directly to
+`http://snomed.info/id/39607008` (Lung structure), typed as `owl:Class`.
+It includes the subsumption assertion for readability; the range axiom also entails
+that assertion. It does not assert immediate parenthood or type the value as an
+individual anatomical structure. **No `skos:Concept` typing is required.**
+
+This is a semantic assertion, not terminology validation: an inappropriate value
+also acquires the subclass relationship. The axiom does not restrict identifier
+namespaces, verify active status, or establish that SNOMED itself asserts the
+relationship. Checking authoritative membership requires a separate terminology
+lookup or validation process. The accompanying SHACL shape checks only Dataset
+subjects and IRI-valued objects for this property.
+
+The term supersedes the R-U-03 `eucaim:hasBodySite` / `eucaim:BP1000024` proposal
+without asserting a formal mapping. The `0.2.1` change replaces the earlier
+`skos:Concept` range and SHACL hierarchy checks. It changes formal semantics and
+validation expectations; the patch number was explicitly selected by the
+maintainers and should not be interpreted as a compatibility guarantee.
+The health-condition property's definition, range, and validation are unchanged.
 
 ## Local validation and documentation
 
@@ -136,7 +148,8 @@ On Windows, activate with
 
 To validate metadata data independently, load the SHACL file with the data graph,
 without importing the vocabulary's domain/range axioms or enabling inference.
-Supply the Concept types in that graph (or an explicitly provided terminology graph).
+For health-condition values, supply Concept types in that graph (or an explicitly
+provided terminology graph). Anatomical values do not require Concept typing.
 Otherwise inference may supply missing types before validation. The example and
 tests use explicit typing and no inference.
 
@@ -155,7 +168,7 @@ The release infrastructure is informed by the
 and its latest/versioned and PyLODE patterns. The scripts here are a separate,
 smaller implementation. Metadata design uses OWL, Dublin Core, DCAT, VANN, FOAF,
 SKOS, MOD, and Schema.org. `owl:imports` references the SKOS ontology because the
-properties use `skos:Concept` and SKOS annotations. It does not import the Semantic
+health-condition property uses `skos:Concept` and both properties use SKOS annotations. It does not import the Semantic
 Interoperability Initiative's semiotics ontology. The local validation checks do
 not fetch imports or infer types before checking the examples.
 All original repository content is licensed under CC BY 4.0. External terminology
