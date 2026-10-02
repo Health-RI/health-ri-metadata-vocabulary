@@ -12,11 +12,13 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 | Versioning | Whole-vocabulary Semantic Versioning, current release `0.4.1` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
-| Official documentation | [GitHub Pages](https://health-ri.github.io/health-ri-metadata-vocabulary/) |
+| Official documentation | [Persistent documentation link](https://w3id.org/health-ri/metadata-vocabulary/spec) |
 
-The official publication and w3id links become live after the implementation is
-merged into the official repository, Pages is enabled, and the separate w3id
-configuration is accepted. A fork is a staging location, not a canonical namespace.
+The vocabulary redirect configuration has been merged into w3id.org. Target files
+and documentation become available when the implementation is merged into the
+official repository and Pages is deployed. A fork is a staging location, not a
+canonical namespace. See [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects)
+for the complete route reference and the current examples-directory exception.
 
 ## Normative status
 
@@ -36,6 +38,96 @@ they are not a complete assessment of conformity to the vocabulary.
 - [Health-condition example](examples/health-condition-of-interest.ttl)
 - [Anatomical-coverage example](examples/anatomical-location-covered.ttl)
 - [Changelog](CHANGELOG.md), [citation metadata](CITATION.cff), and [maintenance](MAINTAINING.md)
+
+## Persistent identifiers (PIDs) and redirects
+
+Use the **w3id links** when citing or sharing resources: their destinations can be
+maintained without changing the identifiers. Repository-relative links in
+[Access](#access) remain useful when browsing a fork or a local checkout.
+
+The tables describe the rules in
+[the Health-RI w3id configuration](https://github.com/perma-id/w3id.org/blob/master/ids/health-ri/.htaccess),
+including [merged PR #6792](https://github.com/perma-id/w3id.org/pull/6792).
+A configured redirect does not guarantee that its target is already published:
+official files must be merged into the Health-RI repository and the latest HTML
+must be deployed to Pages.
+
+### Main links
+
+All paths below use the base `https://w3id.org/health-ri/metadata-vocabulary`.
+Turtle destinations are raw files; the SHACL shapes and examples are non-normative.
+
+| Resource | PID | Redirect destination |
+| --- | --- | --- |
+| Vocabulary identifier | [Base IRI](https://w3id.org/health-ri/metadata-vocabulary) | Latest Turtle or HTML, selected by the request's `Accept` header (see below). |
+| Latest vocabulary Turtle | [/ttl](https://w3id.org/health-ri/metadata-vocabulary/ttl) | [Latest Turtle file](https://raw.githubusercontent.com/Health-RI/health-ri-metadata-vocabulary/refs/heads/main/vocabulary/latest/health-ri-metadata-vocabulary.ttl) in the official repository. |
+| Latest documentation | [/spec](https://w3id.org/health-ri/metadata-vocabulary/spec) | [Rendered documentation](https://health-ri.github.io/health-ri-metadata-vocabulary/) on GitHub Pages. Use this PID for the repository's **Website** field. |
+| Repository | [/git](https://w3id.org/health-ri/metadata-vocabulary/git) | [Official GitHub repository](https://github.com/Health-RI/health-ri-metadata-vocabulary). |
+| Validation shapes | [/shacl](https://w3id.org/health-ri/metadata-vocabulary/shacl) | [SHACL Turtle file](https://raw.githubusercontent.com/Health-RI/health-ri-metadata-vocabulary/refs/heads/main/validation/health-ri-metadata-shapes.ttl). |
+| Default example | [/example](https://w3id.org/health-ri/metadata-vocabulary/example) | [Health-condition example](https://raw.githubusercontent.com/Health-RI/health-ri-metadata-vocabulary/refs/heads/main/examples/health-condition-of-interest.ttl). |
+| Health-condition example | [/example/health-condition-of-interest](https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest) | [Health-condition Turtle file](https://raw.githubusercontent.com/Health-RI/health-ri-metadata-vocabulary/refs/heads/main/examples/health-condition-of-interest.ttl). |
+| Anatomical-coverage example | [/example/anatomical-location-covered](https://w3id.org/health-ri/metadata-vocabulary/example/anatomical-location-covered) | [Anatomical-coverage Turtle file](https://raw.githubusercontent.com/Health-RI/health-ri-metadata-vocabulary/refs/heads/main/examples/anatomical-location-covered.ttl). |
+| Examples directory | [/examples](https://w3id.org/health-ri/metadata-vocabulary/examples) | [Examples folder in Pedro's fork](https://github.com/pedropaulofb/health-ri-metadata-vocabulary/tree/main/examples/). **This route currently targets the personal fork**, unlike the individual example routes above. |
+
+### Versioned links
+
+Replace `X.Y.Z` with an existing release number, such as `0.4.1`.
+Versioned Turtle files and archived HTML are immutable repository snapshots.
+Unversioned links follow the latest content.
+
+| PID path after the base | Purpose and destination |
+| --- | --- |
+| `/vX.Y.Z` | Identifies a release; negotiates between that release's `/ttl` and `/spec`. Example: [v0.4.1](https://w3id.org/health-ri/metadata-vocabulary/v0.4.1). |
+| `/vX.Y.Z/ttl` | Raw official file `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. Example: [v0.4.1 Turtle](https://w3id.org/health-ri/metadata-vocabulary/v0.4.1/ttl). |
+| `/vX.Y.Z/spec` | GitHub file view of `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.html`. Example: [v0.4.1 archived HTML](https://w3id.org/health-ri/metadata-vocabulary/v0.4.1/spec). **This is not a rendered historical Pages site.** |
+
+The version pattern accepts numeric `X.Y.Z` values; it does not check that a
+release exists. Shapes and examples have no versioned PID routes in this
+configuration. They are maintained supporting artifacts whose
+`dcterms:references` identifies the vocabulary release they accompany.
+
+### Supported aliases
+
+These aliases do not identify additional resources. Prefer the main links above.
+
+| Alias path after the base | Equivalent path or behaviour |
+| --- | --- |
+| `/specification`, `/doc`, `/docs`, `/documentation` | `/spec` |
+| `/repo` | `/git` |
+| `/latest`, `/current` | Base IRI, retaining content negotiation |
+| `/latest/{suffix}`, `/current/{suffix}` | `/{suffix}`, where the supported suffixes are `ttl`, `shacl`, `example`, `spec`, `specification`, `doc`, `docs`, and `documentation` |
+| `/example/{name}.ttl` | `/example/{name}`; both redirect to `examples/{name}.ttl` in the official repository |
+| `/vX.Y.Z/specification`, `/vX.Y.Z/doc`, `/vX.Y.Z/docs`, `/vX.Y.Z/documentation` | `/vX.Y.Z/spec` |
+
+All listed routes also accept a trailing slash. Named example routes require a
+corresponding file in `examples/`; a matching name alone does not create a file.
+The latest/current aliases apply only to the suffixes listed above, not to every
+route (for example, there is no defined `/latest/example/{name}` alias).
+
+### Content negotiation and term IRIs
+
+For the base IRI and `/vX.Y.Z`, the redirect rules inspect the HTTP `Accept` header:
+
+| Request | Selected representation |
+| --- | --- |
+| Header contains `text/turtle` | Turtle |
+| Otherwise contains `text/html` or `application/xhtml+xml` | HTML documentation |
+| Otherwise, including no header or `*/*` | Turtle |
+
+These rules use fixed precedence, not media-type quality-value ranking: if both
+Turtle and HTML are mentioned, Turtle wins. Use explicit `/ttl` or `/spec`
+links when you want a predictable representation. Negotiation uses HTTP **303**;
+aliases and redirects to destination files/pages use HTTP **302**.
+
+The term namespace is `https://w3id.org/health-ri/metadata-vocabulary#`. The current term IRIs are:
+
+- [`hri:healthConditionOfInterest`](https://w3id.org/health-ri/metadata-vocabulary#healthConditionOfInterest)
+- [`hri:anatomicalLocationCovered`](https://w3id.org/health-ri/metadata-vocabulary#anatomicalLocationCovered)
+
+Term IRIs stay unversioned. The fragment after `#` is not sent to the server;
+the base IRI is resolved, and a browser can use the preserved fragment to locate
+the term in the latest HTML documentation. Use a versioned vocabulary PID when
+citing a particular release.
 
 ## Health condition of interest
 
@@ -262,8 +354,9 @@ Our validation commands continue to supply the shapes explicitly. No
 
 Example and shapes IRIs refer to mutable supporting files; `dcterms:references`
 records the vocabulary release they currently accompany. Historical vocabulary
-snapshots remain unchanged. The proposed w3id rules support these addresses;
-until those rules are deployed, open the repository files directly.
+snapshots remain unchanged. The merged w3id rules support these addresses;
+see [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects)
+for their destinations and publication dependencies.
 
 
 The example IRI identifies an RDF document, so `foaf:Document` is appropriate.
