@@ -161,6 +161,55 @@ def check_links(directory):
                         f'{page}: missing fragment {value}')
 
 
+def check_support_versions(current):
+    """Check maintained release references without rewriting supporting files."""
+    expected = URIRef(f'{BASE}/v{version_of(current)}')
+    artifacts = [(p, URIRef(f'{BASE}/example/{p.stem}'))
+                 for p in sorted(EXAMPLES.glob('*.ttl'))]
+    require(bool(artifacts), 'No usage examples found')
+    artifacts.append((SHAPES, URIRef(BASE + '/shacl')))
+    for file, subject in artifacts:
+        graph = Graph().parse(file)
+        references = {value for value in graph.objects(subject, DCTERMS.references)
+                      if str(value).startswith(BASE + '/v')}
+        require(references == {expected},
+                f'{file.name}: vocabulary release reference must be {expected}; '
+                'review compatibility and update dcterms:references explicitly')
+
+
+def check_documentation_version(file, version):
+    """Read PyLODE version fields, not incidental links in the document."""
+    soup = BeautifulSoup(file.read_text(), 'html.parser')
+    for predicate, expected in ((OWL.versionIRI, f'{BASE}/v{version}'),
+                                (OWL.versionInfo, version)):
+        labels = soup.select(f'dt a[href="{predicate}"]')
+        require(len(labels) == 1, f'{file.name}: missing or ambiguous {predicate}')
+        field = labels[0].find_parent('dt').find_next_sibling('dd')
+        require(field is not None and field.get_text(strip=True) == expected,
+                f'{file.name}: documentation {predicate} must match {expected}')
+        if predicate == OWL.versionIRI:
+            link = field.find('a', href=expected)
+            require(link is not None, f'{file.name}: incorrect version IRI link')
+
+
+def check_publication_consistency(current):
+    """Verify all generated outputs against the highest numbered release."""
+    version = version_of(current)
+    latest = ROOT / 'vocabulary/latest'
+    require((latest / NAME).read_bytes() == current.read_bytes(), 'Latest Turtle mismatch')
+    require((latest / 'index.html').read_bytes() == current.with_suffix('.html').read_bytes(),
+            'Latest HTML mismatch')
+    check_documentation_version(latest / 'index.html', version)
+    graph = Graph().parse(current)
+    citation = yaml.safe_load((ROOT / 'CITATION.cff').read_text())
+    expected = {'version': version, 'url': f'{BASE}/v{version}',
+                'date-released': str(graph.value(URIRef(BASE), DCTERMS.modified))}
+    for key, value in expected.items():
+        require(str(citation.get(key)) == value,
+                f'CITATION.cff: {key} must match the highest release ({value})')
+    check_support_versions(current)
+
+
 def build(base=None):
     check_immutable(base)
     versions = releases()
@@ -168,8 +217,9 @@ def build(base=None):
     for file in versions:
         validate_release(file, previous)
         previous = version_of(file)
-    validate_example()
     current = versions[-1]
+    check_support_versions(current)
+    validate_example()
     version = version_of(current)
     latest = ROOT / 'vocabulary/latest'
     latest.mkdir(parents=True, exist_ok=True)
@@ -198,9 +248,7 @@ def build(base=None):
     citation['url'] = f'{BASE}/v{version}'
     (ROOT / 'CITATION.cff').write_text(yaml.safe_dump(citation, sort_keys=False, allow_unicode=True))
     check_links(latest)
-    require((latest / NAME).read_bytes() == current.read_bytes(), 'Latest Turtle mismatch')
-    require((latest / 'index.html').read_bytes() == current.with_suffix('.html').read_bytes(),
-            'Latest HTML mismatch')
+    check_publication_consistency(current)
     print(f'Validated {len(versions)} release(s); latest={version}; Pages ready in vocabulary/latest/')
 
 

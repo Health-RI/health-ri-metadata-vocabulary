@@ -7,6 +7,13 @@ Terms do not have independent release versions.
 
 ## [Unreleased]
 
+### Added
+
+- Build-time consistency checks against the highest numbered vocabulary release:
+  latest Turtle/HTML, citation metadata, and explicitly maintained example/SHACL
+  release references. Supporting references are never silently rewritten.
+- Regression checks for missing/stale references and inconsistent generated outputs.
+
 ### Changed
 
 - Restructured the initial 0.1.0 implementation at the maintainers' request:

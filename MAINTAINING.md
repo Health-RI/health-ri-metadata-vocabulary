@@ -21,8 +21,7 @@ limits that exception to the old paths at that exact commit.
 
 The SHACL file in `validation/` and examples in `examples/` are supporting artifacts,
 not additional release inputs. They provide IRI checks, health-condition Concept typing, anatomical hierarchy checks,
-and runnable usage examples. Adding one new versioned vocabulary Turtle file is sufficient for
-the publication pipeline; no versioned copies of these support files are required.
+and runnable usage examples. New releases require reviewed matching references in these support files; no versioned copies of these support files are required.
 
 ## Semantic Versioning
 
@@ -51,14 +50,17 @@ stays on branches until ready for a numbered release.
    `owl:versionIRI`, `dcterms:modified`, the version-specific documentation link,
    and the bibliographic citation. Preserve the vocabulary's original issued date.
    Set `owl:priorVersion` to the preceding version IRI. Update the separate
-   shapes/examples only if the accompanying validation or usage guidance changes.
+   shapes/examples when validation or usage guidance changes. For every release,
+   review their compatibility and explicitly update their document-level
+   `dcterms:references` to the new release IRI, even if their data/constraints
+   remain unchanged. The build rejects missing, stale, or conflicting references.
 3. Add a dated vocabulary-level entry to `CHANGELOG.md` using Keep a Changelog
    categories. Include any breaking semantics or validation effects explicitly.
 4. Run the README validation commands and review both RDF and generated HTML.
 5. Commit the new release and changelog to `main` (or merge a reviewed branch).
 
-Adding the new versioned TTL file is sufficient to trigger generation and
-publication; no hard-coded current-version configuration needs changing. The
+Adding a new versioned TTL triggers the publication workflow; reviewed supporting
+release references must also match before generation and publication can pass; no hard-coded current-version configuration needs changing. The
 highest version is selected numerically, not by modification date or string order.
 All historical snapshots remain stored in GitHub; only the latest documentation
 is deployed to Pages. The workflow commits generated

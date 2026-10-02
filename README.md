@@ -268,3 +268,19 @@ The vocabulary's `foaf:homepage` and `schema:codeRepository` use the `/spec` and
 RDF. Using it as its own `foaf:homepage` would also type that same resource as a
 FOAF Document, which FOAF declares disjoint with Organization. A document PID and
 an organization PID should identify distinct resources.
+
+
+## Release consistency checks
+
+The publication build uses the highest numerically numbered versioned Turtle file
+as its source of truth. After generation it verifies the latest Turtle, latest
+HTML's explicit version fields, and `CITATION.cff` version, release date, and URL.
+
+Before generating outputs, the build requires every example's document-level
+`dcterms:references` and the shapes graph's corresponding reference to identify
+that same vocabulary release. Missing, outdated, or conflicting vocabulary release
+references stop publication with a compatibility-review message. These references
+are not automatically rewritten: review the examples and shapes, then update
+their references explicitly. They identify the release the files accompany, not
+independent versions of the supporting files. The normal example SHACL checks
+also run; they do not replace the compatibility review.

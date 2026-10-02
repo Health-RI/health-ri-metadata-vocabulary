@@ -11,7 +11,7 @@ from test_vocabulary import build
 
 
 class PublicationTests(unittest.TestCase):
-    def test_one_new_ttl_promotes_latest_without_publishing_archives(self):
+    def test_reviewed_new_release_promotes_latest_without_publishing_archives(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / 'repository'
             shutil.copytree(build.ROOT, root, ignore=shutil.ignore_patterns('__pycache__', 'site'))
@@ -30,6 +30,14 @@ class PublicationTests(unittest.TestCase):
             with patch.object(build, 'ROOT', root), \
                     patch.object(build, 'SHAPES', root / 'validation/health-ri-metadata-shapes.ttl'), \
                     patch.object(build, 'EXAMPLES', root / 'examples'):
+                # A new source cannot silently relabel supporting artifacts.
+                old_latest = (root / 'vocabulary/latest' / build.NAME).read_bytes()
+                with self.assertRaisesRegex(ValueError, 'review compatibility'):
+                    build.build()
+                self.assertEqual((root / 'vocabulary/latest' / build.NAME).read_bytes(), old_latest)
+                for support in [*build.EXAMPLES.glob('*.ttl'), build.SHAPES]:
+                    support.write_text(support.read_text().replace(
+                        f'{build.BASE}/v{old_version}>', f'{build.BASE}/v{new_version}>'))
                 build.build()
             latest = root / 'vocabulary/latest'
             self.assertEqual((latest / build.NAME).read_bytes(), new.read_bytes())
