@@ -9,7 +9,7 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.2.1` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.2.2` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [GitHub Pages](https://health-ri.github.io/health-ri-metadata-vocabulary/) |
@@ -180,3 +180,40 @@ and literals. It is not a second vocabulary or a replacement for the full Health
 Metadata Schema. The examples are executable illustrations and validation fixtures.
 These supporting artifacts are updated when usage or validation changes; they do
 not need per-version copies.
+
+
+## Discovering examples and validation shapes
+
+From version `0.2.2`, the vocabulary links to its two usage examples with
+[`vann:example`](https://vocab.org/vann/#example), and to the suggested shapes
+with [`sh:suggestedShapesGraph`](https://www.w3.org/ns/shacl#suggestedShapesGraph).
+Each supporting Turtle file repeats the same vocabulary-to-artifact statement;
+this is the same relationship in another document, not an inverse property.
+
+- Vocabulary IRI: `https://w3id.org/health-ri/metadata-vocabulary` (no trailing slash).
+- Example IRIs: `https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest`
+  and `https://w3id.org/health-ri/metadata-vocabulary/example/anatomical-location-covered`.
+- Shapes IRI: `https://w3id.org/health-ri/metadata-vocabulary/shacl` (the existing redirect).
+
+Examples describe themselves as `foaf:Document` and explicitly state their
+non-normative, incomplete-record status. The shapes graph is identified as
+`owl:Ontology`, consistent with the declared range of `sh:suggestedShapesGraph`;
+this does not make it normative or create another set of domain terms.
+
+Supporting files include a title, description, identifier, publisher, license,
+language, Turtle format, modification date, primary topic, repository link, and
+reference to the vocabulary version they accompany. Their metadata describes the
+supporting artifact, not the fictional dataset illustrated inside it. Original
+creation dates and individual authorship of these files are not inferred from the
+vocabulary's authorship. The vocabulary retains its existing ORCID attribution.
+
+`sh:suggestedShapesGraph` is defined in the W3C SHACL vocabulary as an extension;
+it was not documented in the body of the 2017 Recommendation. It is a discovery
+hint, not a guarantee that validators automatically fetch or apply the shapes.
+Our validation commands continue to supply the shapes explicitly. No
+`owl:imports` dependency is added for these links.
+
+Example and shapes IRIs refer to mutable supporting files; `dcterms:references`
+records the vocabulary release they currently accompany. Historical vocabulary
+snapshots remain unchanged. The proposed w3id rules support these addresses;
+until those rules are deployed, open the repository files directly.

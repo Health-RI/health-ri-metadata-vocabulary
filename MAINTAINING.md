@@ -118,3 +118,15 @@ files unchanged.
 
 The existing w3id proposal uses version-pattern redirects and already covers
 `v0.2.1`; this release does not require new redirect rules.
+
+
+## Supporting Turtle metadata
+
+Keep the document headers in `examples/` and `validation/` current when editing
+those files: update `dcterms:modified` and the accompanying release reference as
+appropriate. Do not invent original publication dates or individual authorship.
+For a new example, add its `vann:example` link to the next vocabulary release and
+repeat the same triple in the example file. Keep the shapes association as
+`sh:suggestedShapesGraph` to the existing `/shacl` IRI. These metadata links do not
+change validation targets or constraints. Supporting artifacts remain unversioned;
+never retrofit discovery links into immutable historical vocabulary snapshots.

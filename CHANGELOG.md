@@ -17,6 +17,23 @@ Terms do not have independent release versions.
   verified ORCID identifiers. This is a correction of the initial implementation,
   not a change to the health-condition property's semantics.
 
+## [0.2.2] - 2026-10-02
+
+### Added
+
+- Vocabulary-level `vann:example` links to both usage examples and
+  `sh:suggestedShapesGraph` linking to the existing `/shacl` resource.
+- Self-describing metadata in both examples and the validation file, including
+  their purpose, publisher, license, format, language, modification date, and
+  accompanying vocabulary release. The discovery relationships are repeated
+  in each relevant supporting file.
+- Documentation of discovery semantics and supporting-artifact metadata.
+
+### Compatibility
+
+- Metadata-only patch: property definitions, OWL axioms, example data, and SHACL
+  constraints are unchanged. Previous release snapshots remain immutable.
+
 ## [0.2.1] - 2026-10-01
 
 ### Changed
