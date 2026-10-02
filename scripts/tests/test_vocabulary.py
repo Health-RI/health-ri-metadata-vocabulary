@@ -93,16 +93,17 @@ class AnatomicalTests(unittest.TestCase):
     def conforms(self):
         return validate(self.graph, shacl_graph=self.shapes, inference='none')[0]
 
-    def test_class_values_without_skos_or_taxonomy_pass_structural_checks(self):
+    def test_class_values_with_taxonomy_pass_without_skos_typing(self):
         for value in (self.root, self.lung):
             self.graph.add((self.dataset, self.term, value))
             self.graph.add((value, RDF.type, OWL.Class))
+        self.graph.add((self.lung, RDFS.subClassOf, self.root))
         self.assertTrue(self.conforms())
 
-    def test_structural_checks_do_not_claim_terminology_validation(self):
+    def test_unverified_class_rejected(self):
         value = URIRef('https://example.org/unverified-class')
         self.graph.add((self.dataset, self.term, value))
-        self.assertTrue(self.conforms())
+        self.assertFalse(self.conforms())
 
     def test_untyped_dataset_rejected(self):
         self.graph.add((self.dataset, self.term, self.lung))

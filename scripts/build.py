@@ -60,7 +60,8 @@ def validate_release(file, previous=None):
         OWL.versionInfo: Literal(version), URIRef(str(DCAT) + 'version'): Literal(version),
         VANN.preferredNamespacePrefix: Literal('hri'),
         VANN.preferredNamespaceUri: Literal(BASE + '#', datatype=XSD.anyURI),
-        DCTERMS.license: LICENSE, SCHEMA.codeRepository: URIRef(REPO),
+        DCTERMS.license: LICENSE, SCHEMA.codeRepository: URIRef(
+            BASE + "/git" if tuple(map(int, version.split("."))) >= (0, 3, 0) else REPO),
     }
     for predicate, value in expected.items():
         require(set(g.objects(ontology, predicate)) == {value},
@@ -105,8 +106,9 @@ def validate_release(file, previous=None):
                     'Expected restriction on rdfs:subClassOf')
             require(set(g.objects(restriction, OWL.hasValue)) == {URIRef('http://snomed.info/id/91723000')},
                     'Expected Anatomical structure as restriction value')
-            require((URIRef('http://snomed.info/id/91723000'), RDF.type, OWL.Class) in g,
-                    'Expected anatomical root class declaration')
+            if tuple(map(int, version.split('.'))) < (0, 3, 0):
+                require((URIRef('http://snomed.info/id/91723000'), RDF.type, OWL.Class) in g,
+                        'Expected historical anatomical root class declaration')
         require((term, RDF.type, OWL.FunctionalProperty) not in g, 'Anatomical property must be repeatable')
     return g
 

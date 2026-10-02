@@ -20,7 +20,7 @@ The explicitly requested restructuring and metadata correction of the initial
 limits that exception to the old paths at that exact commit.
 
 The SHACL file in `validation/` and examples in `examples/` are supporting artifacts,
-not additional release inputs. They provide IRI-only data checks and health-condition Concept typing,
+not additional release inputs. They provide IRI checks, health-condition Concept typing, anatomical hierarchy checks,
 and runnable usage examples. Adding one new versioned vocabulary Turtle file is sufficient for
 the publication pipeline; no versioned copies of these support files are required.
 
@@ -106,7 +106,9 @@ external identifiers separately; syntax validation cannot establish those facts.
 For `hri:anatomicalLocationCovered`, version 0.2.1 uses an OWL Full range restriction
 on `rdfs:subClassOf` with `owl:hasValue` set to SNOMED CT `91723000`.
 Do not interpret the resulting subclass entailment as authoritative terminology
-validation. Anatomical SHACL checks only subject typing and IRI-valued objects.
+validation. Since 0.3.0, anatomical SHACL also checks SNOMED IRI syntax and a
+subclass path to that root. Use `scripts/validate.py` with an independently trusted
+SNOMED hierarchy; see the README for input format, provenance, and limitations.
 The inference regression test exercises the relevant RDF/OWL rules; it is not a
 complete OWL Full consistency checker. OWL 2 DL tools cannot be assumed to support
 this metamodeling pattern.
@@ -117,7 +119,7 @@ Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0
 files unchanged.
 
 The existing w3id proposal uses version-pattern redirects and already covers
-`v0.2.1`; this release does not require new redirect rules.
+`v0.3.0`; this release does not require new redirect rules.
 
 
 ## Supporting Turtle metadata
@@ -130,3 +132,14 @@ repeat the same triple in the example file. Keep the shapes association as
 `sh:suggestedShapesGraph` to the existing `/shacl` IRI. These metadata links do not
 change validation targets or constraints. Supporting artifacts remain unversioned;
 never retrofit discovery links into immutable historical vocabulary snapshots.
+
+
+The 0.3.0 release tightens anatomical validation and therefore uses a new minor
+version under the development versioning policy. Preserve the earlier release
+snapshots. Regression checks cover root/direct/transitive paths, unknown values,
+non-SNOMED IRIs, cycles, and exclusion of submitted subclass assertions.
+
+Use the four vocabulary creators for the SHACL file and Pedro Paulo F. Barcelos
+alone for the examples, identified by ORCID and name. Do not duplicate creators
+as contributors unless recording a distinct contribution is needed. Keep comments
+focused on usage and avoid release-specific wording for unchanged range axioms.

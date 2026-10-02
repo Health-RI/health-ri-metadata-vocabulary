@@ -31,3 +31,25 @@ class ArtifactMetadataTests(unittest.TestCase):
                 if kind == FOAF.Document:
                     self.assertNotIn((resource, RDF.type, build.DCAT.Dataset), support)
                     self.assertIn('Non-normative', str(support.value(resource, DCTERMS.description)))
+
+    def test_requested_attribution_and_persistent_links(self):
+        vocabulary = URIRef(build.BASE)
+        graph = Graph().parse(build.releases()[-1])
+        creators = {URIRef('https://orcid.org/' + value) for value in (
+            '0009-0002-3089-9558', '0000-0001-8306-0380',
+            '0000-0003-0771-3516', '0000-0003-2736-7817')}
+        self.assertEqual(set(graph.objects(vocabulary, DCTERMS.creator)), creators)
+        self.assertFalse(list(graph.objects(vocabulary, DCTERMS.contributor)))
+        self.assertEqual(graph.value(vocabulary, FOAF.homepage), URIRef(build.BASE + '/spec'))
+        self.assertEqual(graph.value(vocabulary, build.SCHEMA.codeRepository), URIRef(build.BASE + '/git'))
+        self.assertNotIn((URIRef('http://snomed.info/id/91723000'), RDF.type, OWL.Class), graph)
+        shapes = Graph().parse(build.SHAPES)
+        self.assertEqual(set(shapes.objects(URIRef(build.BASE + '/shacl'), DCTERMS.creator)), creators)
+        for creator in creators:
+            self.assertTrue(shapes.value(creator, FOAF.name))
+        for path in build.EXAMPLES.glob('*.ttl'):
+            example = Graph().parse(path)
+            resource = URIRef(build.BASE + '/example/' + path.stem)
+            pedro = URIRef('https://orcid.org/0000-0003-2736-7817')
+            self.assertEqual(set(example.objects(resource, DCTERMS.creator)), {pedro})
+            self.assertEqual(str(example.value(pedro, FOAF.name)), 'Pedro Paulo F. Barcelos')

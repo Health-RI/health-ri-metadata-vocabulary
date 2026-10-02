@@ -1,6 +1,7 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sct: <http://snomed.info/id/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix vann: <http://purl.org/vocab/vann/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix mod: <https://w3id.org/mod#> .
@@ -9,17 +10,21 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
-# Document metadata; the usage data or validation constraints follow below.
+# Validation shapes metadata.
 <https://w3id.org/health-ri/metadata-vocabulary/shacl> a owl:Ontology ;
     dcterms:title "Health-RI Metadata Vocabulary — application validation shapes"@en ;
-    dcterms:description "Suggested SHACL shapes for data using the Health-RI Metadata Vocabulary. Checks Dataset subject typing, IRI-valued objects, and skos:Concept typing for health-condition values. Does not validate clinical appropriateness or authoritative SNOMED CT subclass membership, and is not the complete Health-RI Metadata Schema."@en ;
+    dcterms:description "Suggested SHACL shapes for data using the Health-RI Metadata Vocabulary. Checks Dataset subject typing, IRI-valued objects, and skos:Concept typing for health-condition values. Checks anatomical values against SNOMED CT IRI syntax and supplied subclass paths to Anatomical structure. Hierarchy evidence must come from a trusted SNOMED CT release. Does not establish clinical appropriateness or concept activity status, and is not the complete Health-RI Metadata Schema."@en ;
     dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary/shacl"^^xsd:anyURI ;
+    dcterms:creator <https://orcid.org/0009-0002-3089-9558>,
+        <https://orcid.org/0000-0001-8306-0380>,
+        <https://orcid.org/0000-0003-0771-3516>,
+        <https://orcid.org/0000-0003-2736-7817> ;
     dcterms:publisher <https://w3id.org/health-ri> ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:language "en"^^xsd:language ;
     dcterms:format "text/turtle" ;
     dcterms:modified "2026-10-02"^^xsd:date ;
-    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.2.2> ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.3.0> ;
     foaf:primaryTopic <https://w3id.org/health-ri/metadata-vocabulary> ;
     mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
 
@@ -27,7 +32,7 @@
     foaf:name "Health-RI" ;
     foaf:homepage <https://www.health-ri.nl/> .
 
-# Repeat the vocabulary-to-artifact link so this file explains its association.
+# Vocabulary whose data can be checked with these suggested shapes.
 <https://w3id.org/health-ri/metadata-vocabulary> sh:suggestedShapesGraph <https://w3id.org/health-ri/metadata-vocabulary/shacl> .
 
 # Application validation, separate from vocabulary entailments.
@@ -47,12 +52,33 @@
 # explicit data typing must be detected rather than supplied by inference.
 
 # Anatomical subclass semantics are expressed in the vocabulary (OWL Full).
-# This shape only checks subject typing and IRI-valued objects, not SNOMED membership.
+# Supply trusted SNOMED subclass evidence before validation, without vocabulary inference.
+# scripts/validate.py excludes subclass assertions from submitted metadata.
 [] a sh:NodeShape ;
     sh:targetSubjectsOf hri:anatomicalLocationCovered ;
     sh:class dcat:Dataset ;
     sh:property [
         sh:path hri:anatomicalLocationCovered ;
         sh:nodeKind sh:IRI ;
-        sh:message "Anatomical location covered must have an IRI-valued object."@en
+        sh:pattern "^http://snomed[.]info/id/[0-9]+$" ;
+        sh:node [
+            sh:property [
+                sh:path [ sh:zeroOrMorePath rdfs:subClassOf ] ;
+                sh:hasValue sct:91723000 ;
+                sh:message "Anatomical value must be Anatomical structure (91723000) or have a trusted subclass path to it."@en
+            ]
+        ] ;
+        sh:message "Anatomical location covered must be a SNOMED CT IRI in the Anatomical structure hierarchy."@en
     ] .
+
+<https://orcid.org/0009-0002-3089-9558> a foaf:Person ;
+    foaf:name "Ana Konrad" .
+
+<https://orcid.org/0000-0001-8306-0380> a foaf:Person ;
+    foaf:name "Hannah Neikes" .
+
+<https://orcid.org/0000-0003-0771-3516> a foaf:Person ;
+    foaf:name "Niek van Ulzen" .
+
+<https://orcid.org/0000-0003-2736-7817> a foaf:Person ;
+    foaf:name "Pedro Paulo F. Barcelos" .

@@ -17,6 +17,33 @@ Terms do not have independent release versions.
   verified ORCID identifiers. This is a correction of the initial implementation,
   not a change to the health-condition property's semantics.
 
+## [0.3.0] - 2026-10-02
+
+### Changed
+
+- Require SNOMED CT anatomical IRIs and a supplied subclass path to Anatomical
+  structure (91723000), including the root itself, in the anatomical SHACL shape.
+  The OWL Full range restriction remains in place.
+- Attribute examples solely to Pedro Paulo F. Barcelos and the shapes to all four
+  vocabulary creators, with ORCID identifiers and names.
+- Remove duplicate vocabulary contributor assertions; use `/spec` and `/git`
+  PIDs in vocabulary homepage/repository metadata and refine discovery keywords.
+- Remove the local declaration of SNOMED 91723000 as an OWL class, retaining the
+  external IRI in the range axiom. Clean supporting-file prefixes and comments.
+- Update release documentation, generated HTML, and citation metadata.
+
+### Added
+
+- A validation command accepting a separate trusted SNOMED named-class hierarchy,
+  excluding submitted subclass assertions and avoiding vocabulary inference.
+- Regression tests for hierarchy membership, evidence isolation, and attribution.
+
+### Compatibility
+
+- Stricter anatomical validation rejects values accepted by the structural-only
+  0.2.1/0.2.2 checks. The development minor version signals this change.
+  Historical release snapshots and the health-condition semantics are unchanged.
+
 ## [0.2.2] - 2026-10-02
 
 ### Added

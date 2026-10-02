@@ -9,7 +9,7 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.2.2` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.3.0` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [GitHub Pages](https://health-ri.github.io/health-ri-metadata-vocabulary/) |
@@ -75,7 +75,7 @@ relates a dataset to an anatomical class describing its aggregate anatomical cov
 Use is optional and repeatable (`0..*`). It does not pair a body site with a
 particular modality, data category, sample, or record within a mixed dataset.
 
-Version `0.2.1` uses this **OWL Full / RDF-Based Semantics** range:
+Since version `0.2.1`, the vocabulary uses this **OWL Full / RDF-Based Semantics** range:
 
 ```turtle
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
@@ -92,7 +92,6 @@ hri:anatomicalLocationCovered a owl:ObjectProperty ;
         owl:hasValue sct:91723000
     ] .
 
-sct:91723000 a owl:Class .
 ```
 
 Every linked value is thereby a subclass of **91723000 |Anatomical structure
@@ -112,8 +111,16 @@ This is a semantic assertion, not terminology validation: an inappropriate value
 also acquires the subclass relationship. The axiom does not restrict identifier
 namespaces, verify active status, or establish that SNOMED itself asserts the
 relationship. Checking authoritative membership requires a separate terminology
-lookup or validation process. The accompanying SHACL shape checks only Dataset
-subjects and IRI-valued objects for this property.
+lookup or validation process. From `0.3.0`, the accompanying SHACL shape requires
+Dataset subjects, SNOMED CT IRIs, and a zero-or-more-step `rdfs:subClassOf` path
+to Anatomical structure. This accepts the root, direct subclasses, and indirect
+subclasses. Missing hierarchy evidence causes validation to fail for non-root
+values. The original OWL Full range restriction is retained.
+
+The explicit `sct:91723000 a owl:Class` declaration is no longer repeated in the
+vocabulary; the external term is referenced in the restriction without locally
+redeclaring it. This does not remove the class semantics entailed by use of
+`rdfs:subClassOf`.
 
 The term supersedes the R-U-03 `eucaim:hasBodySite` / `eucaim:BP1000024` proposal
 without asserting a formal mapping. The `0.2.1` change replaces the earlier
@@ -146,12 +153,39 @@ No separate tracked `docs` directory or generated `site` copy is needed.
 On Windows, activate with
 `.venv\Scripts\Activate.ps1` in PowerShell.
 
-To validate metadata data independently, load the SHACL file with the data graph,
-without importing the vocabulary's domain/range axioms or enabling inference.
-For health-condition values, supply Concept types in that graph (or an explicitly
-provided terminology graph). Anatomical values do not require Concept typing.
-Otherwise inference may supply missing types before validation. The example and
-tests use explicit typing and no inference.
+For anatomical validation against terminology evidence, run:
+
+```sh
+python scripts/validate.py metadata.ttl --snomed-hierarchy trusted-snomed-hierarchy.ttl
+```
+
+The hierarchy input must be a trusted RDF export from the SNOMED CT edition and
+release selected by the validator operator. It must contain named-class
+`rdfs:subClassOf` edges sufficient to reach `http://snomed.info/id/91723000`.
+A complete relevant hierarchy or a complete subset covering the submitted values
+is suitable. An RF2 distribution or an OWL axiom export is not directly equivalent
+to this input: prepare the named-class hierarchy first. Record the edition,
+release date, and export provenance with the validation results.
+
+The command removes submitted `rdfs:subClassOf` statements and copies subclass
+edges only from that separate trusted input. It performs no vocabulary imports or
+OWL/RDFS inference. Thus a subclass assertion supplied by the metadata author,
+or produced from the vocabulary's range axiom, cannot itself make a value pass.
+The operator is responsible for the trustworthiness of the hierarchy file; the
+command cannot authenticate its source or detect invented facts in that file.
+This checks hierarchy membership, not concept activity status or clinical
+appropriateness. The root itself is permitted without a subclass edge.
+
+Supply the original metadata, before inference. Health-condition values still
+require `skos:Concept` typing in the metadata; anatomical values do not.
+The command returns exit code 0 for conformance, 1 for violations, and 2 for
+input or execution errors.
+
+The build's example check uses the illustrative subclass assertion inside the
+anatomical example as an offline fixture. It checks that the example and shapes
+work together; it is not independent SNOMED verification. A generic SHACL engine
+can use the shapes directly, but only checks the graph it is given: use the
+separate-input command above when submitted hierarchy claims must not be trusted.
 
 ## Attribution and provenance
 
@@ -160,8 +194,10 @@ The authors are [Ana Konrad](https://orcid.org/0009-0002-3089-9558),
 [Hannah Neikes](https://orcid.org/0000-0001-8306-0380),
 [Niek van Ulzen](https://orcid.org/0000-0003-0771-3516), and
 [Pedro Paulo F. Barcelos](https://orcid.org/0000-0003-2736-7817).
-Health-RI is the publisher. Authors are recorded as both creators and contributors;
-this does not imply an additional set of contributors.
+Health-RI is the publisher. The four authors are creators of the vocabulary and
+the SHACL file. Pedro Paulo F. Barcelos is the sole creator of both usage examples.
+Each creator is identified by ORCID and name. Duplicate contributor assertions
+were removed from the current vocabulary; past releases retain their metadata.
 
 The release infrastructure is informed by the
 [Health-RI Mapping Vocabulary](https://github.com/Health-RI/semantic-interoperability/tree/main/vocabulary)
@@ -204,8 +240,8 @@ Supporting files include a title, description, identifier, publisher, license,
 language, Turtle format, modification date, primary topic, repository link, and
 reference to the vocabulary version they accompany. Their metadata describes the
 supporting artifact, not the fictional dataset illustrated inside it. Original
-creation dates and individual authorship of these files are not inferred from the
-vocabulary's authorship. The vocabulary retains its existing ORCID attribution.
+creation dates are not inferred. Creator attribution follows the explicit
+assignments described above.
 
 `sh:suggestedShapesGraph` is defined in the W3C SHACL vocabulary as an extension;
 it was not documented in the body of the 2017 Recommendation. It is a discovery
@@ -217,3 +253,18 @@ Example and shapes IRIs refer to mutable supporting files; `dcterms:references`
 records the vocabulary release they currently accompany. Historical vocabulary
 snapshots remain unchanged. The proposed w3id rules support these addresses;
 until those rules are deployed, open the repository files directly.
+
+
+The example IRI identifies an RDF document, so `foaf:Document` is appropriate.
+Its `foaf:primaryTopic` identifies the vocabulary property demonstrated by that
+document, not the fictional dataset inside it. The shapes graph uses
+`owl:Ontology` as graph-level metadata, matching the declared range of
+`sh:suggestedShapesGraph`; it is not an assertion that the constraints are OWL
+axioms or that the file defines a second domain ontology.
+
+The vocabulary's `foaf:homepage` and `schema:codeRepository` use the `/spec` and
+`/git` PIDs. Health-RI's organizational homepage remains `https://www.health-ri.nl/`:
+`https://w3id.org/health-ri` already identifies the publisher organization in this
+RDF. Using it as its own `foaf:homepage` would also type that same resource as a
+FOAF Document, which FOAF declares disjoint with Organization. A document PID and
+an organization PID should identify distinct resources.
