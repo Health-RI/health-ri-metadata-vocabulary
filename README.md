@@ -26,6 +26,8 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 The vocabulary redirect configuration has been merged into w3id.org. Target files and documentation become available when the implementation is merged into the official repository and Pages is deployed. A fork is a staging location, not a canonical namespace. See [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects) for the complete route reference and the current examples-directory exception.
 
 <!-- omit from toc -->
+## Table of Contents
+
 - [Normative status](#normative-status)
 - [Access](#access)
 - [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects)
@@ -340,7 +342,6 @@ Metadata Schema. The examples are executable illustrations and validation fixtur
 These supporting artifacts are updated when usage or validation changes; they do
 not need per-version copies.
 
-
 ## Discovering examples and validation shapes
 
 From version `0.2.2`, the vocabulary links to its two usage examples with
@@ -378,7 +379,6 @@ snapshots remain unchanged. The merged w3id rules support these addresses;
 see [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects)
 for their destinations and publication dependencies.
 
-
 The example IRI identifies an RDF document, so `foaf:Document` is appropriate.
 Its `foaf:primaryTopic` identifies the vocabulary property demonstrated by that
 document, not the fictional dataset inside it. The shapes graph uses
@@ -392,7 +392,6 @@ The vocabulary's `foaf:homepage` and `schema:codeRepository` use the `/spec` and
 RDF. Using it as its own `foaf:homepage` would also type that same resource as a
 FOAF Document, which FOAF declares disjoint with Organization. A document PID and
 an organization PID should identify distinct resources.
-
 
 ## Release consistency checks
 
