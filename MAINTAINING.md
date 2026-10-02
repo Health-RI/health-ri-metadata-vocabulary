@@ -20,7 +20,7 @@ The explicitly requested restructuring and metadata correction of the initial
 limits that exception to the old paths at that exact commit.
 
 The SHACL file in `validation/` and examples in `examples/` are supporting artifacts,
-not additional release inputs. They provide IRI checks, health-condition Concept typing, anatomical hierarchy checks,
+not additional release inputs. They provide IRI checks, health-condition Concept typing and SNOMED CT/WHO ICD-10 identifier patterns, anatomical hierarchy checks,
 and runnable usage examples. New releases require reviewed matching references in these support files; no versioned copies of these support files are required.
 
 ## Semantic Versioning
@@ -121,7 +121,7 @@ Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0
 files unchanged.
 
 The existing w3id proposal uses version-pattern redirects and already covers
-`v0.3.0`; this release does not require new redirect rules.
+`v0.4.0`; this release does not require new redirect rules.
 
 
 ## Supporting Turtle metadata

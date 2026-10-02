@@ -9,7 +9,7 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.3.0` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.4.0` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [GitHub Pages](https://health-ri.github.io/health-ri-metadata-vocabulary/) |
@@ -37,8 +37,8 @@ metadata or catalogue level.
 It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and
 `rdfs:range skos:Concept`. These axioms entail typing; they are not data-validation
 constraints. The separate SHACL shape requires a Dataset subject and IRI-valued
-Concept objects. No minimum or maximum count is imposed (`0..*`). No new clinical
-class or closed terminology list is introduced.
+Concept objects with SNOMED CT or WHO ICD-10 identifier patterns. No minimum or
+maximum count is imposed (`0..*`). No new clinical class is introduced.
 
 ```turtle
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
@@ -52,9 +52,10 @@ class or closed terminology list is introduced.
 
 This describes dataset-level aboutness. It does not assert diagnoses for individual
 patients, records, samples, or observations, or enumerate all diagnoses in the data.
-SNOMED CT, ICD-10, ICD-11, and other appropriate clinical concept systems may supply
-values where an IRI identifies the intended concept. No particular identifier
-pattern is mandated. The example is not a complete HealthDCAT-AP record.
+Values must identify suitable SNOMED CT or ICD-10 concepts. Since `0.4.0`, SHACL
+checks the SNOMED CT or WHO ICD-10 identifier format, with an optional release year
+for ICD-10. This lightweight check does not verify existence, activity status, or
+clinical suitability; invented identifiers matching the patterns also pass. The example is not a complete HealthDCAT-AP record.
 
 The Concept typing is the Health-RI metadata convention; it does not claim that
 external terminology publishers natively use SKOS. Where an external IRI is also an
@@ -127,7 +128,8 @@ without asserting a formal mapping. The `0.2.1` change replaces the earlier
 `skos:Concept` range and SHACL hierarchy checks. It changes formal semantics and
 validation expectations; the patch number was explicitly selected by the
 maintainers and should not be interpreted as a compatibility guarantee.
-The health-condition property's definition, range, and validation are unchanged.
+The `0.2.1` release left the health-condition property unchanged; `0.4.0` narrows
+its documented terminology binding and adds identifier-pattern validation.
 
 ## Local validation and documentation
 

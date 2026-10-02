@@ -47,11 +47,36 @@ class VocabularyTests(unittest.TestCase):
         self.assertTrue(self.conforms())
 
     def test_multiple_values(self):
-        for iri in ('https://example.org/condition/a', 'https://example.org/condition/b'):
+        for iri in ('http://snomed.info/id/22298006', 'http://id.who.int/icd/release/10/2019/I21'):
             value = URIRef(iri)
             self.graph.add((self.dataset, self.term, value))
             self.graph.add((value, RDF.type, SKOS.Concept))
         self.assertTrue(self.conforms())
+
+    def test_condition_identifier_patterns(self):
+        cases = {
+            'http://snomed.info/id/22298006': True,
+            'http://id.who.int/icd/release/10/I21': True,
+            'http://id.who.int/icd/release/10/2019/I21.0': True,
+            'http://id.who.int/icd/release/10/2019/I20-I25': True,
+            'http://id.who.int/icd/release/10/2019/IX': True,
+            # Format-only validation intentionally accepts invented identifiers.
+            'http://snomed.info/id/999999999999999999': True,
+            'https://example.org/condition': False,
+            'http://snomed.info/id/not-a-number': False,
+            'http://snomed.info/id/22298006/extra': False,
+            'http://id.who.int/icd/entity/123': False,
+            'http://id.who.int/icd/release/11/2026-01/mms/123': False,
+            'http://id.who.int/icd/release/10/': False,
+            'http://id.who.int/icd/release/10/2019/I21/extra': False,
+        }
+        for iri, expected in cases.items():
+            with self.subTest(iri=iri):
+                value = URIRef(iri)
+                self.graph.add((self.dataset, self.term, value))
+                self.graph.add((value, RDF.type, SKOS.Concept))
+                self.assertEqual(self.conforms(), expected)
+                self.graph.remove((self.dataset, self.term, value))
 
     def test_literal_rejected(self):
         self.graph.add((self.dataset, self.term, Literal('condition')))
@@ -64,12 +89,12 @@ class VocabularyTests(unittest.TestCase):
         self.assertFalse(self.conforms())
 
     def test_untyped_iri_rejected(self):
-        self.graph.add((self.dataset, self.term, URIRef('https://example.org/condition')))
+        self.graph.add((self.dataset, self.term, URIRef('http://snomed.info/id/22298006')))
         self.assertFalse(self.conforms())
 
     def test_untyped_subject_rejected(self):
         self.graph.remove((self.dataset, RDF.type, DCAT.Dataset))
-        value = URIRef('https://example.org/condition')
+        value = URIRef('http://snomed.info/id/22298006')
         self.graph.add((self.dataset, self.term, value))
         self.graph.add((value, RDF.type, SKOS.Concept))
         self.assertFalse(self.conforms())

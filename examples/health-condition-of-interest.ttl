@@ -18,7 +18,7 @@
     dcterms:language "en"^^xsd:language ;
     dcterms:format "text/turtle" ;
     dcterms:modified "2026-10-02"^^xsd:date ;
-    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.3.0> ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.0> ;
     foaf:primaryTopic hri:healthConditionOfInterest ;
     mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
 

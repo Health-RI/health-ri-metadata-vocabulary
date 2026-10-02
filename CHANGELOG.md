@@ -5,6 +5,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and vocabulary releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Terms do not have independent release versions.
 
+## [0.4.0] - 2026-10-02
+
+### Changed
+- Update vocabulary abstract, description, keywords, citation, and property annotations; add creator email IRIs and remove the two property history notes from the current release.
+- Restrict health-condition usage to SNOMED CT or ICD-10 concepts and update the existing SHACL shape with the agreed identifier-pattern alternatives. This is a breaking validation change: previously accepted identifiers from other terminologies now fail. Pattern matching does not verify existence, activity status, or clinical suitability.
+- Update supporting artifact references, current documentation, and generated publication/citation files to 0.4.0. Preserve archived releases and the anatomical range and hierarchy validation.
+
 ## [Unreleased]
 
 ### Added
