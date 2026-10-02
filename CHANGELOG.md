@@ -5,6 +5,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and vocabulary releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Terms do not have independent release versions.
 
+## [0.4.1] - 2026-10-03
+
+### Changed
+- Declare the versioned vocabulary Turtle file the sole normative specification for each release, with precedence over supporting resources.
+- Explicitly identify SHACL shapes, examples, and generated HTML documentation as non-normative; clarify that shape checks are implementation guidance and do not introduce or override vocabulary requirements.
+- Distinguish the normative vocabulary interface from compatibility tracking for the supporting validator. Clarify property annotations about use of the shapes.
+- Update supporting release references and generated publication files. Vocabulary axioms, SHACL constraints, and example data are unchanged.
+
 ## [0.4.0] - 2026-10-02
 
 ### Changed

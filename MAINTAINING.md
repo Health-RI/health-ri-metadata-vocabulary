@@ -2,7 +2,7 @@
 
 ## Sources and release contract
 
-Authoritative releases are flat files:
+The sole normative specification for each release is its versioned vocabulary Turtle file:
 `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`.
 The version is part of the filename, not a directory name. All terms belong to the
 same vocabulary version and retain their stable, unversioned term IRIs.
@@ -19,14 +19,19 @@ The explicitly requested restructuring and metadata correction of the initial
 0.1.0 implementation is a one-time migration from commit `e9bc4ca`; the build script
 limits that exception to the old paths at that exact commit.
 
-The SHACL file in `validation/` and examples in `examples/` are supporting artifacts,
-not additional release inputs. They provide IRI checks, health-condition Concept typing and SNOMED CT/WHO ICD-10 identifier patterns, anatomical hierarchy checks,
+Generated HTML documentation is non-normative and is derived from the vocabulary.
+The SHACL file in `validation/` and examples in `examples/` are also non-normative
+supporting artifacts, not additional release inputs. They provide IRI checks, health-condition Concept typing and SNOMED CT/WHO ICD-10 identifier patterns, anatomical hierarchy checks,
 and runnable usage examples. New releases require reviewed matching references in these support files; no versioned copies of these support files are required.
 
 ## Semantic Versioning
 
-The public interface comprises term IRIs, their documented meaning, RDF/OWL axioms,
-and accompanying validation constraints. The vocabulary follows
+The normative vocabulary interface comprises term IRIs, their documented meaning,
+and RDF/OWL axioms in the versioned Turtle file. The accompanying SHACL constraints
+are non-normative implementation guidance. Changes to their validation behaviour
+are still tracked for compatibility and release versioning; this does not make
+them vocabulary requirements. In case of discrepancy, the versioned vocabulary
+Turtle file takes precedence. The vocabulary follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
 - At `1.0.0` and above: incompatible changes require a major version; compatible
@@ -121,7 +126,7 @@ Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0
 files unchanged.
 
 The existing w3id proposal uses version-pattern redirects and already covers
-`v0.4.0`; this release does not require new redirect rules.
+`v0.4.1`; this release does not require new redirect rules.
 
 
 ## Supporting Turtle metadata

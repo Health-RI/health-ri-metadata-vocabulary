@@ -9,7 +9,7 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.4.0` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.4.1` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [GitHub Pages](https://health-ri.github.io/health-ri-metadata-vocabulary/) |
@@ -17,6 +17,15 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 The official publication and w3id links become live after the implementation is
 merged into the official repository, Pages is enabled, and the separate w3id
 configuration is accepted. A fork is a staging location, not a canonical namespace.
+
+## Normative status
+
+For each release, the versioned vocabulary Turtle file is the sole normative specification of the Health-RI Metadata Vocabulary. The accompanying examples, SHACL shapes, and generated HTML documentation are non-normative supporting resources. They illustrate usage and provide suggested validation checks; they do not introduce or override vocabulary requirements. In case of discrepancy, the versioned vocabulary Turtle file takes precedence.
+
+The `vocabulary/latest/` Turtle file is a copy of the latest versioned vocabulary.
+Applying the supporting SHACL shapes is optional unless a separate application
+profile requires them. Validation reports describe conformance to those shapes;
+they are not a complete assessment of conformity to the vocabulary.
 
 ## Access
 
@@ -36,7 +45,7 @@ metadata or catalogue level.
 
 It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and
 `rdfs:range skos:Concept`. These axioms entail typing; they are not data-validation
-constraints. The separate SHACL shape requires a Dataset subject and IRI-valued
+constraints. When used, the separate non-normative SHACL shape requires a Dataset subject and IRI-valued
 Concept objects with SNOMED CT or WHO ICD-10 identifier patterns. No minimum or
 maximum count is imposed (`0..*`). No new clinical class is introduced.
 
@@ -112,7 +121,7 @@ This is a semantic assertion, not terminology validation: an inappropriate value
 also acquires the subclass relationship. The axiom does not restrict identifier
 namespaces, verify active status, or establish that SNOMED itself asserts the
 relationship. Checking authoritative membership requires a separate terminology
-lookup or validation process. From `0.3.0`, the accompanying SHACL shape requires
+lookup or validation process. From `0.3.0`, the accompanying non-normative SHACL shape requires
 Dataset subjects, SNOMED CT IRIs, and a zero-or-more-step `rdfs:subClassOf` path
 to Anatomical structure. This accepts the root, direct subclasses, and indirect
 subclasses. Missing hierarchy evidence causes validation to fail for non-root

@@ -10,10 +10,12 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
-# Validation shapes metadata.
+# Non-normative validation shapes metadata.
+# The versioned vocabulary Turtle file is the sole normative specification.
+# These shapes provide suggested checks and do not introduce or override vocabulary requirements.
 <https://w3id.org/health-ri/metadata-vocabulary/shacl> a owl:Ontology ;
     dcterms:title "Health-RI Metadata Vocabulary — application validation shapes"@en ;
-    dcterms:description "Suggested SHACL shapes for data using the Health-RI Metadata Vocabulary. Checks Dataset subject typing, IRI-valued objects, skos:Concept typing, and SNOMED CT or WHO ICD-10 identifier patterns for health-condition values. These pattern checks do not verify concept existence. Checks anatomical values against SNOMED CT IRI syntax and supplied subclass paths to Anatomical structure. Hierarchy evidence must come from a trusted SNOMED CT release. Does not establish clinical appropriateness or concept activity status, and is not the complete Health-RI Metadata Schema."@en ;
+    dcterms:description "Non-normative SHACL shapes provided as implementation guidance for data using the Health-RI Metadata Vocabulary. The versioned vocabulary Turtle file is the sole normative specification and takes precedence in case of discrepancy. These shapes do not introduce or override vocabulary requirements. Checks Dataset subject typing, IRI-valued objects, skos:Concept typing, and SNOMED CT or WHO ICD-10 identifier patterns for health-condition values. These pattern checks do not verify concept existence. Checks anatomical values against SNOMED CT IRI syntax and supplied subclass paths to Anatomical structure. Hierarchy evidence must come from a trusted SNOMED CT release. Does not establish clinical appropriateness or concept activity status, and is not the complete Health-RI Metadata Schema."@en ;
     dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary/shacl"^^xsd:anyURI ;
     dcterms:creator <https://orcid.org/0009-0002-3089-9558>,
         <https://orcid.org/0000-0001-8306-0380>,
@@ -23,8 +25,8 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:language "en"^^xsd:language ;
     dcterms:format "text/turtle" ;
-    dcterms:modified "2026-10-02"^^xsd:date ;
-    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.0> ;
+    dcterms:modified "2026-10-03"^^xsd:date ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.1> ;
     foaf:primaryTopic <https://w3id.org/health-ri/metadata-vocabulary> ;
     mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
 

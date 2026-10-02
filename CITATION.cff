@@ -15,9 +15,9 @@ authors:
 - given-names: Niek
   family-names: van Ulzen
   orcid: https://orcid.org/0000-0003-0771-3516
-version: 0.4.0
-date-released: '2026-10-02'
-url: https://w3id.org/health-ri/metadata-vocabulary/v0.4.0
+version: 0.4.1
+date-released: '2026-10-03'
+url: https://w3id.org/health-ri/metadata-vocabulary/v0.4.1
 repository-code: https://github.com/Health-RI/health-ri-metadata-vocabulary
 license: CC-BY-4.0
 abstract: Health-RI-specific RDF terms for describing health datasets at metadata
