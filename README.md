@@ -137,8 +137,8 @@ Use Python 3.12 in a virtual environment:
 python -m venv .venv
 . .venv/bin/activate
 python -m pip install -r scripts/requirements.txt
-python -m unittest discover -s scripts/tests -v
 python scripts/build.py
+python -m unittest discover -s scripts/tests -v
 cffconvert --validate
 python -m http.server --directory vocabulary/latest 8000
 ```

@@ -32,11 +32,11 @@ jobs:
           cache: pip
           cache-dependency-path: scripts/requirements.txt
       - run: python -m pip install -r scripts/requirements.txt
-      - run: python -m unittest discover -s scripts/tests -v
       - name: Validate releases, build, and check version consistency
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: python scripts/build.py --base "$BASE_SHA"
+      - run: python -m unittest discover -s scripts/tests -v
       - run: cffconvert --validate
 
   prepare:

@@ -82,3 +82,15 @@ class VersionConsistencyTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'CITATION.cff: ' + key):
                     build.check_publication_consistency(self.current)
                 file.write_text(original)
+
+    def test_build_refreshes_stale_generated_outputs_without_rewriting_support(self):
+        support = {p: p.read_bytes() for p in [*build.EXAMPLES.glob('*.ttl'), build.SHAPES]}
+        latest = self.root / 'vocabulary/latest'
+        for file in (latest / build.NAME, latest / 'index.html', self.root / 'CITATION.cff'):
+            file.write_text(file.read_text().replace(self.version, '0.0.0'))
+        with self.assertRaisesRegex(ValueError, 'Latest Turtle mismatch'):
+            build.check_publication_consistency(self.current)
+        build.build()
+        build.check_publication_consistency(self.current)
+        for file, content in support.items():
+            self.assertEqual(file.read_bytes(), content)
