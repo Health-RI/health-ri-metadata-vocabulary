@@ -1,5 +1,14 @@
 # Health-RI Metadata Vocabulary
 
+[![Official validation and publication](https://github.com/Health-RI/health-ri-metadata-vocabulary/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/Health-RI/health-ri-metadata-vocabulary/actions/workflows/publish.yml)
+[![Vocabulary version](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FHealth-RI%2Fhealth-ri-metadata-vocabulary%2Frefs%2Fheads%2Fmain%2FCITATION.cff&query=%24.version&label=vocabulary&prefix=v&color=blue)](https://w3id.org/health-ri/metadata-vocabulary/ttl)
+[![License: CC BY 4.0](https://img.shields.io/badge/license-CC_BY_4.0-lightgrey)](https://creativecommons.org/licenses/by/4.0/)
+[![Documentation](https://img.shields.io/badge/docs-vocabulary-blue)](https://w3id.org/health-ri/metadata-vocabulary/spec)
+[![Persistent identifier: w3id](https://img.shields.io/badge/PID-w3id-orange)](https://w3id.org/health-ri/metadata-vocabulary)
+[![RDF: Turtle](https://img.shields.io/badge/RDF-Turtle-005A9C)](https://w3id.org/health-ri/metadata-vocabulary/ttl)
+[![SHACL: non-normative](https://img.shields.io/badge/SHACL-non--normative-6f42c1)](https://w3id.org/health-ri/metadata-vocabulary/shacl)
+[![Cite this vocabulary](https://img.shields.io/badge/citation-CFF-blue)](https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/CITATION.cff)
+
 Health-RI-specific RDF terms for describing health datasets at metadata and catalogue
 level. This vocabulary complements reused standards; it is not a complete metadata
 schema, a disease terminology, or the broader Semantic Interoperability Initiative.
