@@ -1,0 +1,49 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix mod: <https://w3id.org/mod#> .
+@prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sct: <http://snomed.info/id/> .
+
+# Usage example metadata.
+<https://w3id.org/health-ri/metadata-vocabulary/example/anatomical-location-covered> a foaf:Document ;
+    dcterms:title "Anatomical location covered — usage example"@en ;
+    dcterms:description "Non-normative usage example demonstrating dataset-level anatomical coverage using an anatomical class. It does not associate body parts with individual records or data categories and is not a complete Health-RI Metadata Schema or HealthDCAT-AP record."@en ;
+    dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary/example/anatomical-location-covered"^^xsd:anyURI ;
+    dcterms:creator <https://orcid.org/0000-0003-2736-7817> ;
+    dcterms:publisher <https://w3id.org/health-ri> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:language "en"^^xsd:language ;
+    dcterms:format "text/turtle" ;
+    dcterms:modified "2026-10-03"^^xsd:date ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.1> ;
+    foaf:primaryTopic hri:anatomicalLocationCovered ;
+    mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
+
+<https://w3id.org/health-ri> a foaf:Organization ;
+    foaf:name "Health-RI" ;
+    foaf:homepage <https://www.health-ri.nl/> .
+
+# Vocabulary illustrated by this usage example.
+<https://w3id.org/health-ri/metadata-vocabulary> vann:example <https://w3id.org/health-ri/metadata-vocabulary/example/anatomical-location-covered> .
+
+# Minimal usage example, not a complete HealthDCAT-AP record.
+<https://example.org/dataset/lung-imaging> a dcat:Dataset ;
+    dcterms:title "Example dataset covering the lung"@en ;
+    hri:anatomicalLocationCovered sct:39607008 .
+
+# Anatomical class typing and an explicit subsumption assertion for readability.
+# This is not a claim that Anatomical structure is the immediate SNOMED parent.
+# Source: SNOMED International's ECL Quick Reference, Reversed Attributes example:
+# https://docs.snomed.org/snomed-ct-specifications/snomed-ct-expression-constraint-language/appendices/appendix-d-ecl-quick-reference
+# The vocabulary range axiom entails this relationship; validation requires independent hierarchy evidence.
+# This entailment is not a check against an authoritative SNOMED edition.
+sct:39607008 a owl:Class ;
+    rdfs:subClassOf sct:91723000 .
+
+<https://orcid.org/0000-0003-2736-7817> a foaf:Person ;
+    foaf:name "Pedro Paulo F. Barcelos" .

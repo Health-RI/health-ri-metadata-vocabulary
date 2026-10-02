@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Health-RI Metadata Vocabulary</title>
+    <style>
+        #pylode {
+            position: fixed;
+            top: 205px;
+            left: -150px;
+            font-size: small;
+            transform: rotate(-90deg);
+            color: grey;
+        }
+        #pylode a {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-decoration: none;
+            color: #005A9C;
+        }
+        #pylode a:hover {
+            color: #333;
+        }
+        #pylode #p {
+            color: #329545;
+        }
+        #pylode #y {
+            color: #f9cb33;
+        }
+        #pylode #version {
+            font-size: 1.0em;
+        }
+
+        #profile {
+            font-style: italic;
+            font-size: 1.25em;
+            color: darkred!important;
+        }
+
+        .cardinality {
+            font-style: italic;
+            color: #aa00aa;
+        }
+
+        dl {
+            /*border: 1px solid navy;*/
+            /*padding:5px;*/
+        }
+
+        dt {
+            font-weight: bold;
+            padding: 0;
+        }
+
+        dd {
+            margin-bottom: 10px;
+            padding-top: 7px;
+            line-height: 1.6em;
+        }
+
+        ul.pylodelitlist {
+            list-style-type: none;
+            margin-left: -40px;
+        }
+
+        #metadata ul li,
+        #classes ul li {
+            margin-bottom: 10px;
+        }
+
+        #metadata dd p {
+          margin: 0 0 1em 0;
+        }
+
+        ul.hlist {
+            list-style-type: none;
+            border: 1px solid navy;
+            padding:5px;
+            background-color: #F4FFFF;
+        }
+
+        div.hierarchy {
+            margin-bottom: 30px;
+            background-color: #F4FFFF;
+            padding: 10px;
+        }
+
+        ul.hierarchy {
+            padding: 5px 25px 5px 25px;
+        }
+
+        ul.hierarchy li {
+            margin-top:5px;
+        }
+
+        ul.hlist li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        .entity {
+            border: 1px solid navy;
+            margin:5px 0 5px 0;
+            padding: 5px;
+        }
+
+        .entity th {
+            width: 150px;
+            vertical-align: top;
+        }
+
+        .entity th,
+        .entity td {
+            padding-bottom: 20px;
+        }
+
+        .entity table th {
+            text-align: left;
+        }
+
+        section#overview img {
+            max-width: 1000px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            text-align: left
+        }
+        h1, h2, h3 {
+            color: #005A9C; background: white
+        }
+        h1 {
+            font: 170% sans-serif;
+            line-height: 110%;
+        }
+        h2 {
+            font: 140% sans-serif;
+            margin-top:40px;
+        }
+        h3 {
+            font: 120% sans-serif;
+            margin-top: 20px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid navy;
+        }
+        h4 { font: bold 100% sans-serif }
+        h5 {
+            font: italic 100% sans-serif;
+            margin-bottom: 10px;
+        }
+        h6 { font: small-caps 100% sans-serif }
+
+        body {
+            padding: 2em 70px 2em 70px;
+            margin: 0;
+            font-family: sans-serif;
+            color: black;
+            background: white;
+            background-position: top left;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            text-align: left;
+        }
+
+        section {
+            max-width: 1500px;
+        }
+
+        .figure {
+            margin-bottom: 20px;
+        }
+
+        :link { color: #00C; background: transparent }
+        :visited { color: #609; background: transparent }
+        a:active { color: #C00; background: transparent }
+
+        .sup-c,
+        .sup-op,
+        .sup-fp,
+        .sup-dp,
+        .sup-ap,
+        .sup-p,
+        .sup-ni,
+        .sup-con,
+        .sup-col,
+        .sup-ns,
+        .sup-ps {
+            cursor:help;
+        }
+
+        .sup-c {
+            color:orange;
+        }
+
+        .sup-op {
+            color:navy;
+        }
+
+        .sup-fp {
+            color:lightskyblue;
+        }
+
+        .sup-dp {
+            color:green;
+        }
+
+        .sup-ap {
+            color:darkred;
+        }
+
+        .sup-p {
+            color:black;
+        }
+
+        .sup-ni {
+            color:brown;
+        }
+
+        .sup-con {
+            color:orange;
+        }
+
+        .sup-col {
+            color:darkred;
+        }
+
+        .sup-ns {
+            color:lightgreen;
+        }
+
+        .sup-ps {
+            color:lightblue;
+        }
+
+        sup {
+            margin-left: -3px;
+        }
+        code {
+            font-size: large;
+            color: darkred;
+        }
+
+        /* less prominent links for properties */
+        .proplink {
+            color: #336;
+            text-decoration: none;
+        }
+
+        #toc {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 2;
+            height: 100%;
+            overflow-y: auto;
+            padding: 10px;
+            border: solid 1px navy;
+            font-size: small;
+            width: 180px;
+        }
+        #toc h3 {
+            margin-top: 5px;
+        }
+
+        #toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        #toc .first > li {
+            margin-top: 5px;
+        }
+
+        #toc .second,
+        #toc .third {
+            padding-left: 10px;
+        }
+
+        .second li {
+            margin-top: 0.5em;
+        }
+
+        #content {
+            width: calc(100% - 150px);
+        }
+
+        .hover_property {
+            cursor: help;
+            text-decoration: none;
+            border-bottom: dashed 1px;
+        }
+
+        .setclass {
+            list-style-type: none;
+        }
+
+        code{
+            word-wrap: break-word;
+          }
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        td {
+            word-wrap: break-word;
+            line-height: 1.6em ;
+        }
+        #legend table.entity {
+            width: 25%;
+        }
+        @media (max-width: 768px) {
+            /* #toc and #pylode are siblings of #content directly under
+               body; flex ordering pulls the ToC (last in the document)
+               to the top of the page */
+            body {
+                display: flex;
+                flex-direction: column;
+                padding: 1em 16px;
+            }
+
+            dd {
+                margin-left: 20px;
+            }
+
+            #pylode {
+                display: none;
+            }
+
+            #content {
+                width: 100%;
+            }
+
+            #toc {
+                order: -1;
+                position: static;
+                width: auto;
+                height: auto;
+                overflow-y: visible;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* long IRIs in link text must be able to break anywhere */
+            a {
+                overflow-wrap: anywhere;
+            }
+
+            /* stack property tables otherwise columns are squeezed */
+            table,
+            thead,
+            tbody,
+            tr,
+            th,
+            td {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .entity th,
+            .entity td {
+                padding-bottom: 6px;
+            }
+
+            .entity td {
+                padding-bottom: 16px;
+            }
+
+            #legend table.entity {
+                width: 100%;
+            }
+        }
+
+	</style>
+    <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhklEQVQ4jbWPzStEURjG3yQLirlGKUnKFO45Z+SjmXvnnmthQcpCoVhYmD/AwmJiI3OvZuZc2U3UlKU0/gAslMw9JgvhHxAr2fko7r0jHSsl+TgbTz2Lt5731/MASEiJW9ONml2QyX6rsGalmnT74v8BDf12hxJfpV8d1uwNKUBYszabdFv84L8B9X0rESVmmUup2fme0cVhJWaZHw4NWL1SewEAfDe6H3Dy6Ll456WEJsRZS630MwCAOI20ei5OBpxse5zcBZw8eS4uPpfIuDiCainIg9umBCU0GZzgLZ9Hn31OgoATL+CkLDGB5H1OKj4nFd/FBxUXJ0UZNb4edw/6nLyJXaj5FeCVyPLNIVmYK8TG1IwWb16L1gEACAFV90ftoT8bdOX0EeyY99gxBXZMgRz6qGb1KantAACI0UvE6F5XJqEjpsdURouI0Vt5gGOUkUNnPu7ObGIIMfNaGqDmjDRi9FZldF1lRgYzeqUyeoiY4ag5Iy3RgOYRM8+/M2bG8efsO4hGrpmJseyMAAAAAElFTkSuQmCC" rel="icon" sizes="16x16" type="image/png">
+    <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC40lEQVRYhe2UT0hUQRzHp6Iss1B3VZKIDbbdfW9mnoi4f3zzjkJQeOgS0SEIb1EWBGGlLLu460zQPQM1unUIIjA6rfpm6ZAhHjoIRVQUFUlEbG+euTsdXG1d3VL3bVD4g+9h+L35fT/8fvN7ADgY9aHY5fpIvK82HO9ysu66wxWOzbkjcekKx0a2ALYA/n2AGi3a6ArFezcidziecQygNhhrcUficjP6PwBqtGijKxy/thnVBePHywYoDsFhl53GV8SEcsTx4usCMLUewTVpc23BNvEzm6Neyf1+KcG2vwqwUjgrOJq2JmHftwmkVBRGTvncFodnbI7vChO/FRznCmHsNM7aHM9Yk7Df5iqsLMw9sMNOK2g+jS4IEz0UJv4iuJZb2RltWnB4UZqH6ioGAgAAGe5vtiZhtzDx7OoRadLmeM7m6IRjhnLMW2Vx1bA5GhAmnhIcz6/xNj4Ujsky8UspwfayjDPjsF2Y6L7N8Vzx/BfP+KPg6LbgSqd8DnfJW2CnbaLhfH5ephpqygJYvQU4Z3P82TLRsDDhUTnmrSq+Y3N0Mg+Xldy/zwEAnLMWZ3pHpNExmfLs/t0dOdVcbT0JeKxUwFP2VljjqiE47Jp53LTXNxhsUZjerTByXWX6VZWRs/4bIQ2ACv+UAomgDzLCISNZxAxZKMhIDjLy1JfsaK+I+eGBUBNk5E2x8RogX/PdcDZUqieWTSh5D6nOVKqfhoycUmlHFFIyu5RXqf7AcQDISCpv/tqbMBqK883RtmpISRoxQyJKPgGn3wNk5NEigDFa6hslqV/Kj+FdBQD0bshIDlKSLlVcoWQo36UhR80BAMB73lulMn0EMpJTqD6qJiOt3mho/8GbkT2BZNgDB/V+RI0fkOrT3kRIVQbaDizJm2hdNbINBxwk5xAj3yEjuV9rZ1iIkgxixkLBA83mz8uCjLwoGwAx0vOnFSy5mtR4VTaAQvVORMnwZgSpzkrV/QmdE2tKe46+MQAAAABJRU5ErkJggg==" rel="icon" sizes="32x32" type="image/png">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script id="schema.org" type="application/ld+json">
+[
+  {
+    "@id": "https://orcid.org/0000-0001-8306-0380",
+    "https://schema.org/name": [
+      {
+        "@value": "Hannah Neikes"
+      }
+    ]
+  },
+  {
+    "@id": "https://orcid.org/0000-0003-0771-3516",
+    "https://schema.org/name": [
+      {
+        "@value": "Niek van Ulzen"
+      }
+    ]
+  },
+  {
+    "@id": "https://orcid.org/0009-0002-3089-9558",
+    "https://schema.org/name": [
+      {
+        "@value": "Ana Konrad"
+      }
+    ]
+  },
+  {
+    "@id": "https://orcid.org/0000-0003-2736-7817",
+    "https://schema.org/name": [
+      {
+        "@value": "Pedro Paulo F. Barcelos"
+      }
+    ]
+  },
+  {
+    "@id": "https://w3id.org/health-ri/metadata-vocabulary",
+    "@type": [
+      "https://schema.org/DefinedTermSet"
+    ],
+    "https://schema.org/contributor": [
+      {
+        "@id": "https://orcid.org/0000-0001-8306-0380"
+      },
+      {
+        "@id": "https://orcid.org/0000-0003-0771-3516"
+      },
+      {
+        "@id": "https://orcid.org/0000-0003-2736-7817"
+      },
+      {
+        "@id": "https://orcid.org/0009-0002-3089-9558"
+      }
+    ],
+    "https://schema.org/creator": [
+      {
+        "@id": "https://orcid.org/0000-0001-8306-0380"
+      },
+      {
+        "@id": "https://orcid.org/0000-0003-0771-3516"
+      },
+      {
+        "@id": "https://orcid.org/0000-0003-2736-7817"
+      },
+      {
+        "@id": "https://orcid.org/0009-0002-3089-9558"
+      }
+    ],
+    "https://schema.org/dateIssued": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#date",
+        "@value": "2026-09-30"
+      }
+    ],
+    "https://schema.org/dateModified": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#date",
+        "@value": "2026-10-02"
+      }
+    ],
+    "https://schema.org/description": [
+      {
+        "@language": "en",
+        "@value": "A vocabulary of Health-RI-specific terms for describing health datasets at metadata and catalogue level. It complements reused metadata standards; it is not a complete metadata schema or a clinical terminology."
+      },
+      {
+        "@language": "en",
+        "@value": "Development release for review. The entire vocabulary is versioned together using Semantic Versioning; term IRIs remain unversioned. This release does not assert approval or adoption by a particular Health-RI Metadata Schema release."
+      }
+    ],
+    "https://schema.org/license": [
+      {
+        "@id": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "https://schema.org/name": [
+      {
+        "@language": "en",
+        "@value": "Health-RI Metadata Vocabulary"
+      }
+    ],
+    "https://schema.org/publisher": [
+      {
+        "@id": "https://w3id.org/health-ri"
+      }
+    ]
+  },
+  {
+    "@id": "https://w3id.org/health-ri",
+    "https://schema.org/name": [
+      {
+        "@value": "Health-RI"
+      }
+    ]
+  }
+]
+	</script>
+  </head>
+  <body>
+    <div id="content">
+      <div class="section" id="metadata">
+        <h1>Health-RI Metadata Vocabulary</h1>
+        <h2>Metadata</h2>
+        <dl>
+          <div>
+            <dt>
+              <strong>IRI</strong>
+            </dt>
+            <dd>
+              <code>https://w3id.org/health-ri/metadata-vocabulary</code>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/title" title="A name given to the resource. Defined in DCMI Metadata Terms">Title</a>
+            </dt>
+            <dd><p>Health-RI Metadata Vocabulary</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/publisher" title="An entity responsible for making the resource available. Defined in DCMI Metadata Terms">Publisher</a>
+            </dt>
+            <dd>
+              <span>
+                <span>Health-RI</span>
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/creator" title="An entity responsible for making the resource. Defined in DCMI Metadata Terms">Creator</a>
+            </dt>
+            <dd>
+              <ul class="pylodelitlist">
+                <li>
+                  <span>
+                    <span>Hannah Neikes</span>
+                    <a href="https://orcid.org/0000-0001-8306-0380">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0000-0001-8306-0380</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    <span>Niek van Ulzen</span>
+                    <a href="https://orcid.org/0000-0003-0771-3516">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0000-0003-0771-3516</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    <span>Pedro Paulo F. Barcelos</span>
+                    <a href="https://orcid.org/0000-0003-2736-7817">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0000-0003-2736-7817</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    <span>Ana Konrad</span>
+                    <a href="https://orcid.org/0009-0002-3089-9558">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0009-0002-3089-9558</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/contributor" title="An entity responsible for making contributions to the resource. Defined in DCMI Metadata Terms">Contributor</a>
+            </dt>
+            <dd>
+              <ul class="pylodelitlist">
+                <li>
+                  <span>
+                    <span>Hannah Neikes</span>
+                    <a href="https://orcid.org/0000-0001-8306-0380">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0000-0001-8306-0380</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    <span>Niek van Ulzen</span>
+                    <a href="https://orcid.org/0000-0003-0771-3516">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0000-0003-0771-3516</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    <span>Pedro Paulo F. Barcelos</span>
+                    <a href="https://orcid.org/0000-0003-2736-7817">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0000-0003-2736-7817</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    <span>Ana Konrad</span>
+                    <a href="https://orcid.org/0009-0002-3089-9558">
+                    <svg width="15px" height="15px" viewBox="0 0 72 72" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>https://orcid.org/0009-0002-3089-9558</title>
+                        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="hero" transform="translate(-924.000000, -72.000000)" fill-rule="nonzero">
+                                <g id="Group-4">
+                                    <g id="vector_iD_icon" transform="translate(924.000000, 72.000000)">
+                                        <path d="M72,36 C72,55.884375 55.884375,72 36,72 C16.115625,72 0,55.884375 0,36 C0,16.115625 16.115625,0 36,0 C55.884375,0 72,16.115625 72,36 Z" id="Path" fill="#A6CE39"></path>
+                                        <g id="Group" transform="translate(18.868966, 12.910345)" fill="#FFFFFF">
+                                            <polygon id="Path" points="5.03734929 39.1250878 0.695429861 39.1250878 0.695429861 9.14431787 5.03734929 9.14431787 5.03734929 22.6930505 5.03734929 39.1250878"></polygon>
+                                            <path d="M11.409257,9.14431787 L23.1380784,9.14431787 C34.303014,9.14431787 39.2088191,17.0664074 39.2088191,24.1486995 C39.2088191,31.846843 33.1470485,39.1530811 23.1944669,39.1530811 L11.409257,39.1530811 L11.409257,9.14431787 Z M15.7511765,35.2620194 L22.6587756,35.2620194 C32.49858,35.2620194 34.7541226,27.8438084 34.7541226,24.1486995 C34.7541226,18.1301509 30.8915059,13.0353795 22.4332213,13.0353795 L15.7511765,13.0353795 L15.7511765,35.2620194 Z" id="Shape"></path>
+                                            <path d="M5.71401206,2.90182329 C5.71401206,4.441452 4.44526937,5.72914146 2.86638958,5.72914146 C1.28750978,5.72914146 0.0187670918,4.441452 0.0187670918,2.90182329 C0.0187670918,1.33420133 1.28750978,0.0745051096 2.86638958,0.0745051096 C4.44526937,0.0745051096 5.71401206,1.36219458 5.71401206,2.90182329 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg></a>
+                  </span>
+                </li>
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/modified" title="Date on which the resource was changed. Defined in DCMI Metadata Terms">Date Modified</a>
+            </dt>
+            <dd><p>2026-10-02</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/issued" title="Recommended practice is to describe the date, date/time, or period of time as recommended for the property Date, of which this is a subproperty. Defined in DCMI Metadata Terms">Date Issued</a>
+            </dt>
+            <dd><p>2026-09-30</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/license" title="Recommended practice is to identify the license document with a URI. If this is not possible or feasible, a literal value that identifies the license may be provided. Defined in DCMI Metadata Terms">License</a>
+            </dt>
+            <dd>
+              <a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/2002/07/owl#versionIRI" title="The property that identifies the version IRI of an ontology. Defined in The OWL 2 Schema vocabulary (OWL 2)">Version Iri</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary/v0.2.2">https://w3id.org/health-ri/metadata-vocabulary/v0.2.2</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/2002/07/owl#versionInfo" title="The annotation property that provides version information for an ontology or another OWL construct. Defined in The OWL 2 Schema vocabulary (OWL 2)">Version Info</a>
+            </dt>
+            <dd><p>0.2.2</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/2002/07/owl#priorVersion" title="The annotation property that indicates the predecessor ontology of a given ontology. Defined in The OWL 2 Schema vocabulary (OWL 2)">Prior Version</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary/v0.2.1">https://w3id.org/health-ri/metadata-vocabulary/v0.2.1</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/vocab/vann/preferredNamespacePrefix" title="None. Defined in None">Preferred Namespace Prefix</a>
+            </dt>
+            <dd><p>hri</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/vocab/vann/preferredNamespaceUri" title="None. Defined in None">Preferred Namespace Uri</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary#">hri:</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/description" title="An account of the resource. Defined in DCMI Metadata Terms">Description</a>
+            </dt>
+            <dd>
+              <ul class="pylodelitlist">
+                <li><p>A vocabulary of Health-RI-specific terms for describing health datasets at metadata and catalogue level. It complements reused metadata standards; it is not a complete metadata schema or a clinical terminology.</p></li>
+                <li><p>Development release for review. The entire vocabulary is versioned together using Semantic Versioning; term IRIs remain unversioned. This release does not assert approval or adoption by a particular Health-RI Metadata Schema release.</p></li>
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/2002/07/owl#imports" title="The property that is used for importing other ontologies into a given ontology. Defined in The OWL 2 Schema vocabulary (OWL 2)">Imports</a>
+            </dt>
+            <dd>
+              <a href="http://www.w3.org/2004/02/skos/core">SKOS Vocabulary</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="https://schema.org/codeRepository" title="Link to the repository where the un-compiled, human readable code and related code is located (SVN, github, CodePlex). Defined in None">Code Repository</a>
+            </dt>
+            <dd>
+              <a href="https://github.com/Health-RI/health-ri-metadata-vocabulary">https://github.com/Health-RI/health-ri-metadata-vocabulary</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#seeAlso" title="Further information about the subject resource. Defined in The RDF Schema vocabulary (RDFS)">See Also</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary/v0.2.2/spec">https://w3id.org/health-ri/metadata-vocabulary/v0.2.2/spec</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/abstract" title="A summary of the resource. Defined in None">Abstract</a>
+            </dt>
+            <dd><p>A vocabulary defining Health-RI-specific metadata terms for health dataset discovery, providing properties for dataset-level health conditions of interest and anatomical locations covered.</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/bibliographicCitation" title="A bibliographic reference for the resource. Defined in None">Bibliographic Citation</a>
+            </dt>
+            <dd><p>Konrad, A.; Neikes, H.; van Ulzen, N.; Barcelos, P. P. F. (2026). Health-RI Metadata Vocabulary, version 0.2.2. https://w3id.org/health-ri/metadata-vocabulary/v0.2.2</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/identifier" title="An unambiguous reference to the resource within a given context. Defined in None">Identifier</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary">https://w3id.org/health-ri/metadata-vocabulary</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/dc/terms/language" title="A language of the resource. Defined in None">Language</a>
+            </dt>
+            <dd><p>en</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://purl.org/vocab/vann/example" title="None. Defined in None">Example</a>
+            </dt>
+            <dd>
+              <ul class="pylodelitlist">
+                <li>
+                  <a href="https://w3id.org/health-ri/metadata-vocabulary/example/anatomical-location-covered">https://w3id.org/health-ri/metadata-vocabulary/example/anatomical-location-covered</a>
+                </li>
+                <li>
+                  <a href="https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest">https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest</a>
+                </li>
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/ns/dcat#keyword" title="None. Defined in None">Keyword</a>
+            </dt>
+            <dd>
+              <ul class="pylodelitlist">
+                <li><p>Semantic Web vocabulary</p></li>
+                <li><p>dataset discovery</p></li>
+                <li><p>health metadata</p></li>
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/ns/dcat#landingPage" title="None. Defined in None">Landing Page</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary/spec">https://w3id.org/health-ri/metadata-vocabulary/spec</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/ns/dcat#version" title="None. Defined in None">Version</a>
+            </dt>
+            <dd><p>0.2.2</p></dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://www.w3.org/ns/shacl#suggestedShapesGraph" title="Suggested shapes graphs for this ontology. The values of this property may be used in the absence of specific sh:shapesGraph statements. Defined in None">Suggested Shapes Graph</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary/shacl">https://w3id.org/health-ri/metadata-vocabulary/shacl</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://xmlns.com/foaf/0.1/homepage" title="None. Defined in None">Homepage</a>
+            </dt>
+            <dd>
+              <a href="https://health-ri.github.io/health-ri-metadata-vocabulary/">https://health-ri.github.io/health-ri-metadata-vocabulary/</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="http://xmlns.com/foaf/0.1/logo" title="None. Defined in None">Logo</a>
+            </dt>
+            <dd>
+              <a href="https://raw.githubusercontent.com/Health-RI/semantic-interoperability/refs/heads/main/docs/assets/images/health-ri-logo-blue.png">https://raw.githubusercontent.com/Health-RI/semantic-interoperability/refs/heads/main/docs/assets/images/health-ri-logo-blue.png</a>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <a class="hover_property" href="https://w3id.org/mod#repository" title="None. Defined in None">Repository</a>
+            </dt>
+            <dd>
+              <a href="https://w3id.org/health-ri/metadata-vocabulary/git">https://w3id.org/health-ri/metadata-vocabulary/git</a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div class="section" id="classes">
+        <h2>Classes</h2>
+        <h3 id="class-hierarchy">Class Hierarchy</h3>
+        <div class="hierarchy">
+          <ul class="hierarchy">
+            <li>
+              <a href="#91723000">91723000</a>
+            </li>
+          </ul>
+        </div>
+        <h3 id="class-definitions">Class Definitions</h3>
+        <div class="property entity" id="91723000">
+          <h3>91723000
+            <sup class="sup-c" title="OWL/RDFS Class">c</sup>
+          </h3>
+          <table>
+            <tr>
+              <th>IRI</th>
+              <td>
+                <code>http://snomed.info/id/91723000</code>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="section" id="objectproperties">
+        <h2>Object Properties</h2>
+        <h3 id="object-property-hierarchy">Object Property Hierarchy</h3>
+        <div class="hierarchy">
+          <ul class="hierarchy">
+            <li>
+              <a href="#anatomicalLocationCovered">anatomical location covered</a>
+            </li>
+            <li>
+              <a href="#healthConditionOfInterest">health condition of interest</a>
+            </li>
+          </ul>
+        </div>
+        <h3 id="object-property-definitions">Object Property Definitions</h3>
+        <div class="property entity" id="anatomicalLocationCovered">
+          <h3>anatomical location covered
+            <sup class="sup-op" title="OWL Object Property">op</sup>
+          </h3>
+          <table>
+            <tr>
+              <th>IRI</th>
+              <td>
+                <code>https://w3id.org/health-ri/metadata-vocabulary#anatomicalLocationCovered</code>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#isDefinedBy" title="The definition of the subject resource. Defined in The RDF Schema vocabulary (RDFS)">Is Defined By</a>
+              </th>
+              <td>
+                <a href="https://w3id.org/health-ri/metadata-vocabulary">Health-RI Metadata Vocabulary</a>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://purl.org/dc/terms/description" title="An account of the resource. Defined in DCMI Metadata Terms">Description</a>
+              </th>
+              <td>
+                <ul class="pylodelitlist">
+                  <li><p>The anonymous range is an owl:hasValue restriction on rdfs:subClassOf with value http://snomed.info/id/91723000. Under OWL Full / RDF-Based Semantics, every linked value is therefore a subclass of that root. Subclass transitivity and reflexivity include indirect subclasses and the root itself. This metamodeling pattern is outside OWL 2 DL. It entails subclass membership; it does not validate whether SNOMED CT already establishes that membership, require a SNOMED-owned IRI, or verify concept status. Use SNOMED CT anatomical class IRIs for the intended terminology binding. No skos:Concept typing is required for these values.</p></li>
+                  <li><p>Relates a dataset to an anatomical class that is Anatomical structure (SNOMED CT 91723000) or one of its subclasses, describing anatomical coverage of the dataset as a whole at metadata or catalogue level.</p></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2004/02/skos/core#scopeNote" title="A note that helps to clarify the meaning and/or the use of a concept. Defined in SKOS Vocabulary">Scope Note</a>
+              </th>
+              <td><p>Describes aggregate anatomical coverage of the dataset. Multiple values may be supplied; use is optional (0..*). Values identify anatomical classes, not individual organs, patients, samples, or observations. For a dataset combining data categories or modalities, this property does not pair a particular anatomical location with a particular category, modality, or record. The accompanying SHACL shape checks only Dataset subjects and IRI-valued objects; the subclass relationship is expressed by the vocabulary's OWL Full range axiom.</p></td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2004/02/skos/core#example" title="An example of the use of a concept. Defined in SKOS Vocabulary">Example</a>
+              </th>
+              <td>
+                <pre>A dataset covering the lung may link directly to http://snomed.info/id/39607008 (Lung structure), an anatomical class subsumed by http://snomed.info/id/91723000. The range axiom also entails that subclass relationship.</pre>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#seeAlso" title="Further information about the subject resource. Defined in The RDF Schema vocabulary (RDFS)">See Also</a>
+              </th>
+              <td>
+                <ul class="pylodelitlist">
+                  <li>
+                    <span>
+                      <a href="http://snomed.info/id/91723000">sct:91723000</a>
+                      <sup class="sup-c" title="OWL/RDFS Class">c</sup>
+                    </span>
+                  </li>
+                  <li>
+                    <a href="https://www.w3.org/TR/owl2-rdf-based-semantics/">https://www.w3.org/TR/owl2-rdf-based-semantics/</a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#domain" title="A domain of the subject property. Defined in The RDF Schema vocabulary (RDFS)">Domain</a>
+              </th>
+              <td>
+                <a href="http://www.w3.org/ns/dcat#Dataset">dcat:Dataset</a>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#range" title="A range of the subject property. Defined in The RDF Schema vocabulary (RDFS)">Range</a>
+              </th>
+              <td>
+                <span>
+                  <span>
+                    <span>
+                      <a href="http://www.w3.org/2000/01/rdf-schema#subClassOf">sub class of</a>
+                      <sup class="sup-p" title="RDF Property">p</sup>
+                    </span>
+                    <span>
+                      <span class="cardinality">value</span>
+                      <span>
+                        <span>
+                          <a href="http://snomed.info/id/91723000">sct:91723000</a>
+                          <sup class="sup-c" title="OWL/RDFS Class">c</sup>
+                        </span>
+                      </span>
+                    </span><br>
+                  </span>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2004/02/skos/core#historyNote" title="A note about the past state/use/meaning of a concept. Defined in SKOS Vocabulary">History Note</a>
+              </th>
+              <td><p>Introduced for R-U-03 in 0.2.0, superseding the earlier eucaim:hasBodySite / eucaim:BP1000024 proposal without asserting a formal mapping to EUCAIM. In 0.2.1, the maintainers explicitly selected an OWL Full subclass-based range instead of skos:Concept plus SHACL hierarchy validation. This changes formal semantics and validation expectations despite the explicitly requested patch version number.</p></td>
+            </tr>
+          </table>
+        </div>
+        <div class="property entity" id="healthConditionOfInterest">
+          <h3>health condition of interest
+            <sup class="sup-op" title="OWL Object Property">op</sup>
+          </h3>
+          <table>
+            <tr>
+              <th>IRI</th>
+              <td>
+                <code>https://w3id.org/health-ri/metadata-vocabulary#healthConditionOfInterest</code>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#isDefinedBy" title="The definition of the subject resource. Defined in The RDF Schema vocabulary (RDFS)">Is Defined By</a>
+              </th>
+              <td>
+                <a href="https://w3id.org/health-ri/metadata-vocabulary">Health-RI Metadata Vocabulary</a>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://purl.org/dc/terms/description" title="An account of the resource. Defined in DCMI Metadata Terms">Description</a>
+              </th>
+              <td>
+                <ul class="pylodelitlist">
+                  <li><p>The value represents a clinical concept, not a patient or an individual occurrence of a condition. Multiple values may be provided. Values must be IRIs; this syntactic requirement is expressed in the accompanying SHACL shape, not by an RDFS range of IRI.</p></li>
+                  <li><p>Relates a dataset to an identified concept representing a disease, disorder, or clinical condition that the dataset as a whole concerns at metadata or catalogue level.</p></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2004/02/skos/core#scopeNote" title="A note that helps to clarify the meaning and/or the use of a concept. Defined in SKOS Vocabulary">Scope Note</a>
+              </th>
+              <td><p>This relation characterises the dataset as a whole. It does not assert that individual subjects, patients, records, samples, or observations have been diagnosed with the condition, and it is not an enumeration of diagnoses in individual records. Use externally identified disease or condition concepts from appropriate terminologies or classifications. The vocabulary does not prescribe a closed list of terminologies. Values are modelled as skos:Concept in accordance with the Health-RI metadata convention.</p></td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2004/02/skos/core#example" title="An example of the use of a concept. Defined in SKOS Vocabulary">Example</a>
+              </th>
+              <td>
+                <pre>A dataset concerning myocardial infarction may link to http://snomed.info/id/22298006; the linked concept is typed as skos:Concept in the metadata graph. This says nothing about diagnosis status of individual participants.</pre>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#domain" title="A domain of the subject property. Defined in The RDF Schema vocabulary (RDFS)">Domain</a>
+              </th>
+              <td>
+                <a href="http://www.w3.org/ns/dcat#Dataset">dcat:Dataset</a>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2000/01/rdf-schema#range" title="A range of the subject property. Defined in The RDF Schema vocabulary (RDFS)">Range</a>
+              </th>
+              <td>
+                <span>
+                  <a href="http://www.w3.org/2004/02/skos/core#Concept">Concept</a>
+                  <sup class="sup-c" title="OWL/RDFS Class">c</sup>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <a class="hover_property" href="http://www.w3.org/2004/02/skos/core#historyNote" title="A note about the past state/use/meaning of a concept. Defined in SKOS Vocabulary">History Note</a>
+              </th>
+              <td><p>Introduced for the health condition of interest requirement (R-U-04). It replaces the previously proposed use of SIO_000332 in the modelling decision. This history does not assert equivalence, subsumption, or a formal mapping to SIO.</p></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="namespaces">
+        <h2>Namespaces</h2>
+        <dl>
+          <dt id="dcat">dcat</dt>
+          <dd>
+            <code>http://www.w3.org/ns/dcat#</code>
+          </dd>
+          <dt id="dcterms">dcterms</dt>
+          <dd>
+            <code>http://purl.org/dc/terms/</code>
+          </dd>
+          <dt id="foaf">foaf</dt>
+          <dd>
+            <code>http://xmlns.com/foaf/0.1/</code>
+          </dd>
+          <dt id="hri">hri</dt>
+          <dd>
+            <code>https://w3id.org/health-ri/metadata-vocabulary#</code>
+          </dd>
+          <dt id="mod">mod</dt>
+          <dd>
+            <code>https://w3id.org/mod#</code>
+          </dd>
+          <dt id="owl">owl</dt>
+          <dd>
+            <code>http://www.w3.org/2002/07/owl#</code>
+          </dd>
+          <dt id="rdf">rdf</dt>
+          <dd>
+            <code>http://www.w3.org/1999/02/22-rdf-syntax-ns#</code>
+          </dd>
+          <dt id="rdfs">rdfs</dt>
+          <dd>
+            <code>http://www.w3.org/2000/01/rdf-schema#</code>
+          </dd>
+          <dt id="schema">schema</dt>
+          <dd>
+            <code>https://schema.org/</code>
+          </dd>
+          <dt id="sct">sct</dt>
+          <dd>
+            <code>http://snomed.info/id/</code>
+          </dd>
+          <dt id="sh">sh</dt>
+          <dd>
+            <code>http://www.w3.org/ns/shacl#</code>
+          </dd>
+          <dt id="skos">skos</dt>
+          <dd>
+            <code>http://www.w3.org/2004/02/skos/core#</code>
+          </dd>
+          <dt id="vann">vann</dt>
+          <dd>
+            <code>http://purl.org/vocab/vann/</code>
+          </dd>
+        </dl>
+      </div>
+      <div id="legend">
+        <h2>Legend</h2>
+        <table class="entity">
+          <tr>
+            <td>
+              <sup class="sup-c" title="OWL/RDFS Class">c</sup>
+            </td>
+            <td>Classes</td>
+          </tr>
+          <tr>
+            <td>
+              <sup class="sup-op" title="OWL Object Property">op</sup>
+            </td>
+            <td>Object Properties</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div id="pylode">
+      <p>made by 
+        <a href="https://github.com/rdflib/pyLODE">
+          <span id="p">p</span>
+          <span id="y">y</span>
+          <span>LODE</span>
+        </a>
+        <a href="https://github.com/rdflib/pyLODE/release/3.6.0" id="version">3.6.0</a>
+        <span> with the </span>
+        <a href="https://linked.data.gov.au/def/ontpub" id="profile">OntPub</a>
+        <span>profile</span>
+      </p>
+    </div>
+    <div id="toc">
+      <h3>Table of Contents</h3>
+      <ul class="first">
+        <li>
+          <h4>
+            <a href="#metadata">Metadata</a>
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a href="#classes">Classes</a>
+          </h4>
+          <h5>
+            <a href="#class-hierarchy" style="margin-left:10px;">Class Hierarchy</a>
+          </h5>
+          <h5>
+            <a href="#class-definitions" style="margin-left:10px;">Class Definitions</a>
+          </h5>
+          <ul class="second">
+            <li style="margin-left:10px;">
+              <a href="#91723000">91723000</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h4>
+            <a href="#objectproperties">Object Properties</a>
+          </h4>
+          <h5>
+            <a href="#object-property-hierarchy" style="margin-left:10px;">Object Property Hierarchy</a>
+          </h5>
+          <h5>
+            <a href="#object-property-definitions" style="margin-left:10px;">Object Property Definitions</a>
+          </h5>
+          <ul class="second">
+            <li style="margin-left:10px;">
+              <a href="#anatomicalLocationCovered">anatomical location covered</a>
+            </li>
+            <li style="margin-left:10px;">
+              <a href="#healthConditionOfInterest">health condition of interest</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h4>
+            <a href="#namespaces">Namespaces</a>
+          </h4>
+          <ul class="second">
+            <li>
+              <a href="#dcat">dcat</a>
+            </li>
+            <li>
+              <a href="#dcterms">dcterms</a>
+            </li>
+            <li>
+              <a href="#foaf">foaf</a>
+            </li>
+            <li>
+              <a href="#hri">hri</a>
+            </li>
+            <li>
+              <a href="#mod">mod</a>
+            </li>
+            <li>
+              <a href="#owl">owl</a>
+            </li>
+            <li>
+              <a href="#rdf">rdf</a>
+            </li>
+            <li>
+              <a href="#rdfs">rdfs</a>
+            </li>
+            <li>
+              <a href="#schema">schema</a>
+            </li>
+            <li>
+              <a href="#sct">sct</a>
+            </li>
+            <li>
+              <a href="#sh">sh</a>
+            </li>
+            <li>
+              <a href="#skos">skos</a>
+            </li>
+            <li>
+              <a href="#vann">vann</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h4>
+            <a href="#legend">Legend</a>
+          </h4>
+          <ul class="second"></ul>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

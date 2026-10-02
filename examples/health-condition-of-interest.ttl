@@ -1,0 +1,43 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix mod: <https://w3id.org/mod#> .
+@prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# Usage example metadata.
+<https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest> a foaf:Document ;
+    dcterms:title "Health condition of interest — usage example"@en ;
+    dcterms:description "Non-normative usage example demonstrating dataset-level health condition of interest. It does not assert diagnoses of individual participants and is not a complete Health-RI Metadata Schema or HealthDCAT-AP record."@en ;
+    dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest"^^xsd:anyURI ;
+    dcterms:creator <https://orcid.org/0000-0003-2736-7817> ;
+    dcterms:publisher <https://w3id.org/health-ri> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:language "en"^^xsd:language ;
+    dcterms:format "text/turtle" ;
+    dcterms:modified "2026-10-03"^^xsd:date ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.1> ;
+    foaf:primaryTopic hri:healthConditionOfInterest ;
+    mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
+
+<https://w3id.org/health-ri> a foaf:Organization ;
+    foaf:name "Health-RI" ;
+    foaf:homepage <https://www.health-ri.nl/> .
+
+# Vocabulary illustrated by this usage example.
+<https://w3id.org/health-ri/metadata-vocabulary> vann:example <https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest> .
+
+<https://example.org/dataset/myocardial-infarction> a dcat:Dataset ;
+    dcterms:title "Example dataset concerning myocardial infarction"@en ;
+    hri:healthConditionOfInterest <http://snomed.info/id/22298006> .
+
+# Local metadata typing; no redistribution of the external terminology.
+<http://snomed.info/id/22298006> a skos:Concept .
+
+# This is a minimal vocabulary usage example, not a complete
+# Health-RI Metadata Schema or HealthDCAT-AP compliant dataset record.
+
+<https://orcid.org/0000-0003-2736-7817> a foaf:Person ;
+    foaf:name "Pedro Paulo F. Barcelos" .
