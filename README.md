@@ -14,11 +14,22 @@ schema, a disease terminology, or the broader Semantic Interoperability Initiati
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [Persistent documentation link](https://w3id.org/health-ri/metadata-vocabulary/spec) |
 
-The vocabulary redirect configuration has been merged into w3id.org. Target files
-and documentation become available when the implementation is merged into the
-official repository and Pages is deployed. A fork is a staging location, not a
-canonical namespace. See [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects)
-for the complete route reference and the current examples-directory exception.
+The vocabulary redirect configuration has been merged into w3id.org. Target files and documentation become available when the implementation is merged into the official repository and Pages is deployed. A fork is a staging location, not a canonical namespace. See [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects) for the complete route reference and the current examples-directory exception.
+
+<!-- omit from toc -->
+- [Normative status](#normative-status)
+- [Access](#access)
+- [Persistent identifiers (PIDs) and redirects](#persistent-identifiers-pids-and-redirects)
+  - [Main links](#main-links)
+  - [Versioned links](#versioned-links)
+  - [Supported aliases](#supported-aliases)
+  - [Content negotiation and term IRIs](#content-negotiation-and-term-iris)
+- [Health condition of interest](#health-condition-of-interest)
+- [Anatomical location covered](#anatomical-location-covered)
+- [Local validation and documentation](#local-validation-and-documentation)
+- [Attribution and provenance](#attribution-and-provenance)
+- [Discovering examples and validation shapes](#discovering-examples-and-validation-shapes)
+- [Release consistency checks](#release-consistency-checks)
 
 ## Normative status
 
