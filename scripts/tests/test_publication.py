@@ -7,6 +7,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from bs4 import BeautifulSoup
+from rdflib import Graph, URIRef
+from rdflib.namespace import SKOS
+
 from test_vocabulary import build
 
 
@@ -45,6 +49,17 @@ class PublicationTests(unittest.TestCase):
             self.assertEqual(original.with_suffix('.html').read_bytes(), archived_html)
             self.assertEqual({p.name for p in latest.iterdir()},
                              {build.NAME, 'index.html'})
+            # The ordinary release build customizes the new snapshot before promotion.
+            soup = BeautifulSoup((latest / 'index.html').read_text(), 'html.parser')
+            self.assertIsNotNone(soup.select_one('#metadata img.hri-logo'))
+            self.assertIsNotNone(soup.select_one('td.hri-example pre'))
+            graph = Graph().parse(new)
+            for entity in soup.select('.property.entity'):
+                table = entity.find('table')
+                term = URIRef(table.select_one('tr td code').get_text(strip=True))
+                definition = table.find('a', href=str(SKOS.definition)).find_parent('tr').td
+                self.assertEqual({p.get_text() for p in definition.find_all('p')},
+                                 {str(value) for value in graph.objects(term, SKOS.definition)})
 
     def test_numeric_version_order(self):
         with tempfile.TemporaryDirectory() as tmp:

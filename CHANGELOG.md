@@ -2,6 +2,14 @@
 
 All notable changes to the complete Health-RI Metadata Vocabulary are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and vocabulary releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Terms do not have independent release versions.
 
+## [0.4.2] - 2026-10-05
+
+### Changed
+- Automatically render the vocabulary's existing logo as an image before the title instead of an ordinary Metadata entry in newly generated PyLODE documentation.
+- Wrap property Example content, including long IRIs and unbroken strings, within its container using scoped styling.
+- Render each property's source `skos:definition` in a Definition field after Is Defined By and before Description; omit the field when no definition is supplied.
+- Publish a new documentation snapshot and update release metadata and supporting references. Term definitions, RDF/OWL axioms, SHACL constraints, and example data are unchanged; existing release snapshots remain immutable.
+
 ## [0.4.1] - 2026-10-03
 
 ### Changed
@@ -94,6 +102,7 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Versioned sources, generated latest representations, PyLODE documentation, and automated validation and GitHub Pages publication infrastructure.
 
 [Unreleased]: https://github.com/Health-RI/health-ri-metadata-vocabulary/commits/main
+[0.4.2]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.2.ttl
 [0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.1.0.ttl
 
 [0.2.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.2.0.ttl

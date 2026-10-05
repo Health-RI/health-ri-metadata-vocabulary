@@ -4,7 +4,7 @@
 
 The sole normative specification for each release is its versioned vocabulary Turtle file: `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. The version is part of the filename, not a directory name. All terms belong to the same vocabulary version and retain their stable, unversioned term IRIs.
 
-PyLODE generates an adjacent `health-ri-metadata-vocabulary-vX.Y.Z.html` snapshot. The highest numbered release is copied to `vocabulary/latest/health-ri-metadata-vocabulary.ttl` and its documentation to `vocabulary/latest/index.html`. These latest files and `CITATION.cff` are generated; do not edit them by hand.
+PyLODE generates an adjacent `health-ri-metadata-vocabulary-vX.Y.Z.html` snapshot. Before storing a new snapshot, `scripts/build.py` renders the source logo before the title, inserts source `skos:definition` values into property Definition fields, and adds scoped Example wrapping styles. This customization applies automatically to every newly generated version; existing snapshots are preserved. The highest numbered release is copied to `vocabulary/latest/health-ri-metadata-vocabulary.ttl` and its documentation to `vocabulary/latest/index.html`. These latest files and `CITATION.cff` are generated; do not edit them by hand.
 
 Published versioned Turtle and HTML snapshots are immutable. Add a new version rather than editing or deleting an existing snapshot. CI checks existing snapshots against its base commit; branch protection remains a separate repository setting. The explicitly requested restructuring and metadata correction of the initial 0.1.0 implementation is a one-time migration from commit `e9bc4ca`; the build script limits that exception to the old paths at that exact commit.
 
@@ -54,7 +54,7 @@ For `hri:anatomicalLocationCovered`, version 0.2.1 uses an OWL Full range restri
 
 The 0.2.1 number is an explicitly requested exception to the development versioning guideline above: the release changes formal range semantics and removes anatomical Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0 files unchanged.
 
-The existing w3id proposal uses version-pattern redirects and already covers `v0.4.1`; this release does not require new redirect rules.
+The existing w3id proposal uses version-pattern redirects and already covers `v0.4.2`; this release does not require new redirect rules.
 
 
 ## Supporting Turtle metadata

@@ -13,7 +13,7 @@ import yaml
 from bs4 import BeautifulSoup
 from pyshacl import validate
 from rdflib import Graph, Literal, Namespace, RDF, RDFS, URIRef
-from rdflib.namespace import DCAT, DCTERMS, OWL, SKOS, XSD
+from rdflib.namespace import DCAT, DCTERMS, FOAF, OWL, SKOS, XSD
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://w3id.org/health-ri/metadata-vocabulary'
@@ -210,6 +210,81 @@ def check_publication_consistency(current):
     check_support_versions(current)
 
 
+def customize_documentation(html, source):
+    """Apply presentation changes to new PyLODE snapshots using the original RDF."""
+    graph = Graph().parse(source)
+    soup = BeautifulSoup(html.read_text(), 'html.parser')
+    metadata = soup.select_one('#metadata')
+    require(metadata is not None and soup.head is not None,
+            'Unexpected PyLODE document structure')
+
+    ontology = graph.value(predicate=RDF.type, object=OWL.Ontology)
+    logo = graph.value(ontology, FOAF.logo)
+    if logo is not None:
+        require(isinstance(logo, URIRef), 'The vocabulary logo must be an IRI')
+        image = soup.new_tag('img', src=str(logo), alt='Health-RI Logo')
+        image['class'] = ['hri-logo']
+        metadata.insert(0, image)
+        for link in metadata.select(f'dt a[href="{FOAF.logo}"]'):
+            entry = link.find_parent('dt').parent
+            require(entry.name == 'div' and entry is not metadata,
+                    'Unexpected PyLODE logo metadata structure')
+            entry.decompose()
+
+    style = soup.new_tag('style', id='hri-documentation-style')
+    style.string = '''
+.hri-logo {
+    display: block;
+    max-height: 80px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    margin-bottom: 1em;
+}
+.property.entity .hri-example {
+    overflow-wrap: anywhere;
+}
+.property.entity .hri-example pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+'''
+    soup.head.append(style)
+
+    for entity in soup.select('.property.entity'):
+        table = entity.find('table')
+        iri = table.select_one('tr td code') if table else None
+        require(iri is not None, 'PyLODE property block is missing its IRI')
+        term = URIRef(iri.get_text(strip=True))
+        definitions = sorted(graph.objects(term, SKOS.definition), key=lambda value: value.n3())
+        if definitions:
+            row = soup.new_tag('tr')
+            header = soup.new_tag('th')
+            label = soup.new_tag('a', href=str(SKOS.definition))
+            label['class'] = ['hover_property']
+            label['title'] = 'A statement of the meaning of the property.'
+            label.string = 'Definition'
+            header.append(label)
+            row.append(header)
+            cell = soup.new_tag('td')
+            for value in definitions:
+                paragraph = soup.new_tag('p')
+                if isinstance(value, Literal) and value.language:
+                    paragraph['lang'] = value.language
+                paragraph.string = str(value)
+                cell.append(paragraph)
+            row.append(cell)
+            defined_by = table.find('a', href=str(RDFS.isDefinedBy))
+            anchor = defined_by.find_parent('tr') if defined_by else table.find('tr')
+            anchor.insert_after(row)
+        for row in table.find_all('tr'):
+            header = row.find('th')
+            if header and header.get_text(strip=True) == 'Example':
+                cell = row.find('td')
+                cell['class'] = [*cell.get('class', []), 'hri-example']
+    html.write_text(str(soup))
+
+
 def build(base=None):
     check_immutable(base)
     versions = releases()
@@ -232,6 +307,7 @@ def build(base=None):
             try:
                 subprocess.run(['pylode', str(file), '-p', 'ontpub',
                                 '-c', 'true', '-o', str(temporary)], check=True)
+                customize_documentation(temporary, file)
                 require(f'{BASE}/v{version_of(file)}' in temporary.read_text(),
                         f'PyLODE output lacks the version IRI: {file.name}')
                 temporary.replace(output)
