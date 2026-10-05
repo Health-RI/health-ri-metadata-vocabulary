@@ -54,7 +54,7 @@ For `hri:anatomicalLocationCovered`, version 0.2.1 uses an OWL Full range restri
 
 The 0.2.1 number is an explicitly requested exception to the development versioning guideline above: the release changes formal range semantics and removes anatomical Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0 files unchanged.
 
-The existing w3id proposal uses version-pattern redirects and already covers `v0.4.2`; this release does not require new redirect rules.
+The existing w3id proposal uses version-pattern redirects and already covers `v0.4.3`; this release does not require new redirect rules.
 
 
 ## Supporting Turtle metadata

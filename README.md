@@ -16,7 +16,7 @@ Health-RI-specific RDF terms for describing health datasets at metadata and cata
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.4.2` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.4.3` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [Persistent documentation link](https://w3id.org/health-ri/metadata-vocabulary/spec) |
@@ -154,13 +154,13 @@ All paths below use the base `https://w3id.org/health-ri/metadata-vocabulary`. T
 
 ### Versioned links
 
-Replace `X.Y.Z` with an existing release number, such as `0.4.2`. Versioned Turtle files and archived HTML are immutable repository snapshots. Unversioned links follow the latest content.
+Replace `X.Y.Z` with an existing release number, such as `0.4.3`. Versioned Turtle files and archived HTML are immutable repository snapshots. Unversioned links follow the latest content.
 
 | PID path after the base | Purpose and destination |
 | --- | --- |
-| `/vX.Y.Z` | Identifies a release; negotiates between that release's `/ttl` and `/spec`. Example: [v0.4.2](https://w3id.org/health-ri/metadata-vocabulary/v0.4.2). |
-| `/vX.Y.Z/ttl` | Raw official file `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. Example: [v0.4.2 Turtle](https://w3id.org/health-ri/metadata-vocabulary/v0.4.2/ttl). |
-| `/vX.Y.Z/spec` | GitHub file view of `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.html`. Example: [v0.4.2 archived HTML](https://w3id.org/health-ri/metadata-vocabulary/v0.4.2/spec). **This is not a rendered historical Pages site.** |
+| `/vX.Y.Z` | Identifies a release; negotiates between that release's `/ttl` and `/spec`. Example: [v0.4.3](https://w3id.org/health-ri/metadata-vocabulary/v0.4.3). |
+| `/vX.Y.Z/ttl` | Raw official file `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. Example: [v0.4.3 Turtle](https://w3id.org/health-ri/metadata-vocabulary/v0.4.3/ttl). |
+| `/vX.Y.Z/spec` | GitHub file view of `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.html`. Example: [v0.4.3 archived HTML](https://w3id.org/health-ri/metadata-vocabulary/v0.4.3/spec). **This is not a rendered historical Pages site.** |
 
 The version pattern accepts numeric `X.Y.Z` values; it does not check that a release exists. Shapes and examples have no versioned PID routes in this configuration. They are maintained supporting artifacts whose `dcterms:references` identifies the vocabulary release they accompany.
 

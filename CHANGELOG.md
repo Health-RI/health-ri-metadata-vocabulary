@@ -2,6 +2,12 @@
 
 All notable changes to the complete Health-RI Metadata Vocabulary are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and vocabulary releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Terms do not have independent release versions.
 
+## [0.4.3] - 2026-10-05
+
+### Changed
+- Replace `rdfs:comment` with `dcterms:description` on `hri:healthConditionOfInterest` and `hri:anatomicalLocationCovered`, preserving their description text and all other property annotations and axioms.
+- Update release metadata, supporting release references, and generated publication artifacts. Existing versioned snapshots, example data, and SHACL constraints remain unchanged.
+
 ## [0.4.2] - 2026-10-05
 
 ### Changed
@@ -101,6 +107,7 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Vocabulary metadata, a Turtle usage example, and CC BY 4.0 licensing.
 - Versioned sources, generated latest representations, PyLODE documentation, and automated validation and GitHub Pages publication infrastructure.
 
+[0.4.3]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.3.ttl
 [Unreleased]: https://github.com/Health-RI/health-ri-metadata-vocabulary/commits/main
 [0.4.2]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.2.ttl
 [0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.1.0.ttl
