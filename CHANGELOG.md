@@ -31,19 +31,6 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Restrict health-condition usage to SNOMED CT or ICD-10 concepts and update the existing SHACL shape with the agreed identifier-pattern alternatives. This is a breaking validation change: previously accepted identifiers from other terminologies now fail. Pattern matching does not verify existence, activity status, or clinical suitability.
 - Update supporting artifact references, current documentation, and generated publication/citation files to 0.4.0. Preserve archived releases and the anatomical range and hierarchy validation.
 
-## [Unreleased]
-
-### Added
-
-- Build-time consistency checks against the highest numbered vocabulary release: latest Turtle/HTML, citation metadata, and explicitly maintained example/SHACL release references. Supporting references are never silently rewritten.
-- Regression checks for missing/stale references and inconsistent generated outputs.
-
-### Changed
-
-- Restructured the initial 0.1.0 implementation at the maintainers' request: flat versioned TTL/HTML files and latest-only Pages publication.
-- Moved tests and pinned dependencies under `scripts/`; moved validation and the usage example to separate supporting directories.
-- Completed initial vocabulary metadata and attributed the four authors with verified ORCID identifiers. This is a correction of the initial implementation, not a change to the health-condition property's semantics.
-
 ## [0.3.0] - 2026-10-02
 
 ### Changed
@@ -58,6 +45,8 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 
 - A validation command accepting a separate trusted SNOMED named-class hierarchy, excluding submitted subclass assertions and avoiding vocabulary inference.
 - Regression tests for hierarchy membership, evidence isolation, and attribution.
+- Build-time consistency checks against the highest numbered vocabulary release: latest Turtle/HTML, citation metadata, and explicitly maintained example/SHACL release references. Supporting references are never silently rewritten.
+- Regression checks for missing/stale references and inconsistent generated outputs.
 
 ### Compatibility
 
@@ -96,6 +85,9 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Superseded the earlier R-U-03 EUCAIM modelling proposal with the Health-RI term, without asserting a formal mapping to EUCAIM.
 - Updated current documentation, citation metadata, and latest representations. Archived 0.1.0 files and health-condition semantics remain unchanged.
 - Validate every usage example and test promotion from the current release.
+- Restructured the initial 0.1.0 implementation at the maintainers' request: flat versioned TTL/HTML files and latest-only Pages publication.
+- Moved tests and pinned dependencies under `scripts/`; moved validation and the usage example to separate supporting directories.
+- Completed initial vocabulary metadata and attributed the four authors with verified ORCID identifiers. This is a correction of the initial implementation, not a change to the health-condition property's semantics.
 
 ## [0.1.0] - 2026-09-30
 
@@ -108,7 +100,6 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Versioned sources, generated latest representations, PyLODE documentation, and automated validation and GitHub Pages publication infrastructure.
 
 [0.4.3]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.3.ttl
-[Unreleased]: https://github.com/Health-RI/health-ri-metadata-vocabulary/commits/main
 [0.4.2]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.2.ttl
 [0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.1.0.ttl
 
