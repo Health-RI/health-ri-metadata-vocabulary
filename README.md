@@ -16,7 +16,7 @@ Health-RI-specific RDF terms for describing health datasets at metadata and cata
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.5.0` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.6.0` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [Persistent documentation link](https://w3id.org/health-ri/metadata-vocabulary/spec) |
@@ -85,30 +85,23 @@ The Concept typing is the Health-RI metadata convention; it does not claim that 
 
 `hri:anatomicalLocationCovered` relates a dataset to an anatomical class describing its aggregate anatomical coverage. Use is optional and repeatable (`0..*`). It does not pair a body site with a particular modality, data category, sample, or record within a mixed dataset.
 
-The vocabulary uses this **OWL Full / RDF-Based Semantics** range:
+The property is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and deliberately has no formal `rdfs:range`:
 
 ```turtle
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix sct: <http://snomed.info/id/> .
 
 hri:anatomicalLocationCovered a owl:ObjectProperty ;
-    rdfs:domain dcat:Dataset ;
-    rdfs:range [
-        a owl:Restriction ;
-        owl:onProperty rdfs:subClassOf ;
-        owl:hasValue sct:91723000
-    ] .
-
+    rdfs:domain dcat:Dataset .
 ```
 
-Every linked value is thereby a subclass of **91723000 |Anatomical structure (body structure)|**. Subclass transitivity and reflexivity include indirect subclasses and the root itself. The restriction operates on `rdfs:subClassOf`, so this pattern is **outside OWL 2 DL**. See the [OWL 2 RDF-Based Semantics](https://www.w3.org/TR/owl2-rdf-based-semantics/) and [SNOMED anatomical-structure model](https://docs.snomed.org/snomed-ct-specifications/snomed-ct-editorial-guide/readme/authoring/domain-specific-modeling/body-structure/body-structure-attributes-summary).
+The normative vocabulary annotations require SNOMED CT anatomical class IRIs that identify **91723000 |Anatomical structure (body structure)|** or one of its subclasses. SNOMED CT terminology data is authoritative for that classification. Using `hri:anatomicalLocationCovered` does not itself assert or entail an `rdfs:subClassOf` relationship, so an inappropriate or unknown value does not become anatomical merely because the property is used. **No `skos:Concept` typing is required.**
 
-Use SNOMED anatomical class IRIs for the intended terminology binding. The [example](examples/anatomical-location-covered.ttl) links directly to `http://snomed.info/id/39607008` (Lung structure), typed as `owl:Class`. It includes the subsumption assertion for readability; the range axiom also entails that assertion. It does not assert immediate parenthood or type the value as an individual anatomical structure. **No `skos:Concept` typing is required.**
+The [example](examples/anatomical-location-covered.ttl) links directly to `http://snomed.info/id/39607008` (Lung structure) and contains usage data only; terminology hierarchy evidence is supplied separately during validation. The accompanying non-normative SHACL shape requires Dataset subjects, SNOMED CT IRIs, and a zero-or-more-step `rdfs:subClassOf` path to Anatomical structure. This accepts the root, direct subclasses, and indirect subclasses when supported by the trusted hierarchy.
 
-This is a semantic assertion, not terminology validation: an inappropriate value also acquires the subclass relationship. The axiom does not restrict identifier namespaces, verify active status, or establish that SNOMED itself asserts the relationship. Checking authoritative membership requires a separate terminology lookup or validation process. The accompanying non-normative SHACL shape requires Dataset subjects, SNOMED CT IRIs, and a zero-or-more-step `rdfs:subClassOf` path to Anatomical structure. This accepts the root, direct subclasses, and indirect subclasses. Missing hierarchy evidence causes validation to fail for non-root values.
+The Health-RI Metadata Vocabulary defines the meaning of the relation. Normative terminology-binding and conformance policy for a concrete Health-RI Metadata Schema/profile belongs to that application/profile layer, while SNOMED CT remains authoritative for concept classification. The validation infrastructure operationalizes the binding against separately trusted SNOMED CT hierarchy evidence.
 
 For release history and compatibility notes, see [CHANGELOG.md](CHANGELOG.md) and [MAINTAINING.md](MAINTAINING.md).
 
@@ -124,11 +117,11 @@ python scripts/validate.py metadata.ttl --snomed-hierarchy trusted-snomed-hierar
 
 The hierarchy input must be a trusted RDF export from the SNOMED CT edition and release selected by the validator operator. It must contain named-class `rdfs:subClassOf` edges sufficient to reach `http://snomed.info/id/91723000`. A complete relevant hierarchy or a complete subset covering the submitted values is suitable. An RF2 distribution or an OWL axiom export is not directly equivalent to this input: prepare the named-class hierarchy first. Record the edition, release date, and export provenance with the validation results.
 
-The command removes submitted `rdfs:subClassOf` statements and copies subclass edges only from that separate trusted input. It performs no vocabulary imports or OWL/RDFS inference. Thus a subclass assertion supplied by the metadata author, or produced from the vocabulary's range axiom, cannot itself make a value pass. The operator is responsible for the trustworthiness of the hierarchy file; the command cannot authenticate its source or detect invented facts in that file. This checks hierarchy membership, not concept activity status or clinical appropriateness. The root itself is permitted without a subclass edge.
+The command removes submitted `rdfs:subClassOf` statements and copies subclass edges only from that separate trusted input. It performs no vocabulary imports or OWL/RDFS inference. Thus a subclass assertion supplied by the metadata author cannot itself make a value pass, and vocabulary inference is not used to manufacture terminology membership. The operator is responsible for the trustworthiness of the hierarchy file; the command cannot authenticate its source or detect invented facts in that file. This checks hierarchy membership, not concept activity status or clinical appropriateness. The root itself is permitted without a subclass edge.
 
 Supply the original metadata, before inference. Health-condition values still require `skos:Concept` typing in the metadata; anatomical values do not. The command returns exit code 0 for conformance, 1 for violations, and 2 for input or execution errors.
 
-The build's example check uses the illustrative subclass assertion inside the anatomical example as an offline fixture. It checks that the example and shapes work together; it is not independent SNOMED verification. A generic SHACL engine can use the shapes directly, but only checks the graph it is given: use the separate-input command above when submitted hierarchy claims must not be trusted.
+The build validates the anatomical example through the same trusted-evidence path as the production validation command, using a separate test hierarchy fixture. The usage example itself contains no subclass assertions. A generic SHACL engine can use the shapes directly, but only checks the graph it is given: use the separate-input command above when submitted hierarchy claims must not be trusted.
 
 ## Persistent identifiers (PIDs) and redirects
 
@@ -154,13 +147,13 @@ All paths below use the base `https://w3id.org/health-ri/metadata-vocabulary`. T
 
 ### Versioned links
 
-Replace `X.Y.Z` with an existing release number, such as `0.5.0`. Versioned Turtle files and archived HTML are immutable repository snapshots. Unversioned links follow the latest content.
+Replace `X.Y.Z` with an existing release number, such as `0.6.0`. Versioned Turtle files and archived HTML are immutable repository snapshots. Unversioned links follow the latest content.
 
 | PID path after the base | Purpose and destination |
 | --- | --- |
-| `/vX.Y.Z` | Identifies a release; negotiates between that release's `/ttl` and `/spec`. Example: [v0.5.0](https://w3id.org/health-ri/metadata-vocabulary/v0.5.0). |
-| `/vX.Y.Z/ttl` | Raw official file `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. Example: [v0.5.0 Turtle](https://w3id.org/health-ri/metadata-vocabulary/v0.5.0/ttl). |
-| `/vX.Y.Z/spec` | GitHub file view of `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.html`. Example: [v0.5.0 archived HTML](https://w3id.org/health-ri/metadata-vocabulary/v0.5.0/spec). **This is not a rendered historical Pages site.** |
+| `/vX.Y.Z` | Identifies a release; negotiates between that release's `/ttl` and `/spec`. Example: [v0.6.0](https://w3id.org/health-ri/metadata-vocabulary/v0.6.0). |
+| `/vX.Y.Z/ttl` | Raw official file `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. Example: [v0.6.0 Turtle](https://w3id.org/health-ri/metadata-vocabulary/v0.6.0/ttl). |
+| `/vX.Y.Z/spec` | GitHub file view of `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.html`. Example: [v0.6.0 archived HTML](https://w3id.org/health-ri/metadata-vocabulary/v0.6.0/spec). **This is not a rendered historical Pages site.** |
 
 The version pattern accepts numeric `X.Y.Z` values; it does not check that a release exists. Shapes and examples have no versioned PID routes in this configuration. They are maintained supporting artifacts whose `dcterms:references` identifies the vocabulary release they accompany.
 

@@ -48,13 +48,13 @@ The official site will be `https://health-ri.github.io/health-ri-metadata-vocabu
 
 `scripts/requirements.txt` pins the full tested Python environment, including transitive dependencies. Use Python 3.12. Action dependencies are pinned to commit SHAs with release labels in comments. Upgrade deliberately, run all checks, and inspect newly generated documentation before accepting upgrades. Past HTML snapshots are preserved when the generator changes.
 
-Tests cover release metadata, IRI-only values, explicit Concept typing, subject typing, optionality, multiple values, and anatomical subclass entailment. Review the clinical meaning and external identifiers separately; syntax validation cannot establish those facts.
+Tests cover release metadata, IRI-only values, explicit Concept typing, subject typing, optionality, multiple values, anatomical hierarchy validation, and the absence of range-generated anatomical subclass entailment in current releases. Review the clinical meaning and external identifiers separately; syntax validation cannot establish those facts.
 
-For `hri:anatomicalLocationCovered`, version 0.2.1 uses an OWL Full range restriction on `rdfs:subClassOf` with `owl:hasValue` set to SNOMED CT `91723000`. Do not interpret the resulting subclass entailment as authoritative terminology validation. Since 0.3.0, anatomical SHACL also checks SNOMED IRI syntax and a subclass path to that root. Use `scripts/validate.py` with an independently trusted SNOMED hierarchy; see the README for input format, provenance, and limitations. The inference regression test exercises the relevant RDF/OWL rules; it is not a complete OWL Full consistency checker. OWL 2 DL tools cannot be assumed to support this metamodeling pattern.
+For `hri:anatomicalLocationCovered`, releases 0.2.1 through 0.5.0 use an OWL Full range restriction on `rdfs:subClassOf` with `owl:hasValue` set to SNOMED CT `91723000`. From 0.6.0 onward, the property has no formal range: the normative annotations retain the SNOMED CT Anatomical structure-or-descendant requirement, while terminology classification comes only from authoritative terminology data. The non-normative SHACL checks SNOMED IRI syntax and a subclass path to that root. Use `scripts/validate.py` with an independently trusted SNOMED hierarchy; submitted subclass assertions are excluded and no vocabulary inference or imports are applied. The build validates the anatomical usage example through this same validation path using an independent test hierarchy fixture.
 
 The 0.2.1 number is an explicitly requested exception to the development versioning guideline above: the release changes formal range semantics and removes anatomical Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0 files unchanged.
 
-The existing w3id proposal uses version-pattern redirects and already covers `v0.5.0`; this release does not require new redirect rules.
+The existing w3id proposal uses version-pattern redirects and already covers `v0.6.0`; this release does not require new redirect rules.
 
 
 ## Supporting Turtle metadata
@@ -64,4 +64,4 @@ Keep the document headers in `examples/` and `validation/` current when editing 
 
 The 0.3.0 release tightens anatomical validation and therefore uses a new minor version under the development versioning policy. Preserve the earlier release snapshots. Regression checks cover root/direct/transitive paths, unknown values, non-SNOMED IRIs, cycles, and exclusion of submitted subclass assertions.
 
-Use the four vocabulary creators for the SHACL file and Pedro Paulo F. Barcelos alone for the examples, identified by ORCID and name. Do not duplicate creators as contributors unless recording a distinct contribution is needed. Keep comments focused on usage and avoid release-specific wording for unchanged range axioms.
+Use the four vocabulary creators for the SHACL file and Pedro Paulo F. Barcelos alone for the examples, identified by ORCID and name. Do not duplicate creators as contributors unless recording a distinct contribution is needed. Keep comments focused on usage and validation roles rather than duplicating historical release notes.
