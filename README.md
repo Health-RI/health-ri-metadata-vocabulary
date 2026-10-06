@@ -16,7 +16,7 @@ Health-RI-specific RDF terms for describing health datasets at metadata and cata
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.4.3` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.5.0` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [Persistent documentation link](https://w3id.org/health-ri/metadata-vocabulary/spec) |
@@ -65,7 +65,7 @@ Both properties describe datasets as a whole and are optional and repeatable (`0
 
 `hri:healthConditionOfInterest` relates a dataset to an identified concept representing a disease, disorder, or clinical condition that the dataset as a whole concerns at metadata or catalogue level.
 
-It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and `rdfs:range skos:Concept`. These axioms entail typing; they are not data-validation constraints. When used, the separate non-normative SHACL shape requires a Dataset subject and IRI-valued Concept objects with SNOMED CT or WHO ICD-10 identifier patterns. No minimum or maximum count is imposed (`0..*`). No new clinical class is introduced.
+It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and `rdfs:range skos:Concept`. These axioms entail typing; they are not data-validation constraints. When used, the separate non-normative SHACL shape requires a Dataset subject and IRI-valued Concept objects with SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier patterns. No minimum or maximum count is imposed (`0..*`). No new clinical class is introduced.
 
 ```turtle
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
@@ -77,7 +77,7 @@ It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and `rdfs:range sk
 <http://snomed.info/id/22298006> a skos:Concept .
 ```
 
-This describes dataset-level aboutness. It does not assert diagnoses for individual patients, records, samples, or observations, or enumerate all diagnoses in the data. Values must identify suitable SNOMED CT or ICD-10 concepts. SHACL checks the SNOMED CT or WHO ICD-10 identifier format, with an optional release year for ICD-10. This lightweight check does not verify existence, activity status, or clinical suitability; invented identifiers matching the patterns also pass. The example is not a complete HealthDCAT-AP record.
+This describes dataset-level aboutness. It does not assert diagnoses for individual patients, records, samples, or observations, or enumerate all diagnoses in the data. Values must identify suitable SNOMED CT, ICD-10, or ORPHAcode concepts. SHACL checks the SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier format, with an optional release year for ICD-10. This lightweight check does not verify existence, activity status, or clinical suitability; invented identifiers matching the patterns also pass. The example is not a complete HealthDCAT-AP record.
 
 The Concept typing is the Health-RI metadata convention; it does not claim that external terminology publishers natively use SKOS. Where an external IRI is also an OWL class, its use here is as a concept individual (OWL 2 punning when applicable), not as an assertion that the dataset has an instance of that disease class.
 
@@ -154,13 +154,13 @@ All paths below use the base `https://w3id.org/health-ri/metadata-vocabulary`. T
 
 ### Versioned links
 
-Replace `X.Y.Z` with an existing release number, such as `0.4.3`. Versioned Turtle files and archived HTML are immutable repository snapshots. Unversioned links follow the latest content.
+Replace `X.Y.Z` with an existing release number, such as `0.5.0`. Versioned Turtle files and archived HTML are immutable repository snapshots. Unversioned links follow the latest content.
 
 | PID path after the base | Purpose and destination |
 | --- | --- |
-| `/vX.Y.Z` | Identifies a release; negotiates between that release's `/ttl` and `/spec`. Example: [v0.4.3](https://w3id.org/health-ri/metadata-vocabulary/v0.4.3). |
-| `/vX.Y.Z/ttl` | Raw official file `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. Example: [v0.4.3 Turtle](https://w3id.org/health-ri/metadata-vocabulary/v0.4.3/ttl). |
-| `/vX.Y.Z/spec` | GitHub file view of `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.html`. Example: [v0.4.3 archived HTML](https://w3id.org/health-ri/metadata-vocabulary/v0.4.3/spec). **This is not a rendered historical Pages site.** |
+| `/vX.Y.Z` | Identifies a release; negotiates between that release's `/ttl` and `/spec`. Example: [v0.5.0](https://w3id.org/health-ri/metadata-vocabulary/v0.5.0). |
+| `/vX.Y.Z/ttl` | Raw official file `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.ttl`. Example: [v0.5.0 Turtle](https://w3id.org/health-ri/metadata-vocabulary/v0.5.0/ttl). |
+| `/vX.Y.Z/spec` | GitHub file view of `vocabulary/versioned/health-ri-metadata-vocabulary-vX.Y.Z.html`. Example: [v0.5.0 archived HTML](https://w3id.org/health-ri/metadata-vocabulary/v0.5.0/spec). **This is not a rendered historical Pages site.** |
 
 The version pattern accepts numeric `X.Y.Z` values; it does not check that a release exists. Shapes and examples have no versioned PID routes in this configuration. They are maintained supporting artifacts whose `dcterms:references` identifies the vocabulary release they accompany.
 

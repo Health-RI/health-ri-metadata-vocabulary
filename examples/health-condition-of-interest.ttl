@@ -10,15 +10,15 @@
 # Usage example metadata.
 <https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest> a foaf:Document ;
     dcterms:title "Health condition of interest — usage example"@en ;
-    dcterms:description "Non-normative usage example demonstrating dataset-level health condition of interest. It does not assert diagnoses of individual participants and is not a complete Health-RI Metadata Schema or HealthDCAT-AP record."@en ;
+    dcterms:description "Non-normative usage example demonstrating dataset-level health condition of interest with SNOMED CT, ICD-10, and ORPHAcode identifiers. It does not assert diagnoses of individual participants and is not a complete Health-RI Metadata Schema or HealthDCAT-AP record."@en ;
     dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest"^^xsd:anyURI ;
     dcterms:creator <https://orcid.org/0000-0003-2736-7817> ;
     dcterms:publisher <https://w3id.org/health-ri> ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:language "en"^^xsd:language ;
     dcterms:format "text/turtle" ;
-    dcterms:modified "2026-10-05"^^xsd:date ;
-    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.3> ;
+    dcterms:modified "2026-10-06"^^xsd:date ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.5.0> ;
     foaf:primaryTopic hri:healthConditionOfInterest ;
     mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
 
@@ -29,12 +29,22 @@
 # Vocabulary illustrated by this usage example.
 <https://w3id.org/health-ri/metadata-vocabulary> vann:example <https://w3id.org/health-ri/metadata-vocabulary/example/health-condition-of-interest> .
 
-<https://example.org/dataset/myocardial-infarction> a dcat:Dataset ;
-    dcterms:title "Example dataset concerning myocardial infarction"@en ;
+<https://example.org/dataset/myocardial-infarction-snomed> a dcat:Dataset ;
+    dcterms:title "Example dataset concerning myocardial infarction (SNOMED CT)"@en ;
     hri:healthConditionOfInterest <http://snomed.info/id/22298006> .
 
-# Local metadata typing; no redistribution of the external terminology.
+<https://example.org/dataset/acute-myocardial-infarction-icd10> a dcat:Dataset ;
+    dcterms:title "Example dataset concerning acute myocardial infarction (ICD-10)"@en ;
+    hri:healthConditionOfInterest <http://id.who.int/icd/release/10/2019/I21> .
+
+<https://example.org/dataset/marfan-syndrome-orphacode> a dcat:Dataset ;
+    dcterms:title "Example dataset concerning Marfan syndrome (ORPHAcode)"@en ;
+    hri:healthConditionOfInterest <http://www.orpha.net/ORDO/Orphanet_558> .
+
+# Local metadata typing; no redistribution of the external terminologies.
 <http://snomed.info/id/22298006> a skos:Concept .
+<http://id.who.int/icd/release/10/2019/I21> a skos:Concept .
+<http://www.orpha.net/ORDO/Orphanet_558> a skos:Concept .
 
 # This is a minimal vocabulary usage example, not a complete
 # Health-RI Metadata Schema or HealthDCAT-AP compliant dataset record.

@@ -47,7 +47,9 @@ class VocabularyTests(unittest.TestCase):
         self.assertTrue(self.conforms())
 
     def test_multiple_values(self):
-        for iri in ('http://snomed.info/id/22298006', 'http://id.who.int/icd/release/10/2019/I21'):
+        for iri in ('http://snomed.info/id/22298006',
+                    'http://id.who.int/icd/release/10/2019/I21',
+                    'http://www.orpha.net/ORDO/Orphanet_558'):
             value = URIRef(iri)
             self.graph.add((self.dataset, self.term, value))
             self.graph.add((value, RDF.type, SKOS.Concept))
@@ -60,8 +62,10 @@ class VocabularyTests(unittest.TestCase):
             'http://id.who.int/icd/release/10/2019/I21.0': True,
             'http://id.who.int/icd/release/10/2019/I20-I25': True,
             'http://id.who.int/icd/release/10/2019/IX': True,
+            'http://www.orpha.net/ORDO/Orphanet_558': True,
             # Format-only validation intentionally accepts invented identifiers.
             'http://snomed.info/id/999999999999999999': True,
+            'http://www.orpha.net/ORDO/Orphanet_999999999': True,
             'https://example.org/condition': False,
             'http://snomed.info/id/not-a-number': False,
             'http://snomed.info/id/22298006/extra': False,
@@ -69,6 +73,9 @@ class VocabularyTests(unittest.TestCase):
             'http://id.who.int/icd/release/11/2026-01/mms/123': False,
             'http://id.who.int/icd/release/10/': False,
             'http://id.who.int/icd/release/10/2019/I21/extra': False,
+            'https://www.orpha.net/ORDO/Orphanet_558': False,
+            'http://www.orpha.net/ORDO/558': False,
+            'http://www.orpha.net/ORDO/Orphanet_not-a-number': False,
         }
         for iri, expected in cases.items():
             with self.subTest(iri=iri):
@@ -77,6 +84,15 @@ class VocabularyTests(unittest.TestCase):
                 self.graph.add((value, RDF.type, SKOS.Concept))
                 self.assertEqual(self.conforms(), expected)
                 self.graph.remove((self.dataset, self.term, value))
+
+    def test_health_condition_example_covers_supported_terminologies(self):
+        example = Graph().parse(build.EXAMPLES / 'health-condition-of-interest.ttl')
+        values = set(example.objects(None, self.term))
+        self.assertEqual(values, {
+            URIRef('http://snomed.info/id/22298006'),
+            URIRef('http://id.who.int/icd/release/10/2019/I21'),
+            URIRef('http://www.orpha.net/ORDO/Orphanet_558'),
+        })
 
     def test_literal_rejected(self):
         self.graph.add((self.dataset, self.term, Literal('condition')))

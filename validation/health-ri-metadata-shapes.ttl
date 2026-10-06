@@ -15,7 +15,7 @@
 # These shapes provide suggested checks and do not introduce or override vocabulary requirements.
 <https://w3id.org/health-ri/metadata-vocabulary/shacl> a owl:Ontology ;
     dcterms:title "Health-RI Metadata Vocabulary — application validation shapes"@en ;
-    dcterms:description "Non-normative SHACL shapes provided as implementation guidance for data using the Health-RI Metadata Vocabulary. The versioned vocabulary Turtle file is the sole normative specification and takes precedence in case of discrepancy. These shapes do not introduce or override vocabulary requirements. Checks Dataset subject typing, IRI-valued objects, skos:Concept typing, and SNOMED CT or WHO ICD-10 identifier patterns for health-condition values. These pattern checks do not verify concept existence. Checks anatomical values against SNOMED CT IRI syntax and supplied subclass paths to Anatomical structure. Hierarchy evidence must come from a trusted SNOMED CT release. Does not establish clinical appropriateness or concept activity status, and is not the complete Health-RI Metadata Schema."@en ;
+    dcterms:description "Non-normative SHACL shapes provided as implementation guidance for data using the Health-RI Metadata Vocabulary. The versioned vocabulary Turtle file is the sole normative specification and takes precedence in case of discrepancy. These shapes do not introduce or override vocabulary requirements. Checks Dataset subject typing, IRI-valued objects, skos:Concept typing, and SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier patterns for health-condition values. These pattern checks do not verify concept existence. Checks anatomical values against SNOMED CT IRI syntax and supplied subclass paths to Anatomical structure. Hierarchy evidence must come from a trusted SNOMED CT release. Does not establish clinical appropriateness or concept activity status, and is not the complete Health-RI Metadata Schema."@en ;
     dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary/shacl"^^xsd:anyURI ;
     dcterms:creator <https://orcid.org/0009-0002-3089-9558>,
         <https://orcid.org/0000-0001-8306-0380>,
@@ -25,8 +25,8 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:language "en"^^xsd:language ;
     dcterms:format "text/turtle" ;
-    dcterms:modified "2026-10-05"^^xsd:date ;
-    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.3> ;
+    dcterms:modified "2026-10-06"^^xsd:date ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.5.0> ;
     foaf:primaryTopic <https://w3id.org/health-ri/metadata-vocabulary> ;
     mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
 
@@ -41,7 +41,7 @@
 # Blank-node shapes avoid introducing extra Health-RI vocabulary terms.
 # Health-condition patterns check identifier syntax only, not terminology membership,
 # concept activity, or clinical suitability. No terminology downloads are required.
-# WHO ICD-10 identifiers may include a release year; ICD-11 is not accepted.
+# WHO ICD-10 identifiers may include a release year; ICD-11 is not accepted.\n# ORPHAcode identifiers use the canonical ORDO class IRI form http://www.orpha.net/ORDO/Orphanet_<code>.
 [] a sh:NodeShape ;
     sh:targetSubjectsOf hri:healthConditionOfInterest ;
     sh:class dcat:Dataset ;
@@ -51,9 +51,9 @@
         sh:class skos:Concept ;
         sh:or (
             [ sh:pattern "^http://snomed[.]info/id/[0-9]+$" ]
-            [ sh:pattern "^http://id[.]who[.]int/icd/release/10/([0-9]{4}/)?[A-Za-z0-9][A-Za-z0-9.-]*$" ]
+            [ sh:pattern "^http://id[.]who[.]int/icd/release/10/([0-9]{4}/)?[A-Za-z0-9][A-Za-z0-9.-]*$" ]\n            [ sh:pattern "^http://www[.]orpha[.]net/ORDO/Orphanet_[0-9]+$" ]
         ) ;
-        sh:message "Health condition of interest must be an IRI identified as a skos:Concept and use the SNOMED CT or WHO ICD-10 identifier format."@en
+        sh:message "Health condition of interest must be an IRI identified as a skos:Concept and use the SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier format."@en
     ] .
 
 # No minCount or maxCount: optional and repeatable (0..*).
