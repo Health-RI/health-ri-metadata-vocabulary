@@ -1,4 +1,4 @@
-"""Exercise range validation and the separation of submitted and trusted evidence."""
+"""Exercise anatomical terminology validation and separation of submitted and trusted evidence."""
 import importlib.util
 import unittest
 from rdflib import Graph, RDF, RDFS, URIRef
@@ -17,6 +17,8 @@ class TrustedHierarchyTests(unittest.TestCase):
         self.dataset = URIRef('https://example.org/dataset')
         self.root = URIRef('http://snomed.info/id/91723000')
         self.lung = URIRef('http://snomed.info/id/39607008')
+        self.fixture = Graph().parse(
+            build.ROOT / 'scripts/tests/fixtures/snomed-anatomy-hierarchy.ttl')
         self.data.add((self.dataset, RDF.type, DCAT.Dataset))
 
     def conforms(self, value):
@@ -39,9 +41,17 @@ class TrustedHierarchyTests(unittest.TestCase):
         self.assertFalse(self.conforms(self.lung))
         self.assertFalse(self.conforms(URIRef('http://snomed.info/id/999999999')))
 
-    def test_submitted_or_inferred_subclass_does_not_supply_evidence(self):
+    def test_submitted_subclass_does_not_supply_evidence(self):
         self.data.add((self.lung, RDFS.subClassOf, self.root))
         self.assertFalse(self.conforms(self.lung))
+
+    def test_usage_example_requires_trusted_fixture(self):
+        example = Graph().parse(build.EXAMPLES / 'anatomical-location-covered.ttl')
+        values = set(example.objects(None, build.HRI.anatomicalLocationCovered))
+        self.assertEqual(values, {self.lung})
+        self.assertFalse(list(example.triples((None, RDFS.subClassOf, None))))
+        self.assertFalse(validation.validate_metadata(example, Graph())[0])
+        self.assertTrue(validation.validate_metadata(example, self.fixture)[0])
 
     def test_non_snomed_iri_rejected_even_with_path(self):
         other = URIRef('https://example.org/anatomy')

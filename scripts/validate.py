@@ -12,8 +12,8 @@ def validation_graph(data, hierarchy):
     """Use only the caller-supplied trusted hierarchy as subclass evidence.
 
     No OWL/RDFS inference or imports are applied. Submitted subclass statements
-    are excluded, including any produced by the vocabulary's range inference.
-    The caller must select an authoritative SNOMED release/export independently
+    are excluded. The caller must select an authoritative SNOMED release/export
+    independently
     of the submitted data; this function cannot authenticate that input.
     """
     graph = Graph()

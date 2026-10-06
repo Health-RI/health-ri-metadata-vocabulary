@@ -2,6 +2,16 @@
 
 All notable changes to the complete Health-RI Metadata Vocabulary are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and vocabulary releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Terms do not have independent release versions.
 
+## [0.6.0] - 2026-10-06
+
+### Changed
+- Replace the OWL Full `rdfs:range` / `owl:hasValue` restriction on `hri:anatomicalLocationCovered` with `rdfs:range skos:Concept`; retain the `dcat:Dataset` domain and the normative SNOMED CT Anatomical structure (91723000) or descendant terminology requirement in the property annotations. Property use now provides metadata-level `skos:Concept` typing but no longer entails terminology hierarchy classification.
+- Preserve the non-normative SHACL terminology check and trusted SNOMED hierarchy isolation, and align build/example validation with the production validation path through an independent hierarchy fixture.
+- Remove inline hierarchy assertions from the anatomical usage example so it contains usage data only; update regression tests, supporting release references, and affected documentation.
+
+### Compatibility
+- Breaking semantic change: consumers that relied on the former range-generated `rdfs:subClassOf` entailment must instead use authoritative SNOMED CT terminology data or the validation layer. The new `skos:Concept` range provides only metadata-level concept typing. Historical releases remain unchanged.
+
 ## [0.5.0] - 2026-10-06
 
 ### Changed
@@ -105,6 +115,7 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Vocabulary metadata, a Turtle usage example, and CC BY 4.0 licensing.
 - Versioned sources, generated latest representations, PyLODE documentation, and automated validation and GitHub Pages publication infrastructure.
 
+[0.6.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.6.0.ttl
 [0.5.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.5.0.ttl
 [0.4.3]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.3.ttl
 [0.4.2]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.2.ttl
