@@ -5,8 +5,6 @@
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix sct: <http://snomed.info/id/> .
 
 # Usage example metadata.
@@ -20,7 +18,7 @@
     dcterms:language "en"^^xsd:language ;
     dcterms:format "text/turtle" ;
     dcterms:modified "2026-10-06"^^xsd:date ;
-    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.5.0> ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.6.0> ;
     foaf:primaryTopic hri:anatomicalLocationCovered ;
     mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
 
@@ -36,14 +34,8 @@
     dcterms:title "Example dataset covering the lung"@en ;
     hri:anatomicalLocationCovered sct:39607008 .
 
-# Anatomical class typing and an explicit subsumption assertion for readability.
-# This is not a claim that Anatomical structure is the immediate SNOMED parent.
-# Source: SNOMED International's ECL Quick Reference, Reversed Attributes example:
-# https://docs.snomed.org/snomed-ct-specifications/snomed-ct-expression-constraint-language/appendices/appendix-d-ecl-quick-reference
-# The vocabulary range axiom entails this relationship; validation requires independent hierarchy evidence.
-# This entailment is not a check against an authoritative SNOMED edition.
-sct:39607008 a owl:Class ;
-    rdfs:subClassOf sct:91723000 .
+# Terminology hierarchy evidence is not part of this submitted usage example.
+# Validation supplies trusted SNOMED CT hierarchy evidence independently.
 
 <https://orcid.org/0000-0003-2736-7817> a foaf:Person ;
     foaf:name "Pedro Paulo F. Barcelos" .
