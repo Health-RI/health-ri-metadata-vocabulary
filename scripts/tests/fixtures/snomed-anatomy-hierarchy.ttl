@@ -1,0 +1,6 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sct: <http://snomed.info/id/> .
+
+# Test-only trusted hierarchy evidence for anatomical usage-example validation.
+# This states transitive subclass membership for Lung structure; it does not claim immediate parenthood.
+sct:39607008 rdfs:subClassOf sct:91723000 .

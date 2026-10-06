@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import importlib.util
 import re
 import shutil
 import subprocess
@@ -96,10 +97,10 @@ def validate_release(file, previous=None):
         require((term, RDF.type, OWL.ObjectProperty) in g, 'Expected anatomical object property')
         require(g.value(term, RDFS.domain) == DCAT.Dataset, 'Expected anatomical Dataset domain')
         ranges = list(g.objects(term, RDFS.range))
-        require(len(ranges) == 1, 'Expected exactly one anatomical range')
         if version == '0.2.0':
-            require(ranges[0] == SKOS.Concept, 'Expected historical anatomical Concept range')
-        else:
+            require(ranges == [SKOS.Concept], 'Expected historical anatomical Concept range')
+        elif tuple(map(int, version.split('.'))) < (0, 6, 0):
+            require(len(ranges) == 1, 'Expected historical anatomical range restriction')
             restriction = ranges[0]
             require((restriction, RDF.type, OWL.Restriction) in g, 'Expected anatomical range restriction')
             require(set(g.objects(restriction, OWL.onProperty)) == {RDFS.subClassOf},
@@ -109,6 +110,8 @@ def validate_release(file, previous=None):
             if tuple(map(int, version.split('.'))) < (0, 3, 0):
                 require((URIRef('http://snomed.info/id/91723000'), RDF.type, OWL.Class) in g,
                         'Expected historical anatomical root class declaration')
+        else:
+            require(not ranges, 'Expected no formal anatomical range from 0.6.0 onward')
         require((term, RDF.type, OWL.FunctionalProperty) not in g, 'Anatomical property must be repeatable')
     return g
 
@@ -119,7 +122,19 @@ def validate_example():
     require(bool(examples), 'No usage examples found')
     for file in examples:
         example = Graph().parse(file)
-        conforms, _, report = validate(example, shacl_graph=shapes, inference='none', meta_shacl=True)
+        if file.name == 'anatomical-location-covered.ttl':
+            validation_path = ROOT / 'scripts/validate.py'
+            spec = importlib.util.spec_from_file_location('hri_metadata_validation', validation_path)
+            require(spec is not None and spec.loader is not None,
+                    'Could not load production anatomical validation')
+            validation = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(validation)
+            hierarchy = Graph().parse(
+                ROOT / 'scripts/tests/fixtures/snomed-anatomy-hierarchy.ttl')
+            conforms, _, report = validation.validate_metadata(example, hierarchy)
+        else:
+            conforms, _, report = validate(
+                example, shacl_graph=shapes, inference='none', meta_shacl=True)
         require(conforms, f'{file.name} fails SHACL\n{report}')
 
 
