@@ -105,7 +105,8 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Vocabulary metadata, a Turtle usage example, and CC BY 4.0 licensing.
 - Versioned sources, generated latest representations, PyLODE documentation, and automated validation and GitHub Pages publication infrastructure.
 
-[0.5.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.5.0.ttl\n[0.4.3]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.3.ttl
+[0.5.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.5.0.ttl
+[0.4.3]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.3.ttl
 [0.4.2]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.2.ttl
 [0.1.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.1.0.ttl
 
