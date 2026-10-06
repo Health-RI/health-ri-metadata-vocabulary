@@ -34,17 +34,17 @@
     dcterms:language "en"^^xsd:language ;
     dcterms:issued "2026-09-30"^^xsd:date ;
     dcterms:modified "2026-10-06"^^xsd:date ;
-    owl:priorVersion <https://w3id.org/health-ri/metadata-vocabulary/v0.4.3> ;
-    owl:versionInfo "0.5.0" ;
-    dcat:version "0.5.0" ;
-    owl:versionIRI <https://w3id.org/health-ri/metadata-vocabulary/v0.5.0> ;
+    owl:priorVersion <https://w3id.org/health-ri/metadata-vocabulary/v0.5.0> ;
+    owl:versionInfo "0.6.0" ;
+    dcat:version "0.6.0" ;
+    owl:versionIRI <https://w3id.org/health-ri/metadata-vocabulary/v0.6.0> ;
     vann:preferredNamespacePrefix "hri" ;
     vann:preferredNamespaceUri "https://w3id.org/health-ri/metadata-vocabulary#"^^xsd:anyURI ;
     foaf:homepage <https://w3id.org/health-ri/metadata-vocabulary/spec> ;
-    rdfs:seeAlso <https://w3id.org/health-ri/metadata-vocabulary/v0.5.0/spec> ;
+    rdfs:seeAlso <https://w3id.org/health-ri/metadata-vocabulary/v0.6.0/spec> ;
     schema:codeRepository <https://w3id.org/health-ri/metadata-vocabulary/git> ;
     dcat:keyword "health dataset metadata"@en, "dataset discovery"@en, "data catalogues"@en, "health condition of interest"@en, "anatomical coverage"@en ;
-    dcterms:bibliographicCitation "Barcelos, P. P. F.; Neikes, H.; Konrad, A.; van Ulzen, N. (2026). Health-RI Metadata Vocabulary, version 0.5.0. https://w3id.org/health-ri/metadata-vocabulary/v0.5.0"@en ;
+    dcterms:bibliographicCitation "Barcelos, P. P. F.; Neikes, H.; Konrad, A.; van Ulzen, N. (2026). Health-RI Metadata Vocabulary, version 0.6.0. https://w3id.org/health-ri/metadata-vocabulary/v0.6.0"@en ;
     rdfs:comment "For each release, the versioned vocabulary Turtle file is the sole normative specification of the Health-RI Metadata Vocabulary. The accompanying examples, SHACL shapes, and generated HTML documentation are non-normative supporting resources. They illustrate usage and provide suggested validation checks; they do not introduce or override vocabulary requirements. In case of discrepancy, the versioned vocabulary Turtle file takes precedence. Development release for review. The entire vocabulary is versioned together using Semantic Versioning; term IRIs remain unversioned. This release does not assert approval or adoption by a particular Health-RI Metadata Schema release."@en .
 
 hri:healthConditionOfInterest a owl:ObjectProperty ;
@@ -60,17 +60,12 @@ hri:healthConditionOfInterest a owl:ObjectProperty ;
 hri:anatomicalLocationCovered a owl:ObjectProperty ;
     rdfs:label "anatomical location covered"@en ;
     skos:definition "Relates a dataset to an anatomical class that is Anatomical structure (SNOMED CT 91723000) or one of its subclasses, describing anatomical coverage of the dataset as a whole at metadata or catalogue level."@en ;
-    dcterms:description "The anonymous range is an owl:hasValue restriction on rdfs:subClassOf with value http://snomed.info/id/91723000. Under OWL Full / RDF-Based Semantics, every linked value is therefore a subclass of that root. Subclass transitivity and reflexivity include indirect subclasses and the root itself. This metamodeling pattern is outside OWL 2 DL. It entails subclass membership; it does not validate whether SNOMED CT already establishes that membership, require a SNOMED-owned IRI, or verify concept status. Use SNOMED CT anatomical class IRIs for the intended terminology binding. No skos:Concept typing is required for these values."@en ;
-    skos:scopeNote "Describes aggregate anatomical coverage of the dataset. Multiple values may be supplied; use is optional (0..*). Values identify anatomical classes, not individual organs, patients, samples, or observations. For a dataset combining data categories or modalities, this property does not pair a particular anatomical location with a particular category, modality, or record. When used, the accompanying non-normative SHACL shape requires Dataset subjects and SNOMED CT IRIs with a supplied rdfs:subClassOf path to Anatomical structure, including the root itself. When using this shape, validate against a separately trusted SNOMED hierarchy without applying the vocabulary's range inference; the OWL Full range axiom alone does not establish terminology membership."@en ;
-    skos:example "A dataset covering the lung may link directly to http://snomed.info/id/39607008 (Lung structure), an anatomical class subsumed by http://snomed.info/id/91723000. The range axiom also entails that subclass relationship."@en ;
+    dcterms:description "Values must be SNOMED CT anatomical class IRIs that identify Anatomical structure (91723000) or one of its subclasses. The rdfs:range skos:Concept declaration provides metadata-level concept typing under RDFS semantics; it does not verify SNOMED CT terminology membership or establish anatomical hierarchy classification. Terminology membership is determined from authoritative SNOMED CT terminology data. Using this property does not itself assert or entail an rdfs:subClassOf relationship. The accompanying non-normative SHACL shape checks SNOMED CT IRI syntax and a supplied subclass path to the root when validation is performed with separately trusted SNOMED CT hierarchy evidence. Explicit skos:Concept typing is not required in submitted metadata by this shape."@en ;
+    skos:scopeNote "Describes aggregate anatomical coverage of the dataset. Multiple values may be supplied; use is optional (0..*). Values identify anatomical classes, not individual organs, patients, samples, observations, or records. For a dataset combining data categories or modalities, this property does not pair a particular anatomical location with a particular category, modality, or record. For Health-RI Metadata Schema/profile conformance, terminology-binding policy and executable validation belong to the application/profile layer; the provided non-normative validation uses separately trusted SNOMED CT hierarchy evidence and excludes submitted rdfs:subClassOf assertions as authority."@en ;
+    skos:example "A dataset covering the lung may link directly to http://snomed.info/id/39607008 (Lung structure) when authoritative SNOMED CT terminology data classifies that concept as http://snomed.info/id/91723000 (Anatomical structure) or one of its subclasses."@en ;
     rdfs:domain dcat:Dataset ;
-    rdfs:range [
-        a owl:Restriction ;
-        owl:onProperty rdfs:subClassOf ;
-        owl:hasValue sct:91723000
-    ] ;
-    rdfs:seeAlso sct:91723000,
-        <https://www.w3.org/TR/owl2-rdf-based-semantics/> ;
+    rdfs:range skos:Concept ;
+    rdfs:seeAlso sct:91723000 ;
     rdfs:isDefinedBy <https://w3id.org/health-ri/metadata-vocabulary> .
 
 <https://w3id.org/health-ri> a foaf:Organization ;
