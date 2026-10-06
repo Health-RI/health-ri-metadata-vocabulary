@@ -134,12 +134,9 @@ class AnatomicalTests(unittest.TestCase):
     def conforms(self):
         return validate(self.graph, shacl_graph=self.shapes, inference='none')[0]
 
-    def test_class_values_with_taxonomy_pass_without_skos_typing(self):
-        for value in (self.root, self.lung):
-            self.graph.add((self.dataset, self.term, value))
-            self.graph.add((value, RDF.type, OWL.Class))
-        self.graph.add((self.lung, RDFS.subClassOf, self.root))
-        self.assertTrue(self.conforms())
+    def test_latest_has_no_formal_anatomical_range(self):
+        graph = Graph().parse(build.releases()[-1])
+        self.assertFalse(list(graph.objects(self.term, RDFS.range)))
 
     def test_unverified_class_rejected(self):
         value = URIRef('https://example.org/unverified-class')
@@ -151,17 +148,15 @@ class AnatomicalTests(unittest.TestCase):
         self.graph.remove((self.dataset, RDF.type, DCAT.Dataset))
         self.assertFalse(self.conforms())
 
-    def test_range_entails_subclass_without_skos_or_anatomical_instance_typing(self):
-        # Exercise the relevant rules; this is not a complete OWL Full consistency check.
+    def test_property_use_does_not_entail_anatomical_subclass(self):
         from owlrl import DeductiveClosure, RDFS_OWLRL_Semantics
         graph = Graph().parse(build.releases()[-1])
-        for value in (self.lung, self.root, URIRef('https://example.org/unverified-class')):
+        values = (self.lung, URIRef('https://example.org/unverified-class'))
+        for value in values:
             graph.add((self.dataset, self.term, value))
         DeductiveClosure(RDFS_OWLRL_Semantics).expand(graph)
-        for value in (self.lung, self.root, URIRef('https://example.org/unverified-class')):
-            self.assertIn((value, RDFS.subClassOf, self.root), graph)
-            self.assertNotIn((value, RDF.type, SKOS.Concept), graph)
-        self.assertNotIn((self.lung, RDF.type, self.root), graph)
+        for value in values:
+            self.assertNotIn((value, RDFS.subClassOf, self.root), graph)
 
     def test_literal_and_blank_values_rejected(self):
         for value in (Literal('91723000'), BNode()):
