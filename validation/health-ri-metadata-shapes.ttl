@@ -41,7 +41,8 @@
 # Blank-node shapes avoid introducing extra Health-RI vocabulary terms.
 # Health-condition patterns check identifier syntax only, not terminology membership,
 # concept activity, or clinical suitability. No terminology downloads are required.
-# WHO ICD-10 identifiers may include a release year; ICD-11 is not accepted.\n# ORPHAcode identifiers use the canonical ORDO class IRI form http://www.orpha.net/ORDO/Orphanet_<code>.
+# WHO ICD-10 identifiers may include a release year; ICD-11 is not accepted.
+# ORPHAcode identifiers use the canonical ORDO class IRI form http://www.orpha.net/ORDO/Orphanet_<code>.
 [] a sh:NodeShape ;
     sh:targetSubjectsOf hri:healthConditionOfInterest ;
     sh:class dcat:Dataset ;
@@ -51,7 +52,8 @@
         sh:class skos:Concept ;
         sh:or (
             [ sh:pattern "^http://snomed[.]info/id/[0-9]+$" ]
-            [ sh:pattern "^http://id[.]who[.]int/icd/release/10/([0-9]{4}/)?[A-Za-z0-9][A-Za-z0-9.-]*$" ]\n            [ sh:pattern "^http://www[.]orpha[.]net/ORDO/Orphanet_[0-9]+$" ]
+            [ sh:pattern "^http://id[.]who[.]int/icd/release/10/([0-9]{4}/)?[A-Za-z0-9][A-Za-z0-9.-]*$" ]
+            [ sh:pattern "^http://www[.]orpha[.]net/ORDO/Orphanet_[0-9]+$" ]
         ) ;
         sh:message "Health condition of interest must be an IRI identified as a skos:Concept and use the SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier format."@en
     ] .
