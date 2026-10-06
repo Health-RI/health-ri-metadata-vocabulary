@@ -85,19 +85,21 @@ The Concept typing is the Health-RI metadata convention; it does not claim that 
 
 `hri:anatomicalLocationCovered` relates a dataset to an anatomical class describing its aggregate anatomical coverage. Use is optional and repeatable (`0..*`). It does not pair a body site with a particular modality, data category, sample, or record within a mixed dataset.
 
-The property is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and deliberately has no formal `rdfs:range`:
+The property is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and `rdfs:range skos:Concept`:
 
 ```turtle
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 hri:anatomicalLocationCovered a owl:ObjectProperty ;
-    rdfs:domain dcat:Dataset .
+    rdfs:domain dcat:Dataset ;
+    rdfs:range skos:Concept .
 ```
 
-The normative vocabulary annotations require SNOMED CT anatomical class IRIs that identify **91723000 |Anatomical structure (body structure)|** or one of its subclasses. SNOMED CT terminology data is authoritative for that classification. Using `hri:anatomicalLocationCovered` does not itself assert or entail an `rdfs:subClassOf` relationship, so an inappropriate or unknown value does not become anatomical merely because the property is used. **No `skos:Concept` typing is required.**
+The normative vocabulary annotations require SNOMED CT anatomical class IRIs that identify **91723000 |Anatomical structure (body structure)|** or one of its subclasses. The `skos:Concept` range provides metadata-level concept typing under RDFS semantics; it does **not** establish that a value is a valid SNOMED CT concept or a member of the anatomical hierarchy. SNOMED CT terminology data remains authoritative for that classification. Using `hri:anatomicalLocationCovered` does not itself assert or entail an `rdfs:subClassOf` relationship, so an inappropriate or unknown value does not become anatomical merely because the property is used.
 
 The [example](examples/anatomical-location-covered.ttl) links directly to `http://snomed.info/id/39607008` (Lung structure) and contains usage data only; terminology hierarchy evidence is supplied separately during validation. The accompanying non-normative SHACL shape requires Dataset subjects, SNOMED CT IRIs, and a zero-or-more-step `rdfs:subClassOf` path to Anatomical structure. This accepts the root, direct subclasses, and indirect subclasses when supported by the trusted hierarchy.
 
@@ -119,7 +121,7 @@ The hierarchy input must be a trusted RDF export from the SNOMED CT edition and 
 
 The command removes submitted `rdfs:subClassOf` statements and copies subclass edges only from that separate trusted input. It performs no vocabulary imports or OWL/RDFS inference. Thus a subclass assertion supplied by the metadata author cannot itself make a value pass, and vocabulary inference is not used to manufacture terminology membership. The operator is responsible for the trustworthiness of the hierarchy file; the command cannot authenticate its source or detect invented facts in that file. This checks hierarchy membership, not concept activity status or clinical appropriateness. The root itself is permitted without a subclass edge.
 
-Supply the original metadata, before inference. Health-condition values still require `skos:Concept` typing in the metadata; anatomical values do not. The command returns exit code 0 for conformance, 1 for violations, and 2 for input or execution errors.
+Supply the original metadata, before inference. Health-condition values still require explicit `skos:Concept` typing in the submitted metadata. Anatomical values need not include an explicit `skos:Concept` type triple: the vocabulary range supplies that semantic typing when RDFS/OWL reasoning is applied, while the anatomical SHACL checks remain focused on IRI syntax and trusted hierarchy evidence. The command returns exit code 0 for conformance, 1 for violations, and 2 for input or execution errors.
 
 The build validates the anatomical example through the same trusted-evidence path as the production validation command, using a separate test hierarchy fixture. The usage example itself contains no subclass assertions. A generic SHACL engine can use the shapes directly, but only checks the graph it is given: use the separate-input command above when submitted hierarchy claims must not be trusted.
 

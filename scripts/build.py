@@ -111,7 +111,8 @@ def validate_release(file, previous=None):
                 require((URIRef('http://snomed.info/id/91723000'), RDF.type, OWL.Class) in g,
                         'Expected historical anatomical root class declaration')
         else:
-            require(not ranges, 'Expected no formal anatomical range from 0.6.0 onward')
+            require(ranges == [SKOS.Concept],
+                    'Expected anatomical Concept range from 0.6.0 onward')
         require((term, RDF.type, OWL.FunctionalProperty) not in g, 'Anatomical property must be repeatable')
     return g
 

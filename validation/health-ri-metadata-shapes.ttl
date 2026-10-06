@@ -15,7 +15,7 @@
 # These shapes provide suggested checks and do not introduce or override vocabulary requirements.
 <https://w3id.org/health-ri/metadata-vocabulary/shacl> a owl:Ontology ;
     dcterms:title "Health-RI Metadata Vocabulary — application validation shapes"@en ;
-    dcterms:description "Non-normative SHACL shapes provided as implementation guidance for data using the Health-RI Metadata Vocabulary. The versioned vocabulary Turtle file is the sole normative specification and takes precedence in case of discrepancy. These shapes do not introduce or override vocabulary requirements. Checks Dataset subject typing, IRI-valued objects, skos:Concept typing, and SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier patterns for health-condition values. These pattern checks do not verify concept existence. Operationalizes the anatomical terminology binding by checking SNOMED CT IRI syntax and supplied subclass paths to Anatomical structure. When used through the provided validation command, hierarchy evidence comes only from a separately trusted SNOMED CT release and submitted subclass assertions are excluded. Does not establish clinical appropriateness or concept activity status, and is not the complete Health-RI Metadata Schema."@en ;
+    dcterms:description "Non-normative SHACL shapes provided as implementation guidance for data using the Health-RI Metadata Vocabulary. The versioned vocabulary Turtle file is the sole normative specification and takes precedence in case of discrepancy. These shapes do not introduce or override vocabulary requirements. Checks Dataset subject typing, IRI-valued objects, skos:Concept typing, and SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier patterns for health-condition values. These pattern checks do not verify concept existence. Operationalizes the anatomical terminology binding by checking SNOMED CT IRI syntax and supplied subclass paths to Anatomical structure. The vocabulary's skos:Concept range is semantic typing, not a terminology-membership validation rule, and this anatomical shape does not require an explicit submitted skos:Concept type triple. When used through the provided validation command, hierarchy evidence comes only from a separately trusted SNOMED CT release and submitted subclass assertions are excluded. Does not establish clinical appropriateness or concept activity status, and is not the complete Health-RI Metadata Schema."@en ;
     dcterms:identifier "https://w3id.org/health-ri/metadata-vocabulary/shacl"^^xsd:anyURI ;
     dcterms:creator <https://orcid.org/0009-0002-3089-9558>,
         <https://orcid.org/0000-0001-8306-0380>,
@@ -63,6 +63,8 @@
 # explicit data typing must be detected rather than supplied by inference.
 
 # Anatomical terminology binding is documented in the vocabulary; this shape operationalizes it.
+# The vocabulary range provides skos:Concept semantic typing, but this shape does not
+# require an explicit submitted skos:Concept type triple.
 # Supply trusted SNOMED subclass evidence before validation, without vocabulary inference.
 # scripts/validate.py excludes subclass assertions from submitted metadata.
 [] a sh:NodeShape ;

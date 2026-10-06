@@ -5,12 +5,12 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 ## [0.6.0] - 2026-10-06
 
 ### Changed
-- Remove the OWL Full `rdfs:range` / `owl:hasValue` restriction from `hri:anatomicalLocationCovered`; retain the `dcat:Dataset` domain and the normative SNOMED CT Anatomical structure (91723000) or descendant terminology requirement in the property annotations. Property use no longer entails terminology classification.
+- Replace the OWL Full `rdfs:range` / `owl:hasValue` restriction on `hri:anatomicalLocationCovered` with `rdfs:range skos:Concept`; retain the `dcat:Dataset` domain and the normative SNOMED CT Anatomical structure (91723000) or descendant terminology requirement in the property annotations. Property use now provides metadata-level `skos:Concept` typing but no longer entails terminology hierarchy classification.
 - Preserve the non-normative SHACL terminology check and trusted SNOMED hierarchy isolation, and align build/example validation with the production validation path through an independent hierarchy fixture.
 - Remove inline hierarchy assertions from the anatomical usage example so it contains usage data only; update regression tests, supporting release references, and affected documentation.
 
 ### Compatibility
-- Breaking semantic change: consumers that relied on the former range-generated `rdfs:subClassOf` entailment must instead use authoritative SNOMED CT terminology data or the validation layer. Historical releases remain unchanged.
+- Breaking semantic change: consumers that relied on the former range-generated `rdfs:subClassOf` entailment must instead use authoritative SNOMED CT terminology data or the validation layer. The new `skos:Concept` range provides only metadata-level concept typing. Historical releases remain unchanged.
 
 ## [0.5.0] - 2026-10-06
 

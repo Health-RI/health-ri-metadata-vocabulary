@@ -134,9 +134,9 @@ class AnatomicalTests(unittest.TestCase):
     def conforms(self):
         return validate(self.graph, shacl_graph=self.shapes, inference='none')[0]
 
-    def test_latest_has_no_formal_anatomical_range(self):
+    def test_latest_has_anatomical_concept_range(self):
         graph = Graph().parse(build.releases()[-1])
-        self.assertFalse(list(graph.objects(self.term, RDFS.range)))
+        self.assertEqual(list(graph.objects(self.term, RDFS.range)), [SKOS.Concept])
 
     def test_unverified_class_rejected(self):
         value = URIRef('https://example.org/unverified-class')
@@ -156,6 +156,7 @@ class AnatomicalTests(unittest.TestCase):
             graph.add((self.dataset, self.term, value))
         DeductiveClosure(RDFS_OWLRL_Semantics).expand(graph)
         for value in values:
+            self.assertIn((value, RDF.type, SKOS.Concept), graph)
             self.assertNotIn((value, RDFS.subClassOf, self.root), graph)
 
     def test_literal_and_blank_values_rejected(self):
