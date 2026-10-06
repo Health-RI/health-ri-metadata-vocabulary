@@ -8,7 +8,7 @@ PyLODE generates an adjacent `health-ri-metadata-vocabulary-vX.Y.Z.html` snapsho
 
 Published versioned Turtle and HTML snapshots are immutable. Add a new version rather than editing or deleting an existing snapshot. CI checks existing snapshots against its base commit; branch protection remains a separate repository setting. The explicitly requested restructuring and metadata correction of the initial 0.1.0 implementation is a one-time migration from commit `e9bc4ca`; the build script limits that exception to the old paths at that exact commit.
 
-Generated HTML documentation is non-normative and is derived from the vocabulary. The SHACL file in `validation/` and examples in `examples/` are also non-normative supporting artifacts, not additional release inputs. They provide IRI checks, health-condition Concept typing and SNOMED CT/WHO ICD-10 identifier patterns, anatomical hierarchy checks, and runnable usage examples. New releases require reviewed matching references in these support files; no versioned copies of these support files are required.
+Generated HTML documentation is non-normative and is derived from the vocabulary. The SHACL file in `validation/` and examples in `examples/` are also non-normative supporting artifacts, not additional release inputs. They provide IRI checks, health-condition Concept typing and SNOMED CT/WHO ICD-10/ORDO ORPHAcode identifier patterns, anatomical hierarchy checks, and runnable usage examples. New releases require reviewed matching references in these support files; no versioned copies of these support files are required.
 
 ## Semantic Versioning
 
@@ -54,7 +54,7 @@ For `hri:anatomicalLocationCovered`, version 0.2.1 uses an OWL Full range restri
 
 The 0.2.1 number is an explicitly requested exception to the development versioning guideline above: the release changes formal range semantics and removes anatomical Concept typing and hierarchy-validation requirements. Retain the archived 0.2.0 files unchanged.
 
-The existing w3id proposal uses version-pattern redirects and already covers `v0.4.3`; this release does not require new redirect rules.
+The existing w3id proposal uses version-pattern redirects and already covers `v0.5.0`; this release does not require new redirect rules.
 
 
 ## Supporting Turtle metadata

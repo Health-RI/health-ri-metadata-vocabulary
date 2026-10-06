@@ -19,8 +19,8 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:language "en"^^xsd:language ;
     dcterms:format "text/turtle" ;
-    dcterms:modified "2026-10-05"^^xsd:date ;
-    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.4.3> ;
+    dcterms:modified "2026-10-06"^^xsd:date ;
+    dcterms:references <https://w3id.org/health-ri/metadata-vocabulary/v0.5.0> ;
     foaf:primaryTopic hri:anatomicalLocationCovered ;
     mod:repository <https://w3id.org/health-ri/metadata-vocabulary/git> .
 
