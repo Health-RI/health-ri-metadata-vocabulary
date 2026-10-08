@@ -2,6 +2,11 @@
 
 All notable changes to the complete Health-RI Metadata Vocabulary are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and vocabulary releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Terms do not have independent release versions.
 
+## [0.6.1] - 2026-10-08
+
+### Fixed
+- Remove redundant “and catalogue records” wording from the `hri:healthConditionOfInterest` scope note. This editorial correction does not change property semantics, RDF/OWL axioms, or SHACL validation.
+
 ## [0.6.0] - 2026-10-06
 
 ### Changed
@@ -115,6 +120,7 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Vocabulary metadata, a Turtle usage example, and CC BY 4.0 licensing.
 - Versioned sources, generated latest representations, PyLODE documentation, and automated validation and GitHub Pages publication infrastructure.
 
+[0.6.1]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.6.1.ttl
 [0.6.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.6.0.ttl
 [0.5.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.5.0.ttl
 [0.4.3]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.4.3.ttl
