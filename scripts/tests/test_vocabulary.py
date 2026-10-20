@@ -49,6 +49,7 @@ class VocabularyTests(unittest.TestCase):
     def test_multiple_values(self):
         for iri in ('http://snomed.info/id/22298006',
                     'http://id.who.int/icd/release/10/2019/I21',
+                    'http://id.who.int/icd/release/11/mms/1334938734/unspecified',
                     'http://www.orpha.net/ORDO/Orphanet_558'):
             value = URIRef(iri)
             self.graph.add((self.dataset, self.term, value))
@@ -70,7 +71,7 @@ class VocabularyTests(unittest.TestCase):
             'http://snomed.info/id/not-a-number': False,
             'http://snomed.info/id/22298006/extra': False,
             'http://id.who.int/icd/entity/123': False,
-            'http://id.who.int/icd/release/11/2026-01/mms/123': False,
+            'http://id.who.int/icd/release/11/2026-01/mms/123': True,
             'http://id.who.int/icd/release/10/': False,
             'http://id.who.int/icd/release/10/2019/I21/extra': False,
             'https://www.orpha.net/ORDO/Orphanet_558': False,
@@ -85,18 +86,68 @@ class VocabularyTests(unittest.TestCase):
                 self.assertEqual(self.conforms(), expected)
                 self.graph.remove((self.dataset, self.term, value))
 
+    def test_icd11_suffix_and_prefix_boundaries(self):
+        # Synthetic cases exercise syntax only; they are not claimed WHO entities.
+        cases = {
+            'http://id.who.int/icd/release/11/x': True,
+            'http://id.who.int/icd/release/11//': True,
+            'http://id.who.int/icd/release/11/mms': True,
+            'http://id.who.int/icd/release/11/arbitrary-suffix?query=value#fragment': True,
+            'http://id.who.int/icd/release/11/': False,
+            'http://id.who.int/icd/release/11': False,
+            'http://id.who.int/icd/release/11?entity=x': False,
+            'http://id.who.int/icd/release/11#entity': False,
+            'http://id.who.int/icd/release/110/x': False,
+            'http://id.who.int/icd/release/11x/x': False,
+            'http://id.who.int/icd/release/12/x': False,
+            'http://id.who.int/icd/entity/123': False,
+            'https://id.who.int/icd/release/11/x': False,
+            'http://idXwhoXint/icd/release/11/x': False,
+            'http://id.who.int.example.org/icd/release/11/x': False,
+            'http://id.who.int/ICD/release/11/x': False,
+            'http://id.who.int/icd/releases/11/x': False,
+            'https://example.org/http://id.who.int/icd/release/11/x': False,
+        }
+        for iri, expected in cases.items():
+            with self.subTest(iri=iri):
+                value = URIRef(iri)
+                self.graph.set((self.dataset, self.term, value))
+                self.graph.add((value, RDF.type, SKOS.Concept))
+                self.assertEqual(self.conforms(), expected)
+
+    def test_icd11_acceptance_is_independent_of_classification_and_entity_type(self):
+        # Arbitrary paths and additional RDF types must not restrict acceptance.
+        suffixes = ('mms/1334938734/unspecified', '2026-01/mms/123',
+                    'other-classification/chapter', 'other-classification/extension/entity')
+        for suffix in suffixes:
+            for extra_type in (None, OWL.Class, OWL.NamedIndividual,
+                               URIRef('https://example.org/EntityType')):
+                with self.subTest(suffix=suffix, extra_type=extra_type):
+                    value = URIRef('http://id.who.int/icd/release/11/' + suffix)
+                    self.graph.set((self.dataset, self.term, value))
+                    self.graph.add((value, RDF.type, SKOS.Concept))
+                    if extra_type is not None:
+                        self.graph.add((value, RDF.type, extra_type))
+                    self.assertTrue(self.conforms())
+                    if extra_type is not None:
+                        self.graph.remove((value, RDF.type, extra_type))
+
     def test_health_condition_example_covers_supported_terminologies(self):
         example = Graph().parse(build.EXAMPLES / 'health-condition-of-interest.ttl')
         values = set(example.objects(None, self.term))
         self.assertEqual(values, {
             URIRef('http://snomed.info/id/22298006'),
             URIRef('http://id.who.int/icd/release/10/2019/I21'),
+            URIRef('http://id.who.int/icd/release/11/mms/1334938734/unspecified'),
             URIRef('http://www.orpha.net/ORDO/Orphanet_558'),
         })
 
     def test_literal_rejected(self):
-        self.graph.add((self.dataset, self.term, Literal('condition')))
-        self.assertFalse(self.conforms())
+        for text in ('condition', 'http://id.who.int/icd/release/11/mms/1334938734/unspecified'):
+            with self.subTest(text=text):
+                value = Literal(text)
+                self.graph.set((self.dataset, self.term, value))
+                self.assertFalse(self.conforms())
 
     def test_blank_concept_rejected(self):
         value = BNode()
@@ -105,15 +156,23 @@ class VocabularyTests(unittest.TestCase):
         self.assertFalse(self.conforms())
 
     def test_untyped_iri_rejected(self):
-        self.graph.add((self.dataset, self.term, URIRef('http://snomed.info/id/22298006')))
-        self.assertFalse(self.conforms())
+        for iri in ('http://snomed.info/id/22298006',
+                    'http://id.who.int/icd/release/11/mms/1334938734/unspecified'):
+            with self.subTest(iri=iri):
+                self.graph.set((self.dataset, self.term, URIRef(iri)))
+                self.assertFalse(self.conforms())
+                self.graph.add((URIRef(iri), RDF.type, OWL.Class))
+                self.assertFalse(self.conforms())
 
     def test_untyped_subject_rejected(self):
         self.graph.remove((self.dataset, RDF.type, DCAT.Dataset))
-        value = URIRef('http://snomed.info/id/22298006')
-        self.graph.add((self.dataset, self.term, value))
-        self.graph.add((value, RDF.type, SKOS.Concept))
-        self.assertFalse(self.conforms())
+        for iri in ('http://snomed.info/id/22298006',
+                    'http://id.who.int/icd/release/11/mms/1334938734/unspecified'):
+            with self.subTest(iri=iri):
+                value = URIRef(iri)
+                self.graph.set((self.dataset, self.term, value))
+                self.graph.add((value, RDF.type, SKOS.Concept))
+                self.assertFalse(self.conforms())
 
 
 
