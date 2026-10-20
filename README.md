@@ -16,7 +16,7 @@ Health-RI-specific RDF terms for describing health datasets at metadata and cata
 | Preferred prefix | `hri` |
 | Namespace | `https://w3id.org/health-ri/metadata-vocabulary#` |
 | Vocabulary IRI | `https://w3id.org/health-ri/metadata-vocabulary` |
-| Versioning | Whole-vocabulary Semantic Versioning, current release `0.6.1` |
+| Versioning | Whole-vocabulary Semantic Versioning, current release `0.7.0` |
 | License | [CC BY 4.0](LICENSE) |
 | Official repository | [Health-RI/health-ri-metadata-vocabulary](https://github.com/Health-RI/health-ri-metadata-vocabulary) |
 | Official documentation | [Persistent documentation link](https://w3id.org/health-ri/metadata-vocabulary/spec) |
@@ -65,7 +65,7 @@ Both properties describe datasets as a whole and are optional and repeatable (`0
 
 `hri:healthConditionOfInterest` relates a dataset to an identified concept representing a disease, disorder, or clinical condition that the dataset as a whole concerns at metadata or catalogue level.
 
-It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and `rdfs:range skos:Concept`. These axioms entail typing; they are not data-validation constraints. When used, the separate non-normative SHACL shape requires a Dataset subject and IRI-valued Concept objects with SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier patterns. No minimum or maximum count is imposed (`0..*`). No new clinical class is introduced.
+It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and `rdfs:range skos:Concept`. These axioms entail typing; they are not data-validation constraints. When used, the separate non-normative SHACL shape requires a Dataset subject and IRI-valued Concept objects with SNOMED CT, WHO ICD-10, ICD-11, or ORDO ORPHAcode identifier patterns. No minimum or maximum count is imposed (`0..*`). No new clinical class is introduced.
 
 ```turtle
 @prefix hri: <https://w3id.org/health-ri/metadata-vocabulary#> .
@@ -77,7 +77,15 @@ It is an `owl:ObjectProperty` with `rdfs:domain dcat:Dataset` and `rdfs:range sk
 <http://snomed.info/id/22298006> a skos:Concept .
 ```
 
-This describes dataset-level aboutness. It does not assert diagnoses for individual patients, records, samples, or observations, or enumerate all diagnoses in the data. Values must identify suitable SNOMED CT, ICD-10, or ORPHAcode concepts. SHACL checks the SNOMED CT, WHO ICD-10, or ORDO ORPHAcode identifier format, with an optional release year for ICD-10. This lightweight check does not verify existence, activity status, or clinical suitability; invented identifiers matching the patterns also pass. The example is not a complete HealthDCAT-AP record.
+This describes dataset-level aboutness. It does not assert diagnoses for individual patients, records, samples, or observations, or enumerate all diagnoses in the data. Values must identify suitable SNOMED CT, ICD-10, ICD-11, or ORPHAcode concepts. SHACL checks the SNOMED CT, WHO ICD-10, ICD-11, or ORDO ORPHAcode identifier format, with an optional release year for ICD-10. This lightweight check does not verify existence, activity status, or clinical suitability; invented identifiers matching the patterns also pass. The example is not a complete HealthDCAT-AP record.
+
+For ICD-11, the shape accepts any entity type whose IRI starts with `http://id.who.int/icd/release/11/` and has a non-empty suffix. It does not restrict classification or require any further suffix structure:
+
+```turtle
+[ sh:pattern "^http://id[.]who[.]int/icd/release/11/.+$" ]
+```
+
+The [health-condition usage example](examples/health-condition-of-interest.ttl) includes an ICD-11 dataset concerning acute myocardial infarction, unspecified, using the identifier published in [WHO's example](https://icd.who.int/docs/doris/en/json-format/#icd-11-example).
 
 The Concept typing is the Health-RI metadata convention; it does not claim that external terminology publishers natively use SKOS. Where an external IRI is also an OWL class, its use here is as a concept individual (OWL 2 punning when applicable), not as an assertion that the dataset has an instance of that disease class.
 
