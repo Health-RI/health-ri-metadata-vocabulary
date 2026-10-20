@@ -90,6 +90,10 @@ class VocabularyTests(unittest.TestCase):
         # Synthetic cases exercise syntax only; they are not claimed WHO entities.
         cases = {
             'http://id.who.int/icd/release/11/x': True,
+            'http://id.who.int/icd/release/11/123': True,
+            'http://id.who.int/icd/release/11/2026-01/123': True,
+            'http://id.who.int/icd/release/11/other/example-entity/subtype': True,
+            'http://id.who.int/icd/release/11/future-release/other/non-numeric-id': True,
             'http://id.who.int/icd/release/11//': True,
             'http://id.who.int/icd/release/11/mms': True,
             'http://id.who.int/icd/release/11/arbitrary-suffix?query=value#fragment': True,
@@ -99,6 +103,7 @@ class VocabularyTests(unittest.TestCase):
             'http://id.who.int/icd/release/11#entity': False,
             'http://id.who.int/icd/release/110/x': False,
             'http://id.who.int/icd/release/11x/x': False,
+            'http://id.who.int/icd/release/011/123': False,
             'http://id.who.int/icd/release/12/x': False,
             'http://id.who.int/icd/entity/123': False,
             'https://id.who.int/icd/release/11/x': False,
