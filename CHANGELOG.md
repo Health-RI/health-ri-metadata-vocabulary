@@ -2,6 +2,15 @@
 
 All notable changes to the complete Health-RI Metadata Vocabulary are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and vocabulary releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Terms do not have independent release versions.
 
+## [0.7.0] - 2026-10-20
+
+### Added
+- Support ICD-11 alongside SNOMED CT, ICD-10, and ORPHAcode for `hri:healthConditionOfInterest`. The non-normative SHACL accepts any IRI under `http://id.who.int/icd/release/11/` with a non-empty suffix, without classification, entity-type, existence, or clinical-appropriateness checks. Existing terminology patterns and other validation behaviour are unchanged.
+- Add a dataset-level ICD-11 usage example using an IRI documented by WHO, and regression tests for accepted suffixes, rejected prefix boundaries, and existing typing requirements.
+
+### Changed
+- Update vocabulary annotations, documentation, release metadata, supporting release references, and generated publication artifacts to 0.7.0. Preserve RDF/OWL domain and range and all previously published versioned artifacts.
+
 ## [0.6.1] - 2026-10-08
 
 ### Fixed
@@ -120,6 +129,7 @@ All notable changes to the complete Health-RI Metadata Vocabulary are recorded h
 - Vocabulary metadata, a Turtle usage example, and CC BY 4.0 licensing.
 - Versioned sources, generated latest representations, PyLODE documentation, and automated validation and GitHub Pages publication infrastructure.
 
+[0.7.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.7.0.ttl
 [0.6.1]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.6.1.ttl
 [0.6.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.6.0.ttl
 [0.5.0]: https://github.com/Health-RI/health-ri-metadata-vocabulary/blob/main/vocabulary/versioned/health-ri-metadata-vocabulary-v0.5.0.ttl

@@ -8,7 +8,7 @@ PyLODE generates an adjacent `health-ri-metadata-vocabulary-vX.Y.Z.html` snapsho
 
 Published versioned Turtle and HTML snapshots are immutable. Add a new version rather than editing or deleting an existing snapshot. CI checks existing snapshots against its base commit; branch protection remains a separate repository setting. The explicitly requested restructuring and metadata correction of the initial 0.1.0 implementation is a one-time migration from commit `e9bc4ca`; the build script limits that exception to the old paths at that exact commit.
 
-Generated HTML documentation is non-normative and is derived from the vocabulary. The SHACL file in `validation/` and examples in `examples/` are also non-normative supporting artifacts, not additional release inputs. They provide IRI checks, health-condition Concept typing and SNOMED CT/WHO ICD-10/ORDO ORPHAcode identifier patterns, anatomical hierarchy checks, and runnable usage examples. New releases require reviewed matching references in these support files; no versioned copies of these support files are required.
+Generated HTML documentation is non-normative and is derived from the vocabulary. The SHACL file in `validation/` and examples in `examples/` are also non-normative supporting artifacts, not additional release inputs. They provide IRI checks, health-condition Concept typing and SNOMED CT/WHO ICD-10/ICD-11/ORDO ORPHAcode identifier patterns, anatomical hierarchy checks, and runnable usage examples. ICD-11 uses only a prefix check under `http://id.who.int/icd/release/11/` with a non-empty suffix. New releases require reviewed matching references in these support files; no versioned copies of these support files are required.
 
 ## Semantic Versioning
 
