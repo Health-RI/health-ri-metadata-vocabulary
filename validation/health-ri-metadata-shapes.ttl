@@ -56,6 +56,7 @@
             [ sh:pattern "^http://snomed[.]info/id/[0-9]+$" ]
             [ sh:pattern "^http://id[.]who[.]int/icd/release/10/([0-9]{4}/)?[A-Za-z0-9][A-Za-z0-9.-]*$" ]
             [ sh:pattern "^http://id[.]who[.]int/icd/release/11/.+$" ]
+            [ sh:pattern "^http://id[.]who[.]int/icd/entity/[0-9]+$" ]
             [ sh:pattern "^http://www[.]orpha[.]net/ORDO/Orphanet_[0-9]+$" ]
         ) ;
         sh:message "Health condition of interest must be an IRI identified as a skos:Concept and use the SNOMED CT, WHO ICD-10, ICD-11, or ORDO ORPHAcode identifier format."@en
